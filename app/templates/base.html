@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<nav>
+    <!-- Navigation Bar -->
+    <a href="{{ url_for('home') }}">Home</a> |
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('personality_test') }}">Personality Test</a> |
+    <a href="{{ url_for('logout') }}">Log Out</a>
+    {% else %}
+    <a href="{{ url_for('login') }}">Log In</a> |
+    <a href="{{ url_for('register') }}">Register</a>
+    {% endif %}
+</nav>
+<div>
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>
