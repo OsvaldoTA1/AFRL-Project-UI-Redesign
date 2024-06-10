@@ -1,12 +1,21 @@
+<!-- login.html -->
 {% extends "base.html" %}
-
 {% block content %}
-<h2>Login</h2>
-<form method="POST">
- {{ form.hidden_tag() }}
- {{ form.email.label }} {{ form.email() }}
- {{ form.password.label }} {{ form.password() }}
- {{ form.remember.label }} {{ form.remember() }}
- {{ form.submit() }}
-</form>
+  <h2>Login</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.user_id.label }} {{ form.user_id() }}
+    {{ form.password.label }} {{ form.password() }}
+    {{ form.remember.label }} {{ form.remember() }}
+    {{ form.submit() }}
+  </form>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class=flashes>
+         {% for message in messages %}
+           <li>{{ message }}</li>
+         {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
 {% endblock %}

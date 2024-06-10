@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, Flask
 from flask import current_app as app
 from app import db, bcrypt
 from app.forms import RegistrationForm, LoginForm, PersonalityForm
@@ -23,22 +23,30 @@ def register():
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('login'))
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(f"Error in {getattr(form, field).label.text}: {error}", 'danger')
     return render_template('register.html', title='Register', form=form)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-   if current_user.is_authenticated:
-      return redirect(url_for('home'))
-   form = LoginForm()
-   if form.validate_on_submit():
-      user = User.query.filter_by(email=form.email.data).first()
-      if user and bcrypt.check_password_hash(user.password, form.password.data):
-         login_user(user, remember=form.remember.data)
-         next_page = request.args.get('next')
-         return redirect(next_page) if next_page else redirect(url_for('home'))
-      else:
-         flash('Login Unsuccessful. Please check email and password', 'danger')
-   return render_template('login.html', title='Login', form=form)
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.user_id.data).first() # assume user_id is a username
+        if user is None:
+            user = User.query.filter_by(email=form.user_id.data).first() # assume user_id is an email
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('home'))
+        else:
+            flash('Login Unsuccessful. Please check your username/email and password', 'danger')
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(f"Error in {getattr(form, field).label.text}: {error}", 'danger')
+    return render_template('login.html', title='Login', form=form)
 
 @app.route("/profile/<username>")
 @login_required

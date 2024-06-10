@@ -1,19 +1,22 @@
+<!-- register.html -->
 {% extends "base.html" %}
 {% block content %}
 <h2>Register</h2>
 {% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <div class="alert alert-warning">
-      {{ messages[0] }}
-    </div>
-  {% endif %}
+{% if messages %}
+<ul class=flashes>
+{% for message in messages %}
+  <li>{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
 {% endwith %}
 <form method="POST">
-    {{ form.hidden_tag() }}
-    {{ form.username.label }} {{ form.username() }}
-    {{ form.email.label }} {{ form.email() }}
-    {{ form.password.label }} {{ form.password() }}
-    {{ form.confirm_password.label }} {{ form.confirm_password() }}
-    {{ form.submit() }}
+{{ form.hidden_tag() }}
+{{ form.username.label }} {{ form.username() }}
+{{ form.email.label }} {{ form.email() }}
+{{ form.password.label }} {{ form.password() }}
+{{ form.confirm_password.label }} {{ form.confirm_password() }}
+{{ form.submit() }}
 </form>
 {% endblock %}

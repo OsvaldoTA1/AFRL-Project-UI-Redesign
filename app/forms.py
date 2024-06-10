@@ -11,22 +11,45 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
     email = StringField('Email', validators=[DataRequired(), Email()])
 
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user:
+            raise ValidationError('That username is taken. Please choose a different one.')
+
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user:
-            flash('That email is taken. Please choose a different one.', 'danger')
             raise ValidationError('That email is taken. Please choose a different one.')
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    user_id = StringField('Username/Email', validators=[DataRequired()])  # replaced username with user_id
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user is None:
+            raise ValidationError('That username does not exist. Please choose a different one or register.')
+
 class PersonalityForm(FlaskForm):
-    # Openness
-    q1 = RadioField('I have a rich vocabulary.', choices=[('5', 'Strongly Agree'), ('4', 'Agree'),
-        ('3', 'Neutral'), ('2', 'Disagree'), ('1', 'Strongly Disagree')])
-    q2 = RadioField('I have a vivid imagination.', choices=[('5', 'Strongly Agree'), ('4', 'Agree'),
-        ('3', 'Neutral'), ('2', 'Disagree'), ('1', 'Strongly Disagree')])
-    # Repeat for other traits
+    questions = {
+        'openness': [
+            ('I have a rich vocabulary.', 'q1'),
+            ('I have a vivid imagination.', 'q2'),
+            # Add more questions here
+        ],
+        'conscientiousness': [
+            # Add questions here
+        ],
+        # Add other traits
+    }
+
+    for trait, qs in questions.items():
+        for text, field_name in qs:
+            locals()[field_name] = RadioField(
+                text,
+                choices=[('5', 'Strongly Agree'), ('4', 'Agree'), ('3', 'Neutral'), ('2', 'Disagree'), ('1', 'Strongly Disagree')],
+                validators=[DataRequired()]
+            )
+    submit = SubmitField('Submit')
