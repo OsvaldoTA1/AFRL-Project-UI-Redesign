@@ -54,19 +54,24 @@ def profile(username):
     user = User.query.filter_by(username=username).first_or_404()
     return render_template('profile.html', title='Profile', user=user)
 
+# personality_test helper
+def get_form_field(form, field_name):
+    return getattr(form, field_name)
+
 @app.route("/personality_test", methods=['GET', 'POST'])
 @login_required
 def personality_test():
     form = PersonalityForm()
     if form.validate_on_submit():
-        # Save the questionnaire results and calculate the OCEAN scores
-        openness_score = int(form.q1.data) + int(form.q2.data)
-        # repeat for every trait and save every score in the respective model
-        current_user.openness = openness_score
+        for trait in form.questions:
+            question_fields = [q for _, q in form.questions[trait]]
+            trait_score = sum(int(getattr(form, field).data) for field in question_fields)
+            setattr(current_user, trait, trait_score)
         db.session.commit()
         flash('Your personality test is submitted!', 'success')
         return redirect(url_for('home'))
-    return render_template('personality_test.html', title='Personality Test', form=form)
+    # here you should pass the new get_form_field function to your template
+    return render_template('personality_test.html', title='Personality Test', form=form, get_form_field=get_form_field)
 
 @app.route("/logout")
 def logout():

@@ -6,14 +6,13 @@
 <form method="POST">
     {{ form.hidden_tag() }}
 
-    <h5>Openness</h5>
-    <p>Q1: {{ form.q1.label }}</p> 
-    <p>{{ form.q1() }}</p>
-    <p>Q2: {{ form.q2.label }}</p> 
-    <p>{{ form.q2() }}</p>
-    <!-- Repeat for all questions -->
-
-    <!-- Repeat the same structure for other traits -->
+    {% for trait, questions in form.questions.items() %}
+    <h5>{{ trait.capitalize() }}</h5>
+        {% for text, field_name in questions %}
+            <p>{{ get_form_field(form, field_name).label }}</p>
+            <p>{{ get_form_field(form, field_name) }}</p>
+        {% endfor %}
+    {% endfor %}
 
     <input type="submit" value="Submit">
 </form>

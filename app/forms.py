@@ -35,13 +35,29 @@ class LoginForm(FlaskForm):
 class PersonalityForm(FlaskForm):
     questions = {
         'openness': [
-            ('I have a rich vocabulary.', 'q1'),
-            ('I have a vivid imagination.', 'q2'),
+            ('I have a rich vocabulary.', 'openness_q1'),
+            ('I have a vivid imagination.', 'openness_q2'),
             # Add more questions here
         ],
         'conscientiousness': [
-            # Add questions here
+            ('I am always prepared.', 'conscientiousness_q1'),
+            ('I pay attention to details.', 'conscientiousness_q2'),
+            # Add more questions here
         ],
+        'extraversion': [
+            ('I am the life of the party.', 'extraversion_q1'),
+            ("I don't mind being the center of attention.", 'extraversion_q2'),
+            #Add more questions here
+        ],
+        'agreeableness': [
+            ('I find interest in people.', 'agreeableness_q1'),
+            ("I feel others' emotions.", 'agreeableness_q2'),
+            #Add more questions here
+        ],
+        'neuroticism': [
+            ('I am easily disturbed.', 'neuroticism_q1'),
+            ('I get upset easily.', 'neuroticism_q2'),
+        ]
         # Add other traits
     }
 
