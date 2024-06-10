@@ -40,6 +40,12 @@ def login():
          flash('Login Unsuccessful. Please check email and password', 'danger')
    return render_template('login.html', title='Login', form=form)
 
+@app.route("/profile/<username>")
+@login_required
+def profile(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('profile.html', title='Profile', user=user)
+
 @app.route("/personality_test", methods=['GET', 'POST'])
 @login_required
 def personality_test():
@@ -48,6 +54,8 @@ def personality_test():
         # Save the questionnaire results and calculate the OCEAN scores
         openness_score = int(form.q1.data) + int(form.q2.data)
         # repeat for every trait and save every score in the respective model
+        current_user.openness = openness_score
+        db.session.commit()
         flash('Your personality test is submitted!', 'success')
         return redirect(url_for('home'))
     return render_template('personality_test.html', title='Personality Test', form=form)

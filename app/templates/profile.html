@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ user.username }}'s Profile</h2>
+<p>Email: {{ user.email }}</p>
+<p>Openness: {{ user.openness }}</p>
+<p>Conscientiousness: {{ user.conscientiousness }}</p>
+<p>Extraversion: {{ user.extraversion }}</p>
+<p>Agreeableness: {{ user.agreeableness }}</p>
+<p>Neuroticism: {{ user.neuroticism }}</p>
+{% endblock %}
