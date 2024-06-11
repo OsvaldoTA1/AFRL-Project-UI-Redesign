@@ -4,6 +4,7 @@ from app import db, bcrypt
 from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm
 from app.models import User
 from flask_login import login_user, current_user, logout_user, login_required
+import json
 
 @app.route("/")
 @app.route("/home")
@@ -97,16 +98,21 @@ def get_form_field(form, field_name):
 @login_required
 def personality_test():
     form = PersonalityForm()
+    with open('questions.json') as f:
+        questions = json.load(f)
     if form.validate_on_submit():
-        for trait in form.questions:
-            question_fields = [q for _, q in form.questions[trait]]
+        for trait in questions:  # update here
+            question_fields = [q for _, q in questions[trait]]
             trait_score = sum(int(getattr(form, field).data) for field in question_fields)
             setattr(current_user, trait, trait_score)
         db.session.commit()
         flash('Your personality test is submitted!', 'success')
         return redirect(url_for('home'))
-    # here you should pass the new get_form_field function to your template
-    return render_template('personality_test.html', title='Personality Test', form=form, get_form_field=get_form_field)
+    return render_template('personality_test.html', 
+                           title='Personality Test', 
+                           form=form,
+                           questions=questions, 
+                           get_form_field=get_form_field)
 
 @app.route("/logout")
 def logout():

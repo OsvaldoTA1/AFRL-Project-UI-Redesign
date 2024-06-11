@@ -1,0 +1,22 @@
+{
+    "openness": [
+        ["I have a rich vocabulary.", "openness_q1"],
+        ["I have a vivid imagination.", "openness_q2"]
+    ],
+    "conscientiousness": [
+        ["I am always prepared.", "conscientiousness_q1"],
+        ["I pay attention to details.", "conscientiousness_q2"]
+    ],
+    "extraversion": [
+        ["I am the life of the party.", "extraversion_q1"],
+        ["I don't mind being the center of attention.", "extraversion_q2"]
+    ],
+    "agreeableness": [
+        ["I find interest in people.", "agreeableness_q1"],
+        ["I feel others' emotions.", "agreeableness_q2"]
+    ],
+    "neuroticism": [
+        ["I am easily disturbed.", "neuroticism_q1"],
+        ["I get upset easily.", "neuroticism_q2"]
+    ]
+}

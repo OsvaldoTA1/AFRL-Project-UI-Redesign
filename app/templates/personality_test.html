@@ -10,14 +10,15 @@ Personality Test | OpenOcean.ai
 <form method="POST">
     {{ form.hidden_tag() }}
 
-    {% for trait, questions in form.questions.items() %}
-    <h5>{{ trait.capitalize() }}</h5>
-        {% for text, field_name in questions %}
-            <p>{{ get_form_field(form, field_name).label }}</p>
-            <p>{{ get_form_field(form, field_name) }}</p>
+    {% for trait in questions %}
+        <h3>{{ trait.capitalize() }}</h3>
+
+        {% for question, field_name in questions[trait] %}
+            <p>{{ form[field_name].label }}</p>
+            <p>{{ form[field_name]() }}</p>
         {% endfor %}
     {% endfor %}
 
-    <input type="submit" value="Submit">
+    {{ form.submit() }}
 </form>
 {% endblock %}

@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Radio
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from wtforms.fields import DateField
 from app.models import User
-from flask import flash
+import json
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -47,35 +47,11 @@ class LoginForm(FlaskForm):
         if user is None:
             raise ValidationError('That username does not exist. Please choose a different one or register.')
 
-class PersonalityForm(FlaskForm):
-    questions = {
-        'openness': [
-            ('I have a rich vocabulary.', 'openness_q1'),
-            ('I have a vivid imagination.', 'openness_q2'),
-            # Add more questions here
-        ],
-        'conscientiousness': [
-            ('I am always prepared.', 'conscientiousness_q1'),
-            ('I pay attention to details.', 'conscientiousness_q2'),
-            # Add more questions here
-        ],
-        'extraversion': [
-            ('I am the life of the party.', 'extraversion_q1'),
-            ("I don't mind being the center of attention.", 'extraversion_q2'),
-            #Add more questions here
-        ],
-        'agreeableness': [
-            ('I find interest in people.', 'agreeableness_q1'),
-            ("I feel others' emotions.", 'agreeableness_q2'),
-            #Add more questions here
-        ],
-        'neuroticism': [
-            ('I am easily disturbed.', 'neuroticism_q1'),
-            ('I get upset easily.', 'neuroticism_q2'),
-        ]
-        # Add other traits
-    }
+# Moved hardcoded questions to questions.jason file.
+with open('questions.json') as f:
+    questions = json.load(f)
 
+class PersonalityForm(FlaskForm):
     for trait, qs in questions.items():
         for text, field_name in qs:
             locals()[field_name] = RadioField(
