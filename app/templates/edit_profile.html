@@ -4,9 +4,20 @@ Edit Profile | OpenOcean.ai
 {% endblock %}
 {% block body %}
 <h1>Edit Profile</h1>
+
+<h2>Edit Birthday</h2>
 <form method="POST">
-    {{ form.hidden_tag() }}
-    {{ form.birth_date.label }} {{ form.birth_date() }}
-    {{ form.submit() }}
+    {{ form_birthday.hidden_tag() }}   
+    {{ form_birthday.birth_date.label }} {{ form_birthday.birth_date() }}
+    {{ form_birthday.submit() }}
 </form>
+
+<h2>Edit Gender and Pronouns</h2>
+<form method="POST">
+    {{ form_gender_pronouns.hidden_tag() }}  
+    {{ form_gender_pronouns.gender.label }} {{ form_gender_pronouns.gender() }}
+    {{ form_gender_pronouns.pronouns.label }} {{ form_gender_pronouns.pronouns() }}
+    {{ form_gender_pronouns.submit() }}
+</form>
+
 {% endblock %}

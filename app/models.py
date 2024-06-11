@@ -12,6 +12,8 @@ class User(db.Model, UserMixin):
     birth_date = db.Column(db.Date) # new birth-date field
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    gender = db.Column(db.String(10))
+    pronouns = db.Column(db.String(30))
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
     is_profile_complete = db.Column(db.Boolean, default=False)

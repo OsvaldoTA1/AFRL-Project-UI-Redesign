@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Flask
 from flask import current_app as app
 from app import db, bcrypt
-from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditProfileForm
+from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm
 from app.models import User
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -64,14 +64,30 @@ def profile(username):
 @app.route("/edit_profile", methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    form = EditProfileForm()
-    if form.validate_on_submit():
-        current_user.birth_date = form.birth_date.data
+    form_birthday = EditBirthdayForm()
+    form_gender_pronouns = EditGenderPronounsForm()
+
+    if form_birthday.validate_on_submit():
+        current_user.birth_date = form_birthday.birth_date.data
         current_user.is_profile_complete = True
         db.session.commit()
-        flash('Your profile has been updated!', 'success')
-        return redirect(url_for('profile', username=current_user.username))
-    return render_template('edit_profile.html', title='Edit Profile', form=form)
+        flash('Your birthdate has been updated!', 'success')
+
+    if form_gender_pronouns.validate_on_submit():
+        current_user.gender = form_gender_pronouns.gender.data
+        current_user.pronouns = form_gender_pronouns.pronouns.data
+        db.session.commit()
+        flash('Your gender and pronouns have been updated!', 'success')
+
+    if request.method == 'GET':
+        form_birthday.birth_date.data = current_user.birth_date
+        form_gender_pronouns.gender.data = current_user.gender
+        form_gender_pronouns.pronouns.data = current_user.pronouns
+
+    return render_template('edit_profile.html',
+                           title='Edit Profile',
+                           form_birthday=form_birthday,
+                           form_gender_pronouns=form_gender_pronouns)
 
 # personality_test helper
 def get_form_field(form, field_name):

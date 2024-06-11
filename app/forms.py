@@ -9,6 +9,8 @@ class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     birth_date = DateField('BirthDate', format='%Y-%m-%d', validators=[DataRequired()]) # New birth-date field
     email = StringField('Email', validators=[DataRequired(), Email()])
+    gender = StringField('Gender')
+    pronouns = StringField('Pronouns')
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sign Up')
@@ -23,8 +25,15 @@ class RegistrationForm(FlaskForm):
         if user:
             raise ValidationError('That email is taken. Please choose a different one.')
         
-class EditProfileForm(FlaskForm):
-    birth_date = DateField('Birthdate', format='%Y-%m-%d')
+# Separate form for birthdate
+class EditBirthdayForm(FlaskForm):
+    birth_date = DateField('Birthdate', format='%Y-%m-%d', validators=[DataRequired()])
+    submit = SubmitField('Save')
+
+# Separate form for Gender and Pronouns
+class EditGenderPronounsForm(FlaskForm):
+    gender = StringField('Gender', validators=[DataRequired()])
+    pronouns = StringField('Pronouns', validators=[DataRequired()])
     submit = SubmitField('Save')
 
 class LoginForm(FlaskForm):
