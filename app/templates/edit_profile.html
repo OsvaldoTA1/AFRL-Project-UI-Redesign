@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}
+Edit Profile | OpenOcean.ai
+{% endblock %}
+{% block body %}
+<h1>Edit Profile</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.birth_date.label }} {{ form.birth_date() }}
+    {{ form.submit() }}
+</form>
+{% endblock %}

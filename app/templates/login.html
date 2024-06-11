@@ -1,6 +1,9 @@
 <!-- login.html -->
 {% extends "base.html" %}
-{% block content %}
+{% block title %}
+Login | OpenOcean.ai
+{% endblock %}
+{% block body %}
   <h2>Login</h2>
   <form method="POST">
     {{ form.hidden_tag() }}
@@ -9,13 +12,4 @@
     {{ form.remember.label }} {{ form.remember() }}
     {{ form.submit() }}
   </form>
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul class=flashes>
-         {% for message in messages %}
-           <li>{{ message }}</li>
-         {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
 {% endblock %}

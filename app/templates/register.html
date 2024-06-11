@@ -1,20 +1,15 @@
 <!-- register.html -->
 {% extends "base.html" %}
-{% block content %}
+{% block title %}
+Register | OpenOcean.ai
+{% endblock %}
+{% block body %}
 <h2>Register</h2>
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul class=flashes>
-{% for message in messages %}
-  <li>{{ message }}</li>
-{% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
 <form method="POST">
 {{ form.hidden_tag() }}
 {{ form.username.label }} {{ form.username() }}
 {{ form.email.label }} {{ form.email() }}
+{{ form.birth_date.label }} {{ form.birth_date() }}  <!-- New birth_date field -->
 {{ form.password.label }} {{ form.password() }}
 {{ form.confirm_password.label }} {{ form.confirm_password() }}
 {{ form.submit() }}

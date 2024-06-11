@@ -1,7 +1,11 @@
 {% extends "base.html" %}
-{% block content %}
+{% block title %}
+{{ user.username }}'s Profile | OpenOcean.ai
+{% endblock %}
+{% block body %}
 <h2>{{ user.username }}'s Profile</h2>
 <p>Email: {{ user.email }}</p>
+<p>Birthdate: {% if user.birth_date %}{{ user.birth_date.strftime('%Y-%m-%d') }}{% else %}Not Set{% endif %}</p>  <!-- New birthdate display -->
 <p>Openness: {{ user.openness }}</p>
 <p>Conscientiousness: {{ user.conscientiousness }}</p>
 <p>Extraversion: {{ user.extraversion }}</p>
