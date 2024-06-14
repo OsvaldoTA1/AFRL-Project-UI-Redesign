@@ -1,5 +1,21 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block body %}
-  <h1> Welcome to OpenOcean.ai! </h1>
+<h1>Welcome to OpenOcean.ai</h1>
+
+{% if current_user.is_authenticated %}
+    <div id="chat-box">
+        <h2>Chat</h2>
+        <form method="POST" id="chat-form">
+            {{ form.hidden_tag() }}
+            {{ form.message.label }}{{ form.message() }}
+            {{ form.send() }}
+        </form>
+        <div id="chat-messages">
+            <!-- Messages will appear here -->
+        </div>
+    </div>
+{% else %}
+    <p>Log in and join the fun!</p>
+{% endif %}
 {% endblock %}

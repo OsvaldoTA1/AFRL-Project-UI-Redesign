@@ -1,16 +1,22 @@
-from flask import render_template, url_for, flash, redirect, request, Flask
+from flask import render_template, url_for, flash, redirect, request, jsonify
 from flask import current_app as app
 from app import db, bcrypt
-from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm
+from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm
 from app.models import User
 from flask_login import login_user, current_user, logout_user, login_required
 import json
 
 @app.route("/")
-@app.route("/home")
+@app.route("/home", methods=['GET', 'POST'])
 def home():
-    return render_template('home.html')
-
+    form = ChatForm()
+    if form.validate_on_submit() and current_user.is_authenticated:
+        message = form.message.data
+        print(f'{current_user.username}: {message}')  # Print to the terminal
+        # You can also save the message to the database if needed
+        flash('Message sent to the terminal!', 'success')
+        return redirect(url_for('home'))
+    return render_template('home.html', form=form)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -55,6 +61,16 @@ def login():
         for error in errors:
             flash(f"Error in {getattr(form, field).label.text}: {error}", 'danger')
     return render_template('login.html', title='Login', form=form)
+
+@app.route("/chat", methods=['POST'])
+@login_required
+def chat():
+    form = ChatForm()
+    if form.validate_on_submit():
+        message = form.message.data
+        print(f'{current_user.username}: {message}')  # Print to server console for debugging
+        return jsonify({'message': f'{current_user.username}: {message}'}) # Print inside chat box
+    return jsonify({'error': 'Form validation failed'}), 400
 
 @app.route("/profile/<username>")
 @login_required

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+</head>
+<body>
+  <form method="POST" id="chat-form">
+    {{ form.hidden_tag() }}
+    {{ form.message.label }}{{ form.message() }}
+    {{ form.send() }}
+  </form>
+  <div id="chat-messages">
+    <!-- Existing messages should appear here -->
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+  </div>
+  <script>
+    document.getElementById('chat-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting the traditional way
+
+        const messageInput = document.querySelector('[name="message"]');
+        const message = messageInput.value;
+        const chatUrl = "{{ url_for('chat') }}";
+
+        fetch(chatUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ form.csrf_token._value() }}'
+            },
+            body: new URLSearchParams(new FormData(this)) // Ensure form data is properly formatted
+        })
+        .then(response => {
+            if (response.ok) {
+                // Append the new message to the chat box
+                return response.json();
+            } else {
+                throw new Error('Failed to send message');
+            }
+        })
+        .then(data => {
+            const chatMessages = document.getElementById('chat-messages');
+            const newMessage = document.createElement('p');
+            newMessage.textContent = data.message;
+            chatMessages.appendChild(newMessage);
+            messageInput.value = ''; // Clear the input field
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
+        })
+        .catch(error => console.error('Error:', error));
+    });
+  </script>
+</body>
+</html>

@@ -7,7 +7,7 @@ import json
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
-    birth_date = DateField('BirthDate', format='%Y-%m-%d', validators=[DataRequired()]) # New birth-date field
+    birth_date = DateField('BirthDate', format='%Y-%m-%d', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     gender = StringField('Gender')
     pronouns = StringField('Pronouns')
@@ -24,20 +24,18 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError('That email is taken. Please choose a different one.')
-        
-# Separate form for birthdate
+
 class EditBirthdayForm(FlaskForm):
     birth_date = DateField('Birthdate', format='%Y-%m-%d', validators=[DataRequired()])
     submit = SubmitField('Save')
 
-# Separate form for Gender and Pronouns
 class EditGenderPronounsForm(FlaskForm):
     gender = StringField('Gender', validators=[DataRequired()])
     pronouns = StringField('Pronouns', validators=[DataRequired()])
     submit = SubmitField('Save')
 
 class LoginForm(FlaskForm):
-    user_id = StringField('Username/Email', validators=[DataRequired()])  # replaced username with user_id
+    user_id = StringField('Username/Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
@@ -47,16 +45,20 @@ class LoginForm(FlaskForm):
         if user is None:
             raise ValidationError('That username does not exist. Please choose a different one or register.')
 
-# Moved hardcoded questions to questions.jason file.
+class ChatForm(FlaskForm):
+    message = StringField('Message', validators=[DataRequired()])
+    send = SubmitField('Send')
+
+class PersonalityForm(FlaskForm):
+    submit = SubmitField('Submit')
+
 with open('questions.json') as f:
     questions = json.load(f)
 
-class PersonalityForm(FlaskForm):
-    for trait, qs in questions.items():
-        for text, field_name in qs:
-            locals()[field_name] = RadioField(
-                text,
-                choices=[('5', 'Strongly Agree'), ('4', 'Agree'), ('3', 'Neutral'), ('2', 'Disagree'), ('1', 'Strongly Disagree')],
-                validators=[DataRequired()]
-            )
-    submit = SubmitField('Submit')
+for trait, qs in questions.items():
+    for text, field_name in qs:
+        setattr(PersonalityForm, field_name, RadioField(
+            text,
+            choices=[('5', 'Strongly Agree'), ('4', 'Agree'), ('3', 'Neutral'), ('2', 'Disagree'), ('1', 'Strongly Disagree')],
+            validators=[DataRequired()]
+        ))

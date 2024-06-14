@@ -1,50 +1,52 @@
 <!doctype html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>{% block title %}Home | OpenOcean.ai{% endblock %}</title>
-    </head>
-    <body>
-      <header>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>{% block title %}Home | OpenOcean.ai{% endblock %}</title>
+</head>
+<body>
+    <header>
         <nav>
-          <!-- Insert Your Brand Logo-->
-          <a href="{{ url_for('home') }}">OpenOcean.ai</a>
+            <!-- Insert Your Brand Logo-->
+            <a href="{{ url_for('home') }}">OpenOcean.ai</a>
 
-          <!-- Navigation Links -->
-          <ul>
-            <li {% if request.endpoint=='home' %}class="active"{% endif %}><a href="{{ url_for('home') }}">Home</a></li>
-            {% if current_user.is_authenticated %}
-              <li {% if request.endpoint=='profile' %}class="active"{% endif %}><a href="{{ url_for('profile', username=current_user.username) }}">Profile</a></li>
-              <li {% if request.endpoint=='personality_test' %}class="active"{% endif %}><a href="{{ url_for('personality_test') }}">Personality Test</a></li>
-              <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-            {% else %}
-              <li {% if request.endpoint=='login' %}class="active"{% endif %}><a href="{{ url_for('login') }}">Log In</a></li>
-              <li {% if request.endpoint=='register' %}class="active"{% endif %}><a href="{{ url_for('register') }}">Register</a></li>
-            {% endif %}
-          </ul>
+            <!-- Navigation Links -->
+            <ul>
+                <li {% if request.endpoint=='home' %}class="active"{% endif %}><a href="{{ url_for('home') }}">Home</a></li>
+                {% if current_user.is_authenticated %}
+                    <li {% if request.endpoint=='profile' %}class="active"{% endif %}><a href="{{ url_for('profile', username=current_user.username) }}">Profile</a></li>
+                    <li {% if request.endpoint=='personality_test' %}class="active"{% endif %}><a href="{{ url_for('personality_test') }}">Personality Test</a></li>
+                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                {% else %}
+                    <li {% if request.endpoint=='login' %}class="active"{% endif %}><a href="{{ url_for('login') }}">Log In</a></li>
+                    <li {% if request.endpoint=='register' %}class="active"{% endif %}><a href="{{ url_for('register') }}">Register</a></li>
+                {% endif %}
+            </ul>
         </nav>
-      </header>
-      <!-- Flash Messages Start Here -->
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-<!-- Flash Messages End Here -->
+    </header>
 
-      <main>
+    <!-- Flash Messages Start Here -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <!-- Flash Messages End Here -->
+
+    <main>
         {% block body %}
             <!-- This will be filled with each page's specific content -->
         {% endblock %}
-      </main>
+    </main>
 
-      <footer>
+    <footer>
         &copy; {{ current_year }} - OpenOcean.ai
-      </footer>
-    </body>
-    </html>
+    </footer>
+</body>
+</html>
