@@ -63,14 +63,13 @@ nav ul li a:hover, nav ul li.active a {
 #chat-box {
     position: fixed;
     bottom: 20%;  /* Adjust this to move up and down */
-    left: 25%;  /* Adjust this to move left and right */
+    left: 25%;   /* Adjust this to move left and right */
     width: 50%;  /* Adjust width as needed */
-    max-height: 500px;
+    height: 60%;  /* Adjust this to your desired chatbox height */
     border: none;
     border-radius: 8px;
     background-color: #333;  /* Matching your top page banner/nav color */
-    box-shadow: 0 5px 9px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
+    box-shadow: 0 20px 9px rgba(0, 0, 0, 0.3);
     color: #857b7b;  /* Text color for the chat box, adjust if needed */
 }
 
@@ -82,9 +81,9 @@ nav ul li a:hover, nav ul li.active a {
 }
 
 /* Ensuring chat box has a functional and user-friendly scroll for messages */
-#chat-box #chat-messages, #chat-messages {
+#chat-messages {
     overflow-y: auto; /* Allows scrolling */
-    max-height: 500px; /* Adjust height as needed to fit within chat-box */
+    height: 80%;  /* Adjust this to take into account the other elements within the chat-box */
     padding: 10px;
     background-color: #e8e8e8; /* Light grey background for contrast */
     margin-bottom: 10px; /* Space between messages and input box */

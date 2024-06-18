@@ -2,3 +2,5 @@ myenv/
 __pycache__/
 *.pyc
 instance/site.db
+app/llama3.py
+responses.csv
