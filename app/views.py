@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, jsonify
+from flask import render_template, url_for, flash, redirect, request, jsonify, abort
 from flask import current_app as app
 from app import db, bcrypt, socketio
 from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm
@@ -6,6 +6,7 @@ from app.models import User, ChatMessage
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 from flask_socketio import emit, join_room
+from app.ollama import generate_ai_response
 import json
 
 @app.route("/")
@@ -17,19 +18,20 @@ def home():
 
 @socketio.on('message')
 def handleMessage(msg):
-    # Ensure current_user is anonymous
     if current_user.is_authenticated:
-        # Store new chat message in the database
-        chat = ChatMessage(message=msg, username=current_user.username, user_id=current_user.id)
-        db.session.add(chat)
-        db.session.commit()
+        try:
+            chat = ChatMessage(message=msg, username=current_user.username, user_id=current_user.id)
+            db.session.add(chat)
+            db.session.commit()
 
-        # Broadcast the new message to all connected clients
-        emit('message', {
-            'username': current_user.username,
-            'message': msg,
-            'timestamp': datetime.now().strftime("%H:%M:%S")
-        }, broadcast=True)
+            emit('message', {
+                'username': current_user.username,
+                'message': msg,
+                'timestamp': chat.timestamp.strftime("%H:%M")
+            }, broadcast=True)
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error handling message: {e}")
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -90,6 +92,38 @@ def get_messages():
         })
 
     return jsonify(messages_data)
+
+@app.route('/get_ai_response', methods=['POST'])
+@login_required
+def get_ai_response():
+    '''  debug statements for terminal incase of failed response.
+    print("Get AI Response function is called.")
+    print('Full Request:', request)
+    print('Received data:', request.get_data(as_text=True)) '''
+    
+    data = request.get_json()
+
+    if not data or 'message' not in data:
+        abort(400, description="Missing 'message' parameter in JSON data.")
+
+    user_message = data.get('message')
+
+    # Generate AI response using Llama3
+    try:
+        ai_response = generate_ai_response(user_message)
+    except Exception as e:
+        # Return error message in case of an issue
+        return jsonify(error=str(e)), 500
+
+    # Save user message and ai response
+    user_chat_message = ChatMessage(username=current_user.username, message=user_message, is_user=True)  # assuming 'is_user' attribute to differentiate user and ai messages
+    ai_chat_message = ChatMessage(username='AI', message=ai_response, is_user=False)
+    db.session.add(user_chat_message)
+    db.session.add(ai_chat_message)
+    db.session.commit()
+
+    # Return AI response
+    return jsonify(ai_response=ai_response)
 
 @app.route("/profile/<username>")
 @login_required

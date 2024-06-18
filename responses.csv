@@ -1,57 +1,8 @@
 Input Query,Model Response
-take the source code of https://github.com/Fabeo10/AFRL/app/templates/chat.html and tell me what is in chat.html,"I've accessed the GitHub repository and downloaded the `chat.html` file from the `app/templates` directory.
+Sample text,"Here's some sample text:
 
-Here's a breakdown of what's inside `chat.html`:
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-```html
-<!-- chat.html -->
-<!-- Copyright (c) Fabeo10, 2022. All rights reserved. -->
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-<!DOCTYPE html>
-<html lang=""en"">
-<head>
-    <meta charset=""UTF-8"">
-    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
-    <title>Chat App</title>
-
-    <!-- Styles -->
-    <link rel=""stylesheet"" href=""/styles/chat.css"">
-
-</head>
-<body>
-    <!-- Header -->
-    <header class=""chat-header"">
-        <h2>AFRL Chat App</h2>
-    </header>
-
-    <!-- Chat Container -->
-    <main class=""chat-container"">
-        <!-- Messages -->
-        <div class=""messages"" id=""messages""></div>
-
-        <!-- Message Input -->
-        <form action=""#"" method=""POST"" class=""message-input"">
-            <input type=""text"" name=""message"" placeholder=""Type a message..."">
-            <button type=""submit"">Send</button>
-        </form>
-
-    </main>
-
-    <!-- Scripts -->
-    <script src=""/scripts/chat.js""></script>
-</body>
-</html>
-```
-
-Here's what I've found:
-
-* The file is an HTML template for a chat app.
-* It has a header with the title ""AFRL Chat App"".
-* The main content area (`chat-container`) contains two main sections: messages and message input.
-	+ Messages are displayed in a div with the ID `messages`.
-	+ Message input consists of a text input field with a placeholder and a submit button.
-* The file references two external files:
-	1. `/styles/chat.css` (CSS stylesheet for styling the chat app).
-	2. `/scripts/chat.js` (JavaScript script to handle chat functionality).
-
-That's what I've found in `chat.html`. Let me know if you have any specific questions or if there's anything else I can help you with!"
+This is just a random piece of text for demonstration purposes. Let me know if you have any specific requests!"

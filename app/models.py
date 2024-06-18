@@ -33,6 +33,7 @@ class ChatMessage(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     username = db.Column(db.String(80))  # added line
+    is_user = db.Column(db.Boolean, nullable=True, default=True)
 
     def __repr__(self):
         return f"ChatMessage('{self.message}', '{self.timestamp}')"

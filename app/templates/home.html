@@ -28,34 +28,46 @@
     <!-- Your chat-related JavaScript comes after -->
     <script>
         $(document).ready(function() {
-            console.log('Document ready');
-            
             var socket = io.connect('http://' + document.domain + ':' + location.port);
             var chatForm = $('#chat-form');
             var chatBox = $('#chat-messages');
             var messageInput = $('input[name="message"]');
     
-            // submit handler for the form
+            // Submit handler for the form
             chatForm.on('submit', function(e) {
-                console.log('Submit handler triggered');
-                e.preventDefault(); // prevents page reloading
-                console.log('Default prevented');
-                var msg = messageInput.val(); // get input value
-                console.log('Message obtained:', msg);
+                e.preventDefault();
+                var msg = messageInput.val();
                 socket.emit('message', msg);
-                console.log('Message emitted');
-                messageInput.val(''); // clear the chat box after sending message
-                console.log('Input cleared');
+    
+                // Make AJAX request to get_aI_response along with the message
+                $.ajax({
+                    url: "{{ url_for('get_ai_response') }}",
+                    method: "POST",
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify({message: msg}), // convert the data to JSON format
+                    headers:{
+                        'X-CSRFToken': "{{ csrf_token() }}" // add this token for non-GET requests
+                    },
+                    success: function(data) {
+                        if (data.error) {
+                            console.log('AI responded with error:', data.error);
+                        } else {
+                            // Receive AI response and append to the chat box
+                            var newAIMessage = $('<p>').text('AI: ' + data.ai_response);
+                            chatBox.append(newAIMessage);
+                            chatBox.scrollTop(chatBox[0].scrollHeight);
+                        }
+                    }
+                });
+    
+                messageInput.val('');
                 return false;
             });
-    
-            // show messages received
+            // Show messages received
             socket.on('message', function(msg) {
-                console.log('Message received:', msg);
                 var newMessage = $('<p>').text(msg.username + " (" + msg.timestamp + "): " + msg.message);
-                    chatBox.append(newMessage);
-                    chatBox.scrollTop(chatBox[0].scrollHeight); // Scroll to the bottom
-                console.log('Message appended');
+                chatBox.append(newMessage);
+                chatBox.scrollTop(chatBox[0].scrollHeight);
             });
         });
     </script>
