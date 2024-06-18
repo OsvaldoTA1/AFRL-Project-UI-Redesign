@@ -1,22 +1,35 @@
 from flask import render_template, url_for, flash, redirect, request, jsonify
 from flask import current_app as app
-from app import db, bcrypt
+from app import db, bcrypt, socketio
 from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm
-from app.models import User
+from app.models import User, ChatMessage
 from flask_login import login_user, current_user, logout_user, login_required
+from datetime import datetime
+from flask_socketio import emit, join_room
 import json
 
 @app.route("/")
 @app.route("/home", methods=['GET', 'POST'])
 def home():
     form = ChatForm()
-    if form.validate_on_submit() and current_user.is_authenticated:
-        message = form.message.data
-        print(f'{current_user.username}: {message}')  # Print to the terminal
-        # You can also save the message to the database if needed
-        flash('Message sent to the terminal!', 'success')
-        return redirect(url_for('home'))
-    return render_template('home.html', form=form)
+    messages = ChatMessage.query.order_by(ChatMessage.timestamp.asc())  # Retrieves existing chat messages 
+    return render_template('home.html', title='Home', form=form, messages=messages)
+
+@socketio.on('message')
+def handleMessage(msg):
+    # Ensure current_user is anonymous
+    if current_user.is_authenticated:
+        # Store new chat message in the database
+        chat = ChatMessage(message=msg, username=current_user.username, user_id=current_user.id)
+        db.session.add(chat)
+        db.session.commit()
+
+        # Broadcast the new message to all connected clients
+        emit('message', {
+            'username': current_user.username,
+            'message': msg,
+            'timestamp': datetime.now().strftime("%H:%M:%S")
+        }, broadcast=True)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -62,15 +75,21 @@ def login():
             flash(f"Error in {getattr(form, field).label.text}: {error}", 'danger')
     return render_template('login.html', title='Login', form=form)
 
-@app.route("/chat", methods=['POST'])
+@app.route("/chat/get_messages", methods=['GET'])
 @login_required
-def chat():
-    form = ChatForm()
-    if form.validate_on_submit():
-        message = form.message.data
-        print(f'{current_user.username}: {message}')  # Print to server console for debugging
-        return jsonify({'message': f'{current_user.username}: {message}'}) # Print inside chat box
-    return jsonify({'error': 'Form validation failed'}), 400
+def get_messages():
+    messages = ChatMessage.query.all() # Replace ChatMessage with your chat message model.
+
+    # Transform SQLAlchemy objects to dictionary.
+    messages_data = []
+    for message in messages:
+        messages_data.append({
+            'username': message.author.username,  # assuming author is a backref to User
+            'timestamp': message.timestamp.strftime("%H:%M:%S"),
+            'text': message.text
+        })
+
+    return jsonify(messages_data)
 
 @app.route("/profile/<username>")
 @login_required

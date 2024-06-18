@@ -12,9 +12,54 @@
             {{ form.send() }}
         </form>
         <div id="chat-messages">
-            <!-- Messages will appear here -->
+            <!-- Existing messages should appear here -->
+            {% for message in messages %}
+            <p>{{ message.username }}: {{ message.message }}</p>
+            {% endfor %}
         </div>
     </div>
+
+    <!-- Include jQuery from CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> 
+
+    <!-- Include Socket.IO JavaScript client from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+
+    <!-- Your chat-related JavaScript comes after -->
+    <script>
+        $(document).ready(function() {
+            console.log('Document ready');
+            
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+            var chatForm = $('#chat-form');
+            var chatBox = $('#chat-messages');
+            var messageInput = $('input[name="message"]');
+    
+            // submit handler for the form
+            chatForm.on('submit', function(e) {
+                console.log('Submit handler triggered');
+                e.preventDefault(); // prevents page reloading
+                console.log('Default prevented');
+                var msg = messageInput.val(); // get input value
+                console.log('Message obtained:', msg);
+                socket.emit('message', msg);
+                console.log('Message emitted');
+                messageInput.val(''); // clear the chat box after sending message
+                console.log('Input cleared');
+                return false;
+            });
+    
+            // show messages received
+            socket.on('message', function(msg) {
+                console.log('Message received:', msg);
+                var newMessage = $('<p>').text(msg.username + " (" + msg.timestamp + "): " + msg.message);
+                    chatBox.append(newMessage);
+                    chatBox.scrollTop(chatBox[0].scrollHeight); // Scroll to the bottom
+                console.log('Message appended');
+            });
+        });
+    </script>
+
 {% else %}
     <p>Log in and join the fun!</p>
 {% endif %}

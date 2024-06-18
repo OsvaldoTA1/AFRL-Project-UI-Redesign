@@ -1,13 +1,16 @@
+/* Body, header, and navigation styles maintained */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f4f4f4; /* Light background for contrast */
 }
 
 header {
     background-color: #333;
     color: #fff;
-    padding: 10px 0;
+    padding: 20px 0;
+    text-align: center; /* Center-align header text */
 }
 
 nav ul {
@@ -15,6 +18,7 @@ nav ul {
     padding: 0;
     display: flex;
     justify-content: center;
+    margin: 0; /* Reset margin for consistency */
 }
 
 nav ul li {
@@ -24,12 +28,11 @@ nav ul li {
 nav ul li a {
     color: #fff;
     text-decoration: none;
+    padding: 5px 10px; /* Added padding for clickability */
+    border-radius: 5px; /* Rounded corners for nav links */
 }
 
-nav ul li.active a {
-    font-weight: bold;
-}
-
+/* Flash messages decoration */
 .flashes {
     list-style-type: none;
     padding: 0;
@@ -45,57 +48,68 @@ nav ul li.active a {
     border-radius: 5px;
 }
 
-/* Chat box styles */
+nav ul li a:hover, nav ul li.active a {
+    background-color: #555; /* Hover and active state */
+    color: #ddd;
+}
+
+/* Updated styles for messages and input interaction enhancement */
 #chat-box {
     position: fixed;
-    bottom: 15px;
-    right: 15px;
-    width: 300px;
-    max-height: 400px;
-    border: 1px solid #333;
-    border-radius: 10px;
+    bottom: 20px;
+    right: 20px;
+    width: 320px;
+    max-height: 500px;
+    border: none; /* Removing the border for a lighter look */
+    border-radius: 8px;
     background-color: #fff;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    overflow: hidden; /* Hides the overflow */
 }
 
 #chat-box h2 {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-    margin: 0;
-    text-align: center;
+    background-color: #005A9C; /* Change to a different accent color */
+    margin: 0; /* Ensure no extra margin */
+    padding: 12px;
+    font-size: 18px; /* Make text size consistent */
 }
 
-#chat-box #chat-messages {
-    height: 300px;
-    overflow-y: scroll;
+/* Ensuring chat box has a functional and user-friendly scroll for messages */
+#chat-box #chat-messages, #chat-messages {
+    overflow-y: auto; /* Allows scrolling */
+    max-height: 300px; /* Adjust height as needed to fit within chat-box */
     padding: 10px;
+    background-color: #e8e8e8; /* Light grey background for contrast */
+    margin-bottom: 10px; /* Space between messages and input box */
 }
 
+/* This targets the form specifically within the chat box for any final adjustments */
 #chat-box form {
     display: flex;
-    flex-direction: column;
+    gap: 10px; /* Ensures space between input and button */
     padding: 10px;
+    background-color: #f0f0f0;
+    border-top: 1px solid #ddd;
 }
 
 #chat-box form input[type="text"] {
-    flex: 1;
+    flex: 1; /* Allow input to fill space */
     padding: 10px;
-    margin-bottom: 10px;
+    margin-right: 10px; /* Add spacing between input box and button */
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 4px; /* Rounded corners for input box */
 }
 
-#chat-box form input[type="submit"] {
-    padding: 10px;
-    background-color: #333;
+#chat-box input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #005A9C; /* Matching header color for consistency */
     color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
 }
 
-#chat-box form input[type="submit"]:hover {
-    background-color: #555;
+#chat-box input[type="submit"]:hover {
+    background-color: #004080; /* Darker shade on hover */
 }
