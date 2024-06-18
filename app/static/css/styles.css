@@ -84,7 +84,7 @@ nav ul li a:hover, nav ul li.active a {
 /* Ensuring chat box has a functional and user-friendly scroll for messages */
 #chat-box #chat-messages, #chat-messages {
     overflow-y: auto; /* Allows scrolling */
-    max-height: 300px; /* Adjust height as needed to fit within chat-box */
+    max-height: 500px; /* Adjust height as needed to fit within chat-box */
     padding: 10px;
     background-color: #e8e8e8; /* Light grey background for contrast */
     margin-bottom: 10px; /* Space between messages and input box */
