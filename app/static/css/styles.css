@@ -1,3 +1,9 @@
+h1 {
+    text-align: center; 
+    margin-bottom: 50px; /* Optional: Adds some bottom spacing */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* The shadow effect */
+}
+
 /* Body, header, and navigation styles maintained */
 body {
     font-family: 'Arial', sans-serif;
@@ -56,22 +62,23 @@ nav ul li a:hover, nav ul li.active a {
 /* Updated styles for messages and input interaction enhancement */
 #chat-box {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 320px;
+    bottom: 20%;  /* Adjust this to move up and down */
+    left: 25%;  /* Adjust this to move left and right */
+    width: 50%;  /* Adjust width as needed */
     max-height: 500px;
-    border: none; /* Removing the border for a lighter look */
+    border: none;
     border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-    overflow: hidden; /* Hides the overflow */
+    background-color: #333;  /* Matching your top page banner/nav color */
+    box-shadow: 0 5px 9px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    color: #857b7b;  /* Text color for the chat box, adjust if needed */
 }
 
 #chat-box h2 {
-    background-color: #005A9C; /* Change to a different accent color */
-    margin: 0; /* Ensure no extra margin */
+    background-color: #555;  /* For the heading inside the chat box */
+    margin: 0;
     padding: 12px;
-    font-size: 18px; /* Make text size consistent */
+    font-size: 18px;
 }
 
 /* Ensuring chat box has a functional and user-friendly scroll for messages */
@@ -102,7 +109,7 @@ nav ul li a:hover, nav ul li.active a {
 
 #chat-box input[type="submit"] {
     padding: 10px 20px;
-    background-color: #005A9C; /* Matching header color for consistency */
+    background-color: #555; /* Matching header color for consistency */
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -112,4 +119,14 @@ nav ul li a:hover, nav ul li.active a {
 
 #chat-box input[type="submit"]:hover {
     background-color: #004080; /* Darker shade on hover */
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    background-color: #333; /* color similar to banner, can change this per your preference */
+    color: #fff; /* white text color for contrast against dark background, can change this per your preference */
 }

@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 
 {% block body %}
-<h1>Welcome to OpenOcean.ai</h1>
-
-{% if current_user.is_authenticated %}
+{% if current_user.is_authenticated %} <!-- If user is logged in -->
+<h1>Discover More (Powered by: Ollama)</h1>
     <div id="chat-box">
         <h2>Chat</h2>
         <form method="POST" id="chat-form">
@@ -72,7 +71,8 @@
         });
     </script>
 
-{% else %}
-    <p>Log in and join the fun!</p>
+{% else %} <!-- If user is not yet logged in -->
+    <h1>Welcome to OpenOcean.ai</h1>
+    <p><a href="{{ url_for('login') }}">Log in</a> to get started, no account? It takes just 5 minutes to <a href="{{ url_for('register') }}">Register</a>!</p>
 {% endif %}
 {% endblock %}
