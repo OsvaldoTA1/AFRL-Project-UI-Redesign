@@ -12,7 +12,7 @@
 
 <!-- Add button to go to edit profile page -->
 {% if user == current_user %}
-    <a href="{{ url_for('edit_profile') }}" class="btn btn-primary">Edit Profile</a>
+    <a class="purple-text-links" href="{{ url_for('edit_profile') }}" class="btn btn-primary">Edit Profile</a>
 {% endif %}
 
 <hr> <!-- Add a line to separate personal details and traits -->

@@ -1,7 +1,61 @@
+body, h1, h2, h3, p {
+    color: #fff; /* white text color for better visibility */
+}
+
+p {
+    font-size: 18px; /* If you want to increase the size of paragraph text */
+}
+
+h1, h2, h3 {
+    font-weight: bold; /* Makes headers bold */
+}
+
 h1 {
-    text-align: center; 
-    margin-bottom: 50px; /* Optional: Adds some bottom spacing */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* The shadow effect */
+    text-align: center;
+    font-size: 32px; /* Adjust if you want larger/smaller heading sizes */
+}
+
+h2 {
+    font-size: 28px; /* Adjust if you want larger/smaller heading sizes */
+}
+
+h3 {
+    font-size: 24px; /* Adjust if you want larger/smaller heading sizes */
+}
+
+/* Rainbow wrapper for words of your choice */
+.rainbow {
+    background: linear-gradient(90deg, 
+        red, 
+        orange, 
+        yellow, 
+        green, 
+        blue, 
+        indigo, 
+        violet, 
+        red, 
+        orange, 
+        yellow, 
+        green, 
+        blue, 
+        indigo, 
+        violet,
+        red
+    );
+    background-size: 200% auto;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    background-clip: text;
+    color: transparent;
+
+    animation: rainbowAnimation 10s linear infinite;
+}
+
+@keyframes rainbowAnimation {
+    0% { background-position: 200%; }
+    100% { background-position: 0%; }
 }
 
 /* Body, header, and navigation styles maintained */
@@ -9,14 +63,45 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4; /* Light background for contrast */
+    background-color: #000; /* Light background for contrast */
+    display: flex;
+    flex-direction: column;  
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
 }
 
 header {
-    background-color: #333;
+    background-color: #000;
     color: #fff;
     padding: 20px 0;
     text-align: center; /* Center-align header text */
+}
+
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    background-color: #000;  /* match with the body background color */
+    color: #fff;  /* white text */
+    flex-shrink: 0;
+}
+
+/* Change link's default color to pink when it hasn't been clicked */
+.purple-text-links {
+    color: #ff1493; /* Hot Pink */
+}
+
+/* Change link's color to a darker pink after being clicked (optional) */
+.purple-text-links:visited {
+    color: #ee1289; /* Darker Pink */
+}
+
+/* Change links color to white when being hovered upon (optional) */
+.purple-text-links:hover {
+    color: #fff; /* white */
 }
 
 nav ul {
@@ -39,6 +124,7 @@ nav ul li a {
 }
 
 /* Flash messages decoration */
+/* Flash messages decoration */
 .flashes {
     list-style-type: none;
     padding: 0;
@@ -46,17 +132,17 @@ nav ul li a {
 }
 
 .flashes li {
-    background-color: #f8d7da;
-    color: #721c24;
+    background-color: #f56bb5;
+    color: #fff;
     padding: 10px;
     margin: 5px 0;
-    border: 1px solid #f5c6cb;
+    border: 1px solid #fff;
     border-radius: 5px;
 }
 
 nav ul li a:hover, nav ul li.active a {
-    background-color: #555; /* Hover and active state */
-    color: #ddd;
+    background-color: #ff1493; /* Hot Pink */
+    color: #fff;
 }
 
 /* Updated styles for messages and input interaction enhancement */
@@ -68,16 +154,19 @@ nav ul li a:hover, nav ul li.active a {
     height: 60%;  /* Adjust this to your desired chatbox height */
     border: none;
     border-radius: 8px;
-    background-color: #333;  /* Matching your top page banner/nav color */
-    box-shadow: 0 20px 9px rgba(0, 0, 0, 0.3);
+    background-color: #444; /* Darker Grey Color */
+    color: #fff;  /* White Text */
+    box-shadow: 0 35px 9px rgba(244, 142, 215, 0.956);
     color: #857b7b;  /* Text color for the chat box, adjust if needed */
 }
 
 #chat-box h2 {
-    background-color: #555;  /* For the heading inside the chat box */
+    background-color: #333;  /* Grey to match style */
+    text-align: center;
     margin: 0;
     padding: 12px;
-    font-size: 18px;
+    font-size: 24px;
+    color: #ff1493; /* Pink Text */
 }
 
 /* Ensuring chat box has a functional and user-friendly scroll for messages */
@@ -94,8 +183,8 @@ nav ul li a:hover, nav ul li.active a {
     display: flex;
     gap: 10px; /* Ensures space between input and button */
     padding: 10px;
-    background-color: #f0f0f0;
-    border-top: 1px solid #ddd;
+    background-color: #333; /* Even Darker Grey Color */
+    border-top: 1px solid #857b7b;
 }
 
 #chat-box form input[type="text"] {
@@ -104,11 +193,13 @@ nav ul li a:hover, nav ul li.active a {
     margin-right: 10px; /* Add spacing between input box and button */
     border: 1px solid #ccc;
     border-radius: 4px; /* Rounded corners for input box */
+    background-color: #fff;  /* White Input Field */
+    color: #000; /* Black Text */
 }
 
 #chat-box input[type="submit"] {
     padding: 10px 20px;
-    background-color: #555; /* Matching header color for consistency */
+    background-color: #555; /* Lighter Grey for contrast */
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -117,15 +208,20 @@ nav ul li a:hover, nav ul li.active a {
 }
 
 #chat-box input[type="submit"]:hover {
-    background-color: #004080; /* Darker shade on hover */
+    background-color: #ff1493; /* Hot Pink */
 }
 
-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    padding: 20px 0;
-    background-color: #333; /* color similar to banner, can change this per your preference */
-    color: #fff; /* white text color for contrast against dark background, can change this per your preference */
+/* for personality_test.html submit button */
+.submit-btn {
+    background-color: #ff1493;  /* Hot Pink to match theme */
+    color: #fff; /* White text for contrast */
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.submit-btn:hover {
+    background-color: #ee1289; /* Slightly darker pink on hover */
 }
