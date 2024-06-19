@@ -9,7 +9,7 @@ def generate_ai_response(inputText):
     response = client.chat.completions.create(
         model="llama3",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant named TARS."},
+            {"role": "system", "content": "You are a helpful assistant named Meche."},
             {"role": "user", "content": f"{inputText}"},
         ]
     )
