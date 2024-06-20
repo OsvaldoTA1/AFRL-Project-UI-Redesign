@@ -18,20 +18,22 @@ def home():
 
 @socketio.on('message')
 def handleMessage(msg):
-    if current_user.is_authenticated:
-        try:
-            chat = ChatMessage(message=msg, username=current_user.username, user_id=current_user.id)
-            db.session.add(chat)
-            db.session.commit()
+    if current_user.is_authenticated and msg.strip():
+        existing_messages = ChatMessage.query.filter_by(message=msg.strip(), user_id=current_user.id).all()
+        if not existing_messages:
+            try:
+                chat = ChatMessage(message=msg.strip(), username=current_user.username, user_id=current_user.id)
+                db.session.add(chat)
+                db.session.commit()
 
-            emit('message', {
-                'username': current_user.username,
-                'message': msg,
-                'timestamp': chat.timestamp.strftime("%H:%M")
-            }, broadcast=True)
-        except Exception as e:
-            db.session.rollback()
-            print(f"Error handling message: {e}")
+                emit('message', {
+                    'username': current_user.username,
+                    'message': msg.strip(),
+                    'timestamp': chat.timestamp.strftime("%H:%M")
+                }, broadcast=True)
+            except Exception as e:
+                db.session.rollback()
+                print(f"Error handling message: {e}")
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -96,6 +98,7 @@ def get_messages():
 @app.route('/get_ai_response', methods=['POST'])
 @login_required
 def get_ai_response():
+    
     '''  debug statements for terminal incase of failed response.
     print("Get AI Response function is called.")
     print('Full Request:', request)
@@ -108,21 +111,31 @@ def get_ai_response():
 
     user_message = data.get('message')
 
+    # Retrieve previous messages to maintain context
+    previous_messages = ChatMessage.query.order_by(ChatMessage.timestamp.asc()).all()
+    chat_history = []
+    for message in previous_messages:
+        if message.is_user:
+            chat_history.append({"role": "user", "content": message.message})
+        else:
+            chat_history.append({"role": "assistant", "content": message.message})
+
+    # Add current message to history
+    chat_history.append({"role": "user", "content": user_message})
+
     # Generate AI response using Llama3
     try:
-        ai_response = generate_ai_response(user_message)
+        ai_response = generate_ai_response(chat_history)
     except Exception as e:
-        # Return error message in case of an issue
         return jsonify(error=str(e)), 500
 
-    # Save user message and ai response
-    user_chat_message = ChatMessage(username=current_user.username, message=user_message, is_user=True)  # assuming 'is_user' attribute to differentiate user and ai messages
+    # Save user message and AI response
+    user_chat_message = ChatMessage(username=current_user.username, message=user_message, is_user=True)
     ai_chat_message = ChatMessage(username='AI', message=ai_response, is_user=False)
     db.session.add(user_chat_message)
     db.session.add(ai_chat_message)
     db.session.commit()
 
-    # Return AI response
     return jsonify(ai_response=ai_response)
 
 @app.route("/profile/<username>")

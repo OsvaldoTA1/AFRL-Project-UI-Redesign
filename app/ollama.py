@@ -1,17 +1,17 @@
 from openai import OpenAI
 
-def generate_ai_response(inputText):
+def generate_ai_response(chat_history):
     client = OpenAI(
         base_url='http://172.20.10.9:11434/v1',  # Replace IP Address, keep 11434/v1
         api_key='ollama',  # Note: API key is required but unused in this snippet.
     )
 
+    messages = [{"role": "system", "content": "You are a helpful assistant named Meche."}]
+    messages.extend(chat_history)
+
     response = client.chat.completions.create(
         model="llama3",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant named Meche."},
-            {"role": "user", "content": f"{inputText}"},
-        ]
+        messages=messages
     )
 
     return response.choices[0].message.content
