@@ -291,17 +291,77 @@ nav ul li a:hover, nav ul li.active a {
     background: #ff1493; /* Hot Pink when hovering over the scrollbar thumb */
 }
 
-/* for personality_test.html submit button */
-.submit-btn {
-    background-color: #ff1493;  /* Hot Pink to match theme */
-    color: #fff; /* White text for contrast */
+/* General form styling */
+.form-wrapper {
+    background-color: #222; /* Dark background to contrast */
+    padding: 30px;
+    border-radius: 10px; /* Rounded corners for the form wrapper */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+    max-width: 400px;
+    margin: 40px auto; /* Center form on the page */
+}
+
+.form-wrapper h2 {
+    text-align: center;  /* Center-align header text for forms */
+    color: #ff1493;  /* Hot Pink color for headings */
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ddd; /* Light text color for labels */
+}
+
+.form-input {
+    width: 100%;
     padding: 10px;
+    border: 1px solid #555;
+    border-radius: 5px; /* Rounded corners for inputs */
+    background-color: #333;
+    color: #fff; /* White text color for inputs */
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #ff1493; /* Pink border color on focus */
+    box-shadow: 0 0 5px #ff1493; /* Pink shadow for emphasis */
+}
+
+.form-remember {
+    display: flex;
+    align-items: center;
+    color: #ddd; /* Light text color for remember me label */
+}
+
+.form-remember input[type="checkbox"] {
+    margin-right: 10px; /* Space between checkbox and label */
+}
+
+/* Adjustments for a more appealing submit button */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px; /* Slightly larger font size */
+    background-color: #555; /* Grey background for the submit button */
+    color: #fff; /* White text */
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    border-radius: 5px; /* Rounded corners */
     transition: background-color 0.3s; /* Smooth transition for hover effect */
+    cursor: pointer; /* Pointer cursor */
 }
 
 .submit-btn:hover {
-    background-color: #ee1289; /* Slightly darker pink on hover */
+    background-color: #ff1493; /* Hot Pink background on hover */
+    color: #fff; /* Ensure text stays white */
+}
+
+/* Keeping focused styling for submit button consistent */
+.submit-btn:focus {
+    outline: none;
+    border: 2px solid #ff1493; /* Hot Pink border */
+    box-shadow: 0 0 5px #ff1493; /* Pink shadow for emphasis */
 }

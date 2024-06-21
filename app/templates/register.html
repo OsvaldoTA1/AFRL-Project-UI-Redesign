@@ -4,14 +4,33 @@
 Register | OpenOcean.ai
 {% endblock %}
 {% block body %}
-<h2>Register</h2>
-<form method="POST">
-{{ form.hidden_tag() }}
-{{ form.username.label }} {{ form.username() }}
-{{ form.email.label }} {{ form.email() }}
-{{ form.birth_date.label }} {{ form.birth_date() }}  <!-- New birth_date field -->
-{{ form.password.label }} {{ form.password() }}
-{{ form.confirm_password.label }} {{ form.confirm_password() }}
-{{ form.submit() }}
-</form>
+<div class="form-wrapper">  <!-- Added a wrapper div for consistency -->
+  <h2>Register</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.username.label }} 
+      {{ form.username(class="form-input") }}
+    </div>
+    <div class="form-group">
+      {{ form.email.label }} 
+      {{ form.email(class="form-input") }}
+    </div>
+    <div class="form-group">
+      {{ form.birth_date.label }} 
+      {{ form.birth_date(class="form-input") }}  <!-- New birth_date field -->
+    </div>
+    <div class="form-group">
+      {{ form.password.label }} 
+      {{ form.password(class="form-input") }}
+    </div>
+    <div class="form-group">
+      {{ form.confirm_password.label }} 
+      {{ form.confirm_password(class="form-input") }}
+    </div>
+    <div class="form-group">
+      {{ form.submit(class="submit-btn") }}  <!-- Using the existing submit button style -->
+    </div>
+  </form>
+</div>
 {% endblock %}

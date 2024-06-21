@@ -4,12 +4,23 @@
 Login | OpenOcean.ai
 {% endblock %}
 {% block body %}
+<div class="form-wrapper">  <!-- Added a wrapper div for consistency -->
   <h2>Login</h2>
   <form method="POST">
     {{ form.hidden_tag() }}
-    {{ form.user_id.label }} {{ form.user_id() }}
-    {{ form.password.label }} {{ form.password() }}
-    {{ form.remember.label }} {{ form.remember() }}
-    {{ form.submit() }}
+    <div class="form-group">
+      {{ form.user_id.label }} 
+      {{ form.user_id(class="form-input") }}
+    </div>
+    <div class="form-group">
+      {{ form.password.label }} 
+      {{ form.password(class="form-input") }}
+    </div>
+    <div class="form-group form-remember">
+      {{ form.remember() }}  <!-- Move checkbox before the label for visual consistency -->
+      {{ form.remember.label }}
+    </div>
+    {{ form.submit(class="submit-btn") }}  <!-- Using the existing submit button style -->
   </form>
+</div>
 {% endblock %}
