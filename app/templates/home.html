@@ -81,5 +81,23 @@
 {% else %} <!-- If user is not yet logged in -->
     <h1>Welcome to OpenOcean.ai</h1>
     <p><a class="purple-text-links" href="{{ url_for('login') }}">Log in</a> to get started, no account? It takes less than 5 minutes to <a class="purple-text-links" href="{{ url_for('register') }}">Sign up</a>!</p>
+    
+    <!-- Feature Highlights Section -->
+    <section class="features-highlight">
+        <h2 class="centered">Explore the Features</h2>
+        <div class="features-grid">
+            <div class="feature">
+                <img src="{{ url_for('static', filename='images/chat_feature.png') }}" alt="Chat Feature">
+                <h3 class="centered">Interactive Chat</h3>
+                <p>Engage in real-time conversations with the Meche Bot and explore dynamic responses powered by Ollama.</p>
+            </div>
+            <div class="feature">
+                <img src="{{ url_for('static', filename='images/personality_test_feature.png') }}" alt="Personality Test Feature">
+                <h3 class="centered">Personality Tests</h3>
+                <p>Take personalized tests to understand your personality traits and receive insightful analysis.</p>
+            </div>
+        </div>
+        <p class="centered">Join us and start exploring today!</p>
+    </section>
 {% endif %}
 {% endblock %}

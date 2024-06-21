@@ -23,6 +23,52 @@ h3 {
     font-size: 24px; /* Adjust if you want larger/smaller heading sizes */
 }
 
+/* Styling for Feature Highlights Section */
+.features-highlight {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.features-highlight h2.centered,
+.features-highlight h3.centered,
+.features-highlight p.centered {
+    text-align: center; /* Center-align text */
+}
+
+/* Grid styling for the feature highlights */
+.features-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between feature elements */
+    flex-wrap: wrap; /* Allows wrapping for smaller screens */
+}
+
+.feature {
+    background-color: #444; /* Dark background to match theme */
+    padding: 20px;
+    border-radius: 8px; /* Rounded corners to match theme */
+    width: 300px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for emphasis */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.feature img {
+    max-width: 100%; /* Responsive image handling */
+    border-radius: 8px; /* Match the border rounding */
+}
+
+.feature h3 {
+    margin-top: 10px;
+    color: #ff1493; /* Hot Pink to match theme */
+}
+
+.feature p {
+    font-size: 16px; /* Ensure readability */
+    color: #ddd; /* Light text color to match theme */
+}
+
 /* Rainbow wrapper for words of your choice */
 .rainbow {
     background: linear-gradient(90deg, 
@@ -124,7 +170,6 @@ nav ul li a {
 }
 
 /* Flash messages decoration */
-/* Flash messages decoration */
 .flashes {
     list-style-type: none;
     padding: 0;
@@ -174,8 +219,9 @@ nav ul li a:hover, nav ul li.active a {
     overflow-y: auto; /* Allows scrolling */
     height: 80%;  /* Adjust this to take into account the other elements within the chat-box */
     padding: 10px;
-    background-color: #e8e8e8; /* Light grey background for contrast */
+    background-color: #444; /* Dark grey background for enhanced readability */
     margin-bottom: 10px; /* Space between messages and input box */
+    color: #fff; /* White text for better contrast */
 }
 
 /* This targets the form specifically within the chat box for any final adjustments */
@@ -191,9 +237,9 @@ nav ul li a:hover, nav ul li.active a {
     flex: 1; /* Allow input to fill space */
     padding: 10px;
     margin-right: 10px; /* Add spacing between input box and button */
-    border: 1px solid #ccc;
+    border: 1px solid #6d6969;
     border-radius: 4px; /* Rounded corners for input box */
-    background-color: #fff;  /* White Input Field */
+    background-color: #b8b2b2;  /* White Input Field */
     color: #000; /* Black Text */
 }
 
@@ -207,8 +253,42 @@ nav ul li a:hover, nav ul li.active a {
     transition: background-color 0.3s; /* Smooth transition for hover effect */
 }
 
+/* Style the input field when it's focused */
+#chat-box form input[type="text"]:focus {
+    outline: none; /* Remove the default blue outline */
+    border: 2px solid #ff1493; /* Hot Pink border */
+    box-shadow: 0 0 5px #ff1493; /* Optional: Add a pink shadow for emphasis */
+}
+
+/* Style the submit button when it's focused */
+#chat-box input[type="submit"]:focus {
+    outline: none; /* Remove the default blue outline */
+    border: 2px solid #ff1493; /* Hot Pink border */
+    box-shadow: 0 0 5px #ff1493; /* Optional: Add a pink shadow for emphasis */
+}
+
 #chat-box input[type="submit"]:hover {
     background-color: #ff1493; /* Hot Pink */
+}
+
+/* Custom Scrollbar */
+#chat-messages::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+}
+
+#chat-messages::-webkit-scrollbar-track {
+    background: #333; /* Background of the scrollbar track */
+    border-radius: 10px; /* Rounded corners for the track */
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+    background: #555; /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Rounded corners of the scrollbar thumb */
+    border: 2px solid #333; /* Padding around the thumb for better appearance */
+}
+
+#chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #ff1493; /* Hot Pink when hovering over the scrollbar thumb */
 }
 
 /* for personality_test.html submit button */
