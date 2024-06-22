@@ -3,24 +3,31 @@
 {{ user.username }}'s Profile | OpenOcean.ai
 {% endblock %}
 {% block body %}
+<div class="profile-header">
 <h2>{{ user.username }}'s Profile</h2>
+</div>
 
-<p>Email: {{ user.email }}</p>
-<p>Birthdate: {% if user.birth_date %}{{ user.birth_date.strftime('%Y-%m-%d') }}{% else %}Not Set{% endif %}</p>
-<p>Gender: {% if user.gender %}{{ user.gender }}{% else %}Not Set{% endif %}</p>
-<p>Pronouns: {% if user.pronouns %}{{ user.pronouns }}{% else %}Not Set{% endif %}</p>
+<div class="profile-info">
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Birthdate:</strong> {% if user.birth_date %}{{ user.birth_date.strftime('%Y-%m-%d') }}{% else %}Not Set{% endif %}</p>
+    <p><strong>Gender:</strong> {% if user.gender %}{{ user.gender }}{% else %}Not Set{% endif %}</p>
+    <p><strong>Pronouns:</strong> {% if user.pronouns %}{{ user.pronouns }}{% else %}Not Set{% endif %}</p>
+</div>
 
-<!-- Add button to go to edit profile page -->
 {% if user == current_user %}
-    <a class="purple-text-links" href="{{ url_for('edit_profile') }}" class="btn btn-primary">Edit Profile</a>
+    <div class="profile-edit-button">
+        <a class="purple-text-links btn btn-primary" href="{{ url_for('edit_profile') }}">Edit Profile</a>
+    </div>
 {% endif %}
 
-<hr> <!-- Add a line to separate personal details and traits -->
+<hr> <!-- Optional: This can be styled using CSS -->
 
-<p>Openness: {{ user.openness }}</p>
-<p>Conscientiousness: {{ user.conscientiousness }}</p>
-<p>Extraversion: {{ user.extraversion }}</p>
-<p>Agreeableness: {{ user.agreeableness }}</p>
-<p>Neuroticism: {{ user.neuroticism }}</p>
+<div class="profile-traits">
+    <p><strong>Openness:</strong> {{ user.openness }}</p>
+    <p><strong>Conscientiousness:</strong> {{ user.conscientiousness }}</p>
+    <p><strong>Extraversion:</strong> {{ user.extraversion }}</p>
+    <p><strong>Agreeableness:</strong> {{ user.agreeableness }}</p>
+    <p><strong>Neuroticism:</strong> {{ user.neuroticism }}</p>
+</div>
 
 {% endblock %}

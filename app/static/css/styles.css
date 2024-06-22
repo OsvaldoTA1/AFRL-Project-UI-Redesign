@@ -352,6 +352,7 @@ nav ul li a:hover, nav ul li.active a {
     border-radius: 5px; /* Rounded corners */
     transition: background-color 0.3s; /* Smooth transition for hover effect */
     cursor: pointer; /* Pointer cursor */
+    margin-top: 10px;  /* Add margin to create space between input fields and button */
 }
 
 .submit-btn:hover {
@@ -364,4 +365,60 @@ nav ul li a:hover, nav ul li.active a {
     outline: none;
     border: 2px solid #ff1493; /* Hot Pink border */
     box-shadow: 0 0 5px #ff1493; /* Pink shadow for emphasis */
+}
+
+/* Add styles for profile header */
+.profile-header h2 {
+    text-align: center;
+    font-size: 36px;
+    color: #ff1493; /* Hot Pink */
+    margin-top: 20px;
+}
+
+/* Style for profile information section */
+.profile-info {
+    padding: 20px;
+    background-color: #222; /* Dark background to contrast */
+    border-radius: 10px;
+    margin: 20px auto;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    max-width: 600px;
+}
+
+.profile-info p {
+    font-size: 18px;
+    color: #ddd; /* Light text color */
+}
+
+.profile-info p strong {
+    color: #ff1493; /* Hot Pink for highlighting */
+}
+
+/* Styling the edit button */
+.profile-edit-button {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.profile-traits {
+    padding: 20px;
+    background-color: #222; /* Dark background to contrast */
+    border-radius: 10px;
+    margin: 20px auto;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    max-width: 600px;
+}
+
+.profile-traits p {
+    font-size: 18px;
+    color: #ddd; /* Light text color */
+}
+
+.profile-traits p strong {
+    color: #ff1493; /* Hot Pink for highlighting */
+}
+
+/* Extra spacing below input field */
+.form-group {
+    margin-bottom: 20px;
 }
