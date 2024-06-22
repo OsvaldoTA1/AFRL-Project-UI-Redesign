@@ -5,7 +5,7 @@ from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthday
 from app.models import User, ChatMessage
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
-from flask_socketio import emit, join_room
+from flask_socketio import emit
 from app.ollama import generate_ai_response
 import json
 
@@ -194,7 +194,7 @@ def personality_test():
                            title='Personality Test', 
                            form=form,
                            questions=questions, 
-                           get_form_field=get_form_field)
+                           enumerate=enumerate)
 
 @app.route("/logout")
 def logout():

@@ -1,5 +1,6 @@
 body, h1, h2, h3, p {
     color: #fff; /* white text color for better visibility */
+    font-family: 'Arial', sans-serif; /* Consistent and clean font family */
 }
 
 p {
@@ -12,15 +13,17 @@ h1, h2, h3 {
 
 h1 {
     text-align: center;
-    font-size: 32px; /* Adjust if you want larger/smaller heading sizes */
+    font-size: 32px;
 }
 
 h2 {
-    font-size: 28px; /* Adjust if you want larger/smaller heading sizes */
+    text-align: center;
+    font-size: 2.2em; /* Adjusted for larger heading sizes */
 }
 
 h3 {
-    font-size: 24px; /* Adjust if you want larger/smaller heading sizes */
+    font-size: 1.8em; /* Adjusted for larger heading sizes */
+    margin-top: 1em;
 }
 
 /* Styling for Feature Highlights Section */
@@ -421,4 +424,69 @@ nav ul li a:hover, nav ul li.active a {
 /* Extra spacing below input field */
 .form-group {
     margin-bottom: 20px;
+}
+
+.test-wrapper {
+    background-color: #222; /* Dark background for contrast */
+    padding: 30px;
+    border-radius: 15px; /* Rounded corners for a modern look */
+    max-width: 700px; /* Ensures the form is centralized and not too wide */
+    margin: auto; /* Center-align the form on the page */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+    margin-top: 2em;
+}
+
+.test-wrapper h2 {
+    color: #ff1493; /* Hot Pink color for headings */
+}
+
+.next-btn, .submit-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #555; /* Grey background for the button */
+    color: #fff; /* White text */
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    font-size: 16px; /* Slightly larger font size */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    margin-top: 1.5em;
+}
+
+.next-btn:hover, .submit-btn:hover {
+    background-color: #ff1493; /* Hot Pink background on hover */
+}
+
+.form-input:focus, .next-btn:focus, .submit-btn:focus {
+    outline: none;
+    box-shadow: 0 0 5px #ff1493; /* Pink shadow for emphasis */
+}
+
+.trait-section, .question-section {
+    margin-bottom: 2em; /* Space between sections */
+}
+
+.form-group p {
+    margin: 1em 0; /* Space between questions */
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+.fade-out {
+    opacity: 1;
+    animation: fadeOut 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
 }

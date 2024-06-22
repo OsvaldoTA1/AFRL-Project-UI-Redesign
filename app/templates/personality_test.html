@@ -5,20 +5,70 @@ Personality Test | OpenOcean.ai
 {% endblock %}
 
 {% block body %}
-<h2>Personality Test</h2>
+<div class="test-wrapper">
+    <h2>Personality Test</h2>
 
-<form method="POST">
-    {{ form.hidden_tag() }}
+    <form method="POST" id="personality-test-form">
+        {{ form.hidden_tag() }}
 
-    {% for trait in questions %}
-        <h3>{{ trait.capitalize() }}</h3>
+        {% for trait_idx, trait in enumerate(questions) %}
+            <div class="trait-section" id="trait-{{ trait_idx }}" {% if loop.index0 != 0 %}style="display:none"{% endif %}>
+                <h3>{{ trait.capitalize() }}</h3>
 
-        {% for question, field_name in questions[trait] %}
-            <p>{{ form[field_name].label }}</p>
-            <p>{{ form[field_name]() }}</p>
+                {% for question_idx, (question, field_name) in enumerate(questions[trait]) %}
+                    <div class="question-section" id="question-{{ trait_idx }}-{{ question_idx }}" {% if not loop.first %}style="display:none"{% endif %}>
+                        <p>{{ form[field_name].label }}</p>
+                        <p>{{ form[field_name]() }}</p>
+                    </div>
+                {% endfor %}
+            </div>
         {% endfor %}
-    {% endfor %}
 
-    {{ form.submit(class="submit-btn") }}
-</form>
+        <button type="button" class="next-btn" onclick="showNextQuestion()">Next</button>
+        {{ form.submit(class="submit-btn", style="display:none") }}
+    </form>
+</div>
+
+<script>
+    let currentTraitIdx = 0;
+    let currentQuestionIdx = 0;
+
+    function showNextQuestion() {
+        const currentQuestion = document.getElementById(`question-${currentTraitIdx}-${currentQuestionIdx}`);
+        const currentTrait = document.getElementById(`trait-${currentTraitIdx}`);
+
+        currentQuestion.classList.remove('fade-in');
+        currentQuestion.classList.add('fade-out');
+        
+        currentQuestionIdx++;
+        const nextQuestion = document.getElementById(`question-${currentTraitIdx}-${currentQuestionIdx}`);
+        
+        if (nextQuestion) {
+            setTimeout(() => {
+                currentQuestion.style.display = 'none';
+                nextQuestion.style.display = 'block';
+                nextQuestion.classList.add('fade-in');
+            }, 500); // Match this timeout to the duration of the CSS animation
+        } else {
+            const nextTrait = document.getElementById(`trait-${currentTraitIdx + 1}`);
+            
+            if (nextTrait) {
+                setTimeout(() => {
+                    currentTrait.style.display = 'none';
+                    currentTraitIdx++;
+                    currentQuestionIdx = 0;
+                    const firstQuestion = document.getElementById(`question-${currentTraitIdx}-0`);
+                    nextTrait.style.display = 'block';
+                    firstQuestion.style.display = 'block';
+                    firstQuestion.classList.add('fade-in');
+                }, 500); // Match this timeout to the duration of the CSS animation
+            } else {
+                setTimeout(() => {
+                    document.querySelector('.next-btn').style.display = 'none';
+                    document.querySelector('.submit-btn').style.display = 'block';
+                }, 500); // Match this timeout to the duration of the CSS animation
+            }
+        }
+    }
+</script>
 {% endblock %}
