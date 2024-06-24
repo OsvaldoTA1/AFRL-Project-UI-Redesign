@@ -1,14 +1,18 @@
 body, h1, h2, h3, p {
-    color: #fff; /* white text color for better visibility */
+    color: #fff; /* White text for better visibility */
     font-family: 'Arial', sans-serif; /* Consistent and clean font family */
 }
 
 p {
-    font-size: 18px; /* If you want to increase the size of paragraph text */
+    font-size: 18px; /* Increase paragraph text size */
+}
+
+.home-paragraph {
+    text-align: center;
 }
 
 h1, h2, h3 {
-    font-weight: bold; /* Makes headers bold */
+    font-weight: bold; /* Bold headers */
 }
 
 h1 {
@@ -18,12 +22,47 @@ h1 {
 
 h2 {
     text-align: center;
-    font-size: 2.2em; /* Adjusted for larger heading sizes */
+    font-size: 2.2em;
 }
 
 h3 {
-    font-size: 1.8em; /* Adjusted for larger heading sizes */
+    font-size: 1.8em;
     margin-top: 1em;
+}
+
+/* Profile setup section styling */
+.profile-setup {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.setup-steps {
+    list-style-type: decimal;
+    margin: 20px;
+    padding-left: 0;
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.setup-steps li {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    color: #ddd;
+}
+
+.setup-steps li h3 {
+    color: #ff1493; /* Hot Pink */
+    margin-bottom: 10px;
+}
+
+.setup-steps li p {
+    font-size: 16px;
+    margin-bottom: 10px;
 }
 
 /* Styling for Feature Highlights Section */
