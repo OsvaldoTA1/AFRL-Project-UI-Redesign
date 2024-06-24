@@ -18,7 +18,8 @@ def home():
 @login_required
 def chat():
     form = ChatForm()
-    messages = ChatMessage.query.order_by(ChatMessage.timestamp.asc())
+    # Load messages only for the current user
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
     return render_template('chat.html', title='Chat', form=form, messages=messages)
 
 @socketio.on('message')
@@ -90,7 +91,8 @@ def get_ai_response():
         abort(400, description="Missing 'message' parameter in JSON data.")
     
     user_message = data['message']
-    previous_messages = ChatMessage.query.order_by(ChatMessage.timestamp.asc()).all()
+    # Get only the current user's previous messages
+    previous_messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
     
     chat_history = [{'role': 'user' if msg.is_user else 'assistant', 'content': msg.message} for msg in previous_messages]
     chat_history.append({"role": "user", "content": user_message})
@@ -100,13 +102,18 @@ def get_ai_response():
     except Exception as e:
         return jsonify(error=str(e)), 500
 
-    user_chat_message = ChatMessage(username=current_user.username, message=user_message, is_user=True)
-    ai_chat_message = ChatMessage(username='AI', message=ai_response, is_user=False)
-    db.session.add(user_chat_message)
-    db.session.add(ai_chat_message)
-    db.session.commit()
+    try:
+        user_chat_message = ChatMessage(username=current_user.username, message=user_message, is_user=True, user_id=current_user.id)
+        ai_chat_message = ChatMessage(username='AI', message=ai_response, is_user=False, user_id=current_user.id)
+        
+        db.session.add(user_chat_message)
+        db.session.add(ai_chat_message)
+        db.session.commit()
 
-    return jsonify(ai_response=ai_response)
+        return jsonify(ai_response=ai_response)
+    except Exception as e:
+        db.session.rollback()
+        return jsonify(error=str(e)), 500
 
 @app.route("/profile/<username>")
 @login_required
@@ -156,5 +163,9 @@ def personality_test():
 
 @app.route("/logout")
 def logout():
+    # Clear chat messages related to the current user session.
+    ChatMessage.query.filter_by(user_id=current_user.id).delete()
+    db.session.commit()
+    
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('login'))
