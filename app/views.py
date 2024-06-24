@@ -10,25 +10,32 @@ from app.ollama import generate_ai_response
 import json
 
 @app.route("/")
-@app.route("/home", methods=['GET', 'POST'])
+@app.route("/home", methods=['GET'])
 def home():
+    return render_template('home.html', title='Home')
+
+@app.route("/chat", methods=['GET', 'POST'])
+@login_required
+def chat():
     form = ChatForm()
-    messages = ChatMessage.query.order_by(ChatMessage.timestamp.asc())  # Retrieves existing chat messages 
-    return render_template('home.html', title='Home', form=form, messages=messages)
+    messages = ChatMessage.query.order_by(ChatMessage.timestamp.asc())
+    return render_template('chat.html', title='Chat', form=form, messages=messages)
 
 @socketio.on('message')
+@login_required
 def handleMessage(msg):
-    if current_user.is_authenticated and msg.strip():
-        existing_messages = ChatMessage.query.filter_by(message=msg.strip(), user_id=current_user.id).all()
+    msg = msg.strip()
+    if msg:
+        existing_messages = ChatMessage.query.filter_by(message=msg, user_id=current_user.id).all()
         if not existing_messages:
             try:
-                chat = ChatMessage(message=msg.strip(), username=current_user.username, user_id=current_user.id)
+                chat = ChatMessage(message=msg, username=current_user.username, user_id=current_user.id)
                 db.session.add(chat)
                 db.session.commit()
 
                 emit('message', {
                     'username': current_user.username,
-                    'message': msg.strip(),
+                    'message': msg,
                     'timestamp': chat.timestamp.strftime("%H:%M")
                 }, broadcast=True)
             except Exception as e:
@@ -42,11 +49,8 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data,
-                    email=form.email.data,
-                    birth_date=form.birth_date.data,
-                    password=hashed_password,
-                    is_profile_complete=bool(form.birth_date.data))
+        user = User(username=form.username.data, email=form.email.data, birth_date=form.birth_date.data,
+                    password=hashed_password, is_profile_complete=bool(form.birth_date.data))
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
@@ -62,10 +66,7 @@ def login():
         return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter(
-            (User.username == form.user_id.data) | 
-            (User.email == form.user_id.data)
-        ).first()
+        user = User.query.filter((User.username == form.user_id.data) | (User.email == form.user_id.data)).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             if not user.is_profile_complete:
@@ -79,57 +80,25 @@ def login():
             flash(f"Error in {getattr(form, field).label.text}: {error}", 'danger')
     return render_template('login.html', title='Login', form=form)
 
-@app.route("/chat/get_messages", methods=['GET'])
-@login_required
-def get_messages():
-    messages = ChatMessage.query.all() # Replace ChatMessage with your chat message model.
-
-    # Transform SQLAlchemy objects to dictionary.
-    messages_data = []
-    for message in messages:
-        messages_data.append({
-            'username': message.author.username,  # assuming author is a backref to User
-            'timestamp': message.timestamp.strftime("%H:%M:%S"),
-            'text': message.text
-        })
-
-    return jsonify(messages_data)
-
 @app.route('/get_ai_response', methods=['POST'])
 @login_required
 def get_ai_response():
-    
-    '''  debug statements for terminal incase of failed response.
-    print("Get AI Response function is called.")
-    print('Full Request:', request)
-    print('Received data:', request.get_data(as_text=True)) '''
-    
     data = request.get_json()
 
     if not data or 'message' not in data:
         abort(400, description="Missing 'message' parameter in JSON data.")
-
-    user_message = data.get('message')
-
-    # Retrieve previous messages to maintain context
+    
+    user_message = data['message']
     previous_messages = ChatMessage.query.order_by(ChatMessage.timestamp.asc()).all()
-    chat_history = []
-    for message in previous_messages:
-        if message.is_user:
-            chat_history.append({"role": "user", "content": message.message})
-        else:
-            chat_history.append({"role": "assistant", "content": message.message})
-
-    # Add current message to history
+    
+    chat_history = [{'role': 'user' if msg.is_user else 'assistant', 'content': msg.message} for msg in previous_messages]
     chat_history.append({"role": "user", "content": user_message})
 
-    # Generate AI response using Llama3
     try:
         ai_response = generate_ai_response(chat_history)
     except Exception as e:
         return jsonify(error=str(e)), 500
 
-    # Save user message and AI response
     user_chat_message = ChatMessage(username=current_user.username, message=user_message, is_user=True)
     ai_chat_message = ChatMessage(username='AI', message=ai_response, is_user=False)
     db.session.add(user_chat_message)
@@ -167,14 +136,7 @@ def edit_profile():
         form_gender_pronouns.gender.data = current_user.gender
         form_gender_pronouns.pronouns.data = current_user.pronouns
 
-    return render_template('edit_profile.html',
-                           title='Edit Profile',
-                           form_birthday=form_birthday,
-                           form_gender_pronouns=form_gender_pronouns)
-
-# personality_test helper
-def get_form_field(form, field_name):
-    return getattr(form, field_name)
+    return render_template('edit_profile.html', title='Edit Profile', form_birthday=form_birthday, form_gender_pronouns=form_gender_pronouns)
 
 @app.route("/personality_test", methods=['GET', 'POST'])
 @login_required
@@ -183,20 +145,16 @@ def personality_test():
     with open('questions.json') as f:
         questions = json.load(f)
     if form.validate_on_submit():
-        for trait in questions:  # update here
-            question_fields = [q for _, q in questions[trait]]
+        for trait, question_pairs in questions.items():
+            question_fields = [q for _, q in question_pairs]
             trait_score = sum(int(getattr(form, field).data) for field in question_fields)
             setattr(current_user, trait, trait_score)
         db.session.commit()
         flash('Your personality test is submitted!', 'success')
         return redirect(url_for('home'))
-    return render_template('personality_test.html', 
-                           title='Personality Test', 
-                           form=form,
-                           questions=questions, 
-                           enumerate=enumerate)
+    return render_template('personality_test.html', title='Personality Test', form=form, questions=questions, enumerate=enumerate)
 
 @app.route("/logout")
 def logout():
-   logout_user()
-   return redirect(url_for('home'))
+    logout_user()
+    return redirect(url_for('home'))
