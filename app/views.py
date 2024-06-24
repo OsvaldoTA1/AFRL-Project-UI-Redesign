@@ -50,6 +50,7 @@ def register():
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=form.username.data, email=form.email.data, birth_date=form.birth_date.data,
+                    gender=form.gender.data,
                     password=hashed_password, is_profile_complete=bool(form.birth_date.data))
         db.session.add(user)
         db.session.commit()
@@ -126,10 +127,9 @@ def edit_profile():
         flash('Your birthdate has been updated!', 'success')
 
     if form_gender_pronouns.validate_on_submit():
-        current_user.gender = form_gender_pronouns.gender.data
         current_user.pronouns = form_gender_pronouns.pronouns.data
         db.session.commit()
-        flash('Your gender and pronouns have been updated!', 'success')
+        flash('Your pronouns have been updated!', 'success')
 
     if request.method == 'GET':
         form_birthday.birth_date.data = current_user.birth_date

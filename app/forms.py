@@ -9,7 +9,7 @@ class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     birth_date = DateField('BirthDate', format='%Y-%m-%d', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    gender = StringField('Gender')
+    gender = RadioField('Gender', choices=[('Male', 'Male'), ('Female', 'Female')], validators=[DataRequired()])
     pronouns = StringField('Pronouns')
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
@@ -30,8 +30,8 @@ class EditBirthdayForm(FlaskForm):
     submit = SubmitField('Save')
 
 class EditGenderPronounsForm(FlaskForm):
-    gender = StringField('Gender', validators=[DataRequired()])
-    pronouns = StringField('Pronouns', validators=[DataRequired()])
+    gender = StringField('Gender', render_kw={'readonly': True})
+    pronouns = StringField('Pronouns')
     submit = SubmitField('Save')
 
 class LoginForm(FlaskForm):

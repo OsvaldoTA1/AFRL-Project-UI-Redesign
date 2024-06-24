@@ -401,6 +401,30 @@ nav ul li a:hover, nav ul li.active a {
     background-color: #ff1493; /* Hot Pink background on hover */
     color: #fff; /* Ensure text stays white */
 }
+  
+/* Gender radio buttons styles */
+.gender-options {
+    display: flex;
+    gap: 20px; /* space between radio buttons */
+    margin-bottom: 15px;
+}
+
+.gender-options .form-radio {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.gender-options .form-radio label {
+    margin-left: 5px;
+    color: #ddd; /* Light text color for labels */
+}
+
+/* Ensuring radio buttons have a white dot when checked */
+.gender-options input[type="radio"] {
+    accent-color: #ff1493;
+}
 
 /* Keeping focused styling for submit button consistent */
 .submit-btn:focus {
