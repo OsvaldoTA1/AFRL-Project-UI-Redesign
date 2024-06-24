@@ -1,86 +1,34 @@
 {% extends "base.html" %}
 
 {% block body %}
-{% if current_user.is_authenticated %} <!-- If user is logged in -->
-<h1>Discover More (Powered by: <span class="rainbow">Ollama</span>)</h1>
-    <div id="chat-box">
-        <h2>Meche Bot</h2>
-        <form method="POST" id="chat-form">
-            {{ form.hidden_tag() }}
-            {{ form.message.label }}{{ form.message() }}
-            {{ form.send() }}
-        </form>
-        <div id="chat-messages">
-            <!-- Existing messages should appear here -->
-            {% for message in messages %}
-            <p>{{ message.username }}: {{ message.message }}</p>
-            {% endfor %}
-        </div>
-    </div>
+{% if current_user.is_authenticated %}
+<div class="profile-setup">
+    <h1>Welcome, {{ current_user.username }}</h1>
 
-    <!-- Include jQuery from CDN -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> 
+    <h2>Let's Get Started!</h2>
+    <p>Please complete the steps below to set up your profile and explore our features:</p>
 
-    <!-- Include Socket.IO JavaScript client from CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
-
-    <!-- Chat-related JavaScript comes after -->
-    <script>
-        $(document).ready(function() {
-    var socket = io.connect('http://' + document.domain + ':' + location.port);
-    var chatForm = $('#chat-form');
-    var chatBox = $('#chat-messages');
-    var messageInput = $('input[name="message"]');
-
-    let lastSentMessage = "";
-
-    chatForm.on('submit', function(e) {
-        e.preventDefault();
-        var msg = messageInput.val().trim();
-
-        // Prevent empty or duplicate messages
-        if (msg === "" || msg === lastSentMessage) {
-            return false;
-        }
-
-        lastSentMessage = msg;
-        socket.emit('message', msg);
-
-        $.ajax({
-            url: "{{ url_for('get_ai_response') }}",
-            method: "POST",
-            contentType: 'application/json;charset=UTF-8',
-            data: JSON.stringify({message: msg}),
-            headers: {
-                'X-CSRFToken': "{{ csrf_token() }}"
-            },
-            success: function(data) {
-                if (data.error) {
-                    console.log('AI responded with error:', data.error);
-                } else {
-                    var newAIMessage = $('<p>').text('AI: ' + data.ai_response);
-                    chatBox.append(newAIMessage);
-                    chatBox.scrollTop(chatBox[0].scrollHeight);
-                }
-            }
-        });
-
-        messageInput.val('');
-        return false;
-    });
-
-    // Show messages received
-    socket.on('message', function(msg) {
-        var newMessage = $('<p>').text(msg.username + " (" + msg.timestamp + "): " + msg.message);
-        chatBox.append(newMessage);
-        chatBox.scrollTop(chatBox[0].scrollHeight);
-    });
-});
-    </script>
-
-{% else %} <!-- If user is not yet logged in -->
+    <ol class="setup-steps">
+        <li>
+            <h3>Step 1: Complete Your Profile</h3>
+            <p>This step ensures we have the necessary details to personalize your experience.</p>
+            <p><a class="purple-text-links" href="{{ url_for('edit_profile') }}">Complete Profile</a></p>
+        </li>
+        <li>
+            <h3>Step 2: Explore the Personality Test</h3>
+            <p>Understand your personality better through our tailored personality test. This provides insights based on your traits and preferences.</p>
+            <p><a class="purple-text-links" href="{{ url_for('personality_test') }}">Take the Test</a></p>
+        </li>
+        <li>
+            <h3>Step 3: Engage with Interactive Chat <span class="rainbow">(Powered by Ollama)</span></h3>
+            <p>Interact with our Meche Bot, powered by Ollama, for real-time conversations and dynamic responses customized for you.</p>
+            <p><a class="purple-text-links" href="{{ url_for('chat') }}">Start Chatting</a></p>
+        </li>
+    </ol>
+</div>
+{% else %}
     <h1>Welcome to OpenOcean.ai</h1>
-    <p><a class="purple-text-links" href="{{ url_for('login') }}">Log in</a> to get started, no account? It takes less than 5 minutes to <a class="purple-text-links" href="{{ url_for('register') }}">Sign up</a>!</p>
+    <p class="home-paragraph"><a class="purple-text-links" href="{{ url_for('login') }}">Log in</a> to get started, no account? It takes less than 5 minutes to <a class="purple-text-links" href="{{ url_for('register') }}">Sign up</a>!</p>
     
     <!-- Feature Highlights Section -->
     <section class="features-highlight">
