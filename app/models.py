@@ -29,11 +29,11 @@ class User(db.Model, UserMixin):
 
 class ChatMessage(db.Model): 
     id = db.Column(db.Integer, primary_key=True)
-    message = db.Column(db.String(140), nullable=False)  # adjusted line
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    username = db.Column(db.String(80))  # added line
-    is_user = db.Column(db.Boolean, nullable=True, default=True)
+    message = db.Column(db.String(140), nullable=False)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    username = db.Column(db.String(80), nullable=False)
+    is_user = db.Column(db.Boolean, default=True, nullable=False)
 
     def __repr__(self):
         return f"ChatMessage('{self.message}', '{self.timestamp}')"
@@ -41,8 +41,8 @@ class ChatMessage(db.Model):
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(140), nullable=False)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
         return f"Post('{self.content}', '{self.timestamp}')"
