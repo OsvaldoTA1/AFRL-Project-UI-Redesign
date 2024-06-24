@@ -59,6 +59,6 @@ for trait, qs in questions.items():
     for text, field_name in qs:
         setattr(PersonalityForm, field_name, RadioField(
             text,
-            choices=[('5', 'Strongly Agree'), ('4', 'Agree'), ('3', 'Neutral'), ('2', 'Disagree'), ('1', 'Strongly Disagree')],
+            choices=[('4', 'Strongly Agree'), ('3', 'Agree'), ('2', 'Disagree'), ('1', 'Strongly Disagree')],
             validators=[DataRequired()]
         ))
