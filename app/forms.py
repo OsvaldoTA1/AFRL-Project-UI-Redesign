@@ -40,11 +40,6 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user is None:
-            raise ValidationError('That username does not exist. Please choose a different one or register.')
-
 class ChatForm(FlaskForm):
     message = StringField('Message', validators=[DataRequired()])
     send = SubmitField('Send')
