@@ -18,6 +18,7 @@
                 {% if current_user.is_authenticated %}
                     <li {% if request.endpoint=='profile' %}class="active"{% endif %}><a href="{{ url_for('profile', username=current_user.username) }}">Profile</a></li>
                     <li {% if request.endpoint=='personality_test' %}class="active"{% endif %}><a href="{{ url_for('personality_test') }}">Personality Test</a></li>
+                    <li {% if request.endpoint=='chat' %}class="active"{% endif %}><a href="{{ url_for('chat') }}">AI</a></li>
                     <li><a href="{{ url_for('logout') }}">Log Out</a></li>
                 {% else %}
                     <li {% if request.endpoint=='login' %}class="active"{% endif %}><a href="{{ url_for('login') }}">Log In</a></li>
