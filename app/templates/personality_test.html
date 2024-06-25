@@ -12,13 +12,13 @@ Personality Test | OpenOcean.ai
         {{ form.hidden_tag() }}
 
         {% for trait_idx, trait in enumerate(questions) %}
-            <div class="trait-section" id="trait-{{ trait_idx }}" {% if loop.index0 != 0 %}style="display:none"{% endif %}>
+            <div class="trait-section" id="trait-{{ trait_idx }}" {% if trait_idx != 0 %}style="display:none"{% endif %}>
                 <h3>{{ trait.capitalize() }}</h3>
 
                 {% for question_idx, (question, field_name) in enumerate(questions[trait]) %}
-                    <div class="question-section" id="question-{{ trait_idx }}-{{ question_idx }}" {% if not loop.first %}style="display:none"{% endif %}>
-                        <p>{{ form[field_name].label }}</p>
-                        <p>{{ form[field_name]() }}</p>
+                    <div class="question-section" id="question-{{ trait_idx }}-{{ question_idx }}" {% if not question_idx == 0 %}style="display:none"{% endif %}>
+                        <p>{{ question }}</p>
+                        <p>{{ form[field_name]() }}</p> <!-- Rendering the dynamically added field -->
                     </div>
                 {% endfor %}
             </div>
