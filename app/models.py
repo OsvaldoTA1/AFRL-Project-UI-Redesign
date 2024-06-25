@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from app import db, login_manager
 from flask_login import UserMixin
 
@@ -30,7 +30,7 @@ class User(db.Model, UserMixin):
 class ChatMessage(db.Model): 
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(140), nullable=False)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow, nullable=False)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.now(timezone.utc), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     username = db.Column(db.String(80), nullable=False)
     is_user = db.Column(db.Boolean, default=True, nullable=False)
@@ -41,7 +41,7 @@ class ChatMessage(db.Model):
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(140), nullable=False)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow, nullable=False)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.now(timezone.utc), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
