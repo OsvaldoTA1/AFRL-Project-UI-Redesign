@@ -7,7 +7,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime, timezone
 from flask_socketio import emit
 from app.ollama import generate_ai_response
-import json
+from app.utils import load_questions
 
 # Home route
 @app.route("/")
@@ -152,15 +152,66 @@ def handleMessage(msg):
 @app.route("/personality_test", methods=['GET', 'POST'])
 @login_required
 def personality_test():
-    form = PersonalityForm()
-    with open('questions.json') as f:
-        questions = json.load(f)
+    form = PersonalityForm() # Load questions here
+    
+    # Load questions from JSON
+    questions = load_questions()
+
     if form.validate_on_submit():
+        traits = {
+            'openness': 0,
+            'conscientiousness': 0,
+            'extraversion': 0,
+            'agreeableness': 0,
+            'neuroticism': 0,
+        }
+
+        # Calculate scores based on the form inputs
         for trait, question_pairs in questions.items():
-            question_fields = [q for _, q in question_pairs]
-            trait_score = sum(int(getattr(form, field).data) for field in question_fields)
-            setattr(current_user, trait, trait_score)
+            trait_score = sum(int(getattr(form, field).data) for _, field in question_pairs)
+            traits[trait] = trait_score  # Use trait as key directly from JSON
+
+        # Save trait scores to the user profile
+        current_user.openness = traits['openness']
+        current_user.conscientiousness = traits['conscientiousness']
+        current_user.extraversion = traits['extraversion']
+        current_user.agreeableness = traits['agreeableness']
+        current_user.neuroticism = traits['neuroticism']
         db.session.commit()
-        flash('Your personality test is submitted!', 'success')
-        return redirect(url_for('home'))
+
+        # Apply condition logic
+        O, C, E, A, N = traits['openness'], traits['conscientiousness'], traits['extraversion'], traits['agreeableness'], traits['neuroticism']
+        
+        if 6 <= O <= 12 and 6 <= C <= 12 and 3 <= E <= 5 and 6 <= A <= 12 and 10 <= N <= 12:
+            # Save the profile type for the user
+            flash('Your investment profile is now available.\nYou can always review it from the profile tab!', 'success')
+            return redirect(url_for('over_controlled_1'))
+        elif 6 <= O <= 9 and 10 <= C <= 12 and 6 <= E <= 9 and 10 <= A <= 12 and 3 <= N <= 5:
+            # Save the profile type for the user
+            flash('Your investment profile is now available.\nYou can always review it from the profile tab!', 'success')
+            return redirect(url_for('resilient_2'))
+        elif 3 <= O <= 9 and 6 <= C <= 9 and 10 <= E <= 12 and 3 <= A <= 9 and 3 <= N <= 12:
+            # Save the profile type for the user
+            flash('Your investment profile is now available.\nYou can always review it from the profile tab!', 'success')
+            return redirect(url_for('under_controlled_3'))
+        else:
+            # Save the profile type for the user as most common if not directly categorized
+            flash('Your investment profile is now available.\nYou can always review it from the profile tab!', 'warning')
+            return redirect(url_for('over_controlled_1'))
+
     return render_template('personality_test.html', title='Personality Test', form=form, questions=questions, enumerate=enumerate)
+
+@app.route('/investment_profile/over_controlled_1')
+@login_required
+def over_controlled_1():
+    return render_template('investment_profile/over_controlled_1.html')
+
+@app.route('/investment_profile/resilient_2')
+@login_required
+def resilient_2():
+    return render_template('investment_profile/resilient_2.html')
+
+@app.route('/investment_profile/under_controlled_3')
+@login_required
+def under_controlled_3():
+    return render_template('investment_profile/under_controlled_3.html')
