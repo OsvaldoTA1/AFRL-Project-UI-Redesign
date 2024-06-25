@@ -23,6 +23,7 @@ class User(db.Model, UserMixin):
     extraversion = db.Column(db.Integer, nullable=True)
     agreeableness = db.Column(db.Integer, nullable=True)
     neuroticism = db.Column(db.Integer, nullable=True)
+    investment_profile = db.Column(db.String(50), nullable=True) 
     
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
