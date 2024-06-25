@@ -460,12 +460,6 @@ nav ul li a:hover, nav ul li.active a {
     color: #ff1493; /* Hot Pink for highlighting */
 }
 
-/* Styling the edit button */
-.profile-edit-button {
-    text-align: center;
-    margin: 20px 0;
-}
-
 .profile-traits {
     padding: 20px;
     background-color: #222; /* Dark background to contrast */
@@ -483,6 +477,55 @@ nav ul li a:hover, nav ul li.active a {
 .profile-traits p strong {
     color: #ff1493; /* Hot Pink for highlighting */
 }
+
+/* Styling the edit button */
+.profile-edit-button {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Investment Profile information section styling */
+.investment-profile-info {
+    padding: 20px;
+    background-color: #222; /* Dark background to contrast */
+    border-radius: 10px;
+    margin: 20px auto;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+    max-width: 600px;
+}
+
+.investment-profile-info p {
+    font-size: 18px;
+    color: #ddd; /* Light text color */
+}
+
+.investment-profile-info p strong {
+    color: #ff1493; /* Hot Pink for highlighting */
+}
+
+.investment-profile-button, .profile-edit-button {
+    text-align: center;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+/* Button Styling - Shared Style */
+.btn-info, .profile-edit-button a {
+    background-color: #ff1493; /* Hot Pink for button */
+    border: none;
+    color: #fff; /* White text */
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth transition for hover */
+    cursor: pointer;
+    text-decoration: none; /* Remove underline */
+}
+
+.btn-info:hover, .profile-edit-button a:hover {
+    background-color: #e01190; /* Darker pink on hover */
+}
+
 
 /* Extra spacing below input field */
 .form-group {
