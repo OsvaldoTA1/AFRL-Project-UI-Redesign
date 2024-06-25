@@ -152,9 +152,7 @@ def handleMessage(msg):
 @app.route("/personality_test", methods=['GET', 'POST'])
 @login_required
 def personality_test():
-    form = PersonalityForm() # Load questions here
-    
-    # Load questions from JSON
+    form = PersonalityForm()
     questions = load_questions()
 
     if form.validate_on_submit():
@@ -169,35 +167,31 @@ def personality_test():
         # Calculate scores based on the form inputs
         for trait, question_pairs in questions.items():
             trait_score = sum(int(getattr(form, field).data) for _, field in question_pairs)
-            traits[trait] = trait_score  # Use trait as key directly from JSON
+            traits[trait] = trait_score
 
-        # Save trait scores to the user profile
+        # Save the trait scores to user profile.
         current_user.openness = traits['openness']
         current_user.conscientiousness = traits['conscientiousness']
         current_user.extraversion = traits['extraversion']
         current_user.agreeableness = traits['agreeableness']
         current_user.neuroticism = traits['neuroticism']
+
+        # Determine the investment profile
+        O, C, E, A, N = traits['openness'], traits['conscientiousness'], traits['extraversion'], traits['agreeableness'], traits['neuroticism']
+        if 6 <= O <= 12 and 6 <= C <= 12 and 3 <= E <= 5 and 6 <= A <= 12 and 10 <= N <= 12:
+            profile_type = 'over_controlled_1'
+        elif 6 <= O <= 9 and 10 <= C <= 12 and 6 <= E <= 9 and 10 <= A <= 12 and 3 <= N <= 5:
+            profile_type = 'resilient_2'
+        elif 3 <= O <= 9 and 6 <= C <= 9 and 10 <= E <= 12 and 3 <= A <= 9 and 3 <= N <= 12:
+            profile_type = 'under_controlled_3'
+        else:
+            profile_type = 'over_controlled_1'
+
+        current_user.investment_profile = profile_type
         db.session.commit()
 
-        # Apply condition logic
-        O, C, E, A, N = traits['openness'], traits['conscientiousness'], traits['extraversion'], traits['agreeableness'], traits['neuroticism']
-        
-        if 6 <= O <= 12 and 6 <= C <= 12 and 3 <= E <= 5 and 6 <= A <= 12 and 10 <= N <= 12:
-            # Save the profile type for the user
-            flash('Your investment profile is now available.\nYou can always review it from the profile tab!', 'success')
-            return redirect(url_for('over_controlled_1'))
-        elif 6 <= O <= 9 and 10 <= C <= 12 and 6 <= E <= 9 and 10 <= A <= 12 and 3 <= N <= 5:
-            # Save the profile type for the user
-            flash('Your investment profile is now available.\nYou can always review it from the profile tab!', 'success')
-            return redirect(url_for('resilient_2'))
-        elif 3 <= O <= 9 and 6 <= C <= 9 and 10 <= E <= 12 and 3 <= A <= 9 and 3 <= N <= 12:
-            # Save the profile type for the user
-            flash('Your investment profile is now available.\nYou can always review it from the profile tab!', 'success')
-            return redirect(url_for('under_controlled_3'))
-        else:
-            # Save the profile type for the user as most common if not directly categorized
-            flash('Your investment profile is now available.\nYou can always review it from the profile tab!', 'warning')
-            return redirect(url_for('over_controlled_1'))
+        flash('Your investment profile is now available.\nYou can always review it from the profile tab!', 'success')
+        return redirect(url_for(profile_type))
 
     return render_template('personality_test.html', title='Personality Test', form=form, questions=questions, enumerate=enumerate)
 
