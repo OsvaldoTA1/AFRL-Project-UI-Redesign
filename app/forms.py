@@ -1,16 +1,15 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, RadioField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from wtforms.fields import DateField
 from app.models import User
-import json
+from app.utils import add_personality_questions, load_questions
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     birth_date = DateField('BirthDate', format='%Y-%m-%d', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     gender = RadioField('Gender', choices=[('Male', 'Male'), ('Female', 'Female')], validators=[DataRequired()])
-    pronouns = StringField('Pronouns')
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sign Up')
@@ -47,13 +46,6 @@ class ChatForm(FlaskForm):
 class PersonalityForm(FlaskForm):
     submit = SubmitField('Submit')
 
-with open('questions.json') as f:
-    questions = json.load(f)
-
-for trait, qs in questions.items():
-    for text, field_name in qs:
-        setattr(PersonalityForm, field_name, RadioField(
-            text,
-            choices=[('4', 'Strongly Agree'), ('3', 'Agree'), ('2', 'Disagree'), ('1', 'Strongly Disagree')],
-            validators=[DataRequired()]
-        ))
+# Dynamically adds test questions from JSON (utils.py)
+questions = load_questions()
+add_personality_questions(PersonalityForm, questions)
