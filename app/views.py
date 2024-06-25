@@ -1,48 +1,21 @@
-from flask import render_template, url_for, flash, redirect, request, jsonify, abort
+from flask import render_template, url_for, flash, redirect, request, jsonify
 from flask import current_app as app
 from app import db, bcrypt, socketio
 from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm
 from app.models import User, ChatMessage
 from flask_login import login_user, current_user, logout_user, login_required
-from datetime import datetime
+from datetime import datetime, timezone
 from flask_socketio import emit
 from app.ollama import generate_ai_response
 import json
 
+# Home route
 @app.route("/")
 @app.route("/home", methods=['GET'])
 def home():
     return render_template('home.html', title='Home')
 
-@app.route("/chat", methods=['GET', 'POST'])
-@login_required
-def chat():
-    form = ChatForm()
-    # Load messages only for the current user
-    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
-    return render_template('chat.html', title='Chat', form=form, messages=messages)
-
-@socketio.on('message')
-@login_required
-def handleMessage(msg):
-    msg = msg.strip()
-    if msg:
-        existing_messages = ChatMessage.query.filter_by(message=msg, user_id=current_user.id).all()
-        if not existing_messages:
-            try:
-                chat = ChatMessage(message=msg, username=current_user.username, user_id=current_user.id)
-                db.session.add(chat)
-                db.session.commit()
-
-                emit('message', {
-                    'username': current_user.username,
-                    'message': msg,
-                    'timestamp': chat.timestamp.strftime("%H:%M")
-                }, broadcast=True)
-            except Exception as e:
-                db.session.rollback()
-                print(f"Error handling message: {e}")
-
+# Authentication routes (register, login, logout)
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -82,39 +55,14 @@ def login():
             flash(f"Error in {getattr(form, field).label.text}: {error}", 'danger')
     return render_template('login.html', title='Login', form=form)
 
-@app.route('/get_ai_response', methods=['POST'])
-@login_required
-def get_ai_response():
-    data = request.get_json()
+@app.route("/logout")
+def logout():
+    ChatMessage.query.filter_by(user_id=current_user.id).delete()
+    db.session.commit()
+    logout_user()
+    return redirect(url_for('login'))
 
-    if not data or 'message' not in data:
-        abort(400, description="Missing 'message' parameter in JSON data.")
-    
-    user_message = data['message']
-    # Get only the current user's previous messages
-    previous_messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
-    
-    chat_history = [{'role': 'user' if msg.is_user else 'assistant', 'content': msg.message} for msg in previous_messages]
-    chat_history.append({"role": "user", "content": user_message})
-
-    try:
-        ai_response = generate_ai_response(chat_history)
-    except Exception as e:
-        return jsonify(error=str(e)), 500
-
-    try:
-        user_chat_message = ChatMessage(username=current_user.username, message=user_message, is_user=True, user_id=current_user.id)
-        ai_chat_message = ChatMessage(username='AI', message=ai_response, is_user=False, user_id=current_user.id)
-        
-        db.session.add(user_chat_message)
-        db.session.add(ai_chat_message)
-        db.session.commit()
-
-        return jsonify(ai_response=ai_response)
-    except Exception as e:
-        db.session.rollback()
-        return jsonify(error=str(e)), 500
-
+# Profile routes
 @app.route("/profile/<username>")
 @login_required
 def profile(username):
@@ -145,6 +93,62 @@ def edit_profile():
 
     return render_template('edit_profile.html', title='Edit Profile', form_birthday=form_birthday, form_gender_pronouns=form_gender_pronouns)
 
+# Chat routes
+@app.route("/chat", methods=['GET', 'POST'])
+@login_required
+def chat():
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('chat.html', title='Chat', form=form, messages=messages)
+
+@app.route('/get_ai_response', methods=['POST'])
+@login_required
+def get_ai_response():
+    data = request.get_json()
+
+    if not data or 'message' not in data:
+        return jsonify(error="Missing 'message' parameter in JSON data."), 400
+    
+    user_message = data['message']
+    previous_messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    
+    chat_history = [{'role': 'user' if msg.is_user else 'assistant', 'content': msg.message} for msg in previous_messages]
+    chat_history.append({"role": "user", "content": user_message})
+
+    try:
+        ai_response = generate_ai_response(chat_history)
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
+    try:
+        user_chat_message = ChatMessage(username=current_user.username, message=user_message, is_user=True, user_id=current_user.id)
+        ai_chat_message = ChatMessage(username='AI', message=ai_response, is_user=False, user_id=current_user.id)
+        
+        db.session.add(user_chat_message)
+        db.session.add(ai_chat_message)
+        db.session.commit()
+
+        return jsonify(ai_response=ai_response)
+    except Exception as e:
+        db.session.rollback()
+        return jsonify(error=str(e)), 500
+
+# Socket.IO event handler
+@socketio.on('message')
+@login_required
+def handleMessage(msg):
+    msg = msg.strip()
+    if msg:
+        emit('message', {
+            'username': current_user.username,
+            'message': msg,
+            'timestamp': datetime.now(timezone.utc).strftime("%H:%M")
+        }, broadcast=True)
+        chat_message = ChatMessage(username=current_user.username, message=msg, is_user=True, user_id=current_user.id)
+        db.session.add(chat_message)
+        db.session.commit()
+
+# Personality test route
 @app.route("/personality_test", methods=['GET', 'POST'])
 @login_required
 def personality_test():
@@ -160,12 +164,3 @@ def personality_test():
         flash('Your personality test is submitted!', 'success')
         return redirect(url_for('home'))
     return render_template('personality_test.html', title='Personality Test', form=form, questions=questions, enumerate=enumerate)
-
-@app.route("/logout")
-def logout():
-    # Clear chat messages related to the current user session.
-    ChatMessage.query.filter_by(user_id=current_user.id).delete()
-    db.session.commit()
-    
-    logout_user()
-    return redirect(url_for('login'))
