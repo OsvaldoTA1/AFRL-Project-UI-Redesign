@@ -179,33 +179,54 @@ def personality_test():
         # Determine the investment profile
         O, C, E, A, N = traits['openness'], traits['conscientiousness'], traits['extraversion'], traits['agreeableness'], traits['neuroticism']
         if 6 <= O <= 12 and 6 <= C <= 12 and 3 <= E <= 5 and 6 <= A <= 12 and 10 <= N <= 12:
-            profile_type = 'over_controlled_1'
+            profile_type = 'over_controlled'
         elif 6 <= O <= 9 and 10 <= C <= 12 and 6 <= E <= 9 and 10 <= A <= 12 and 3 <= N <= 5:
-            profile_type = 'resilient_2'
+            profile_type = 'resilient'
         elif 3 <= O <= 9 and 6 <= C <= 9 and 10 <= E <= 12 and 3 <= A <= 9 and 3 <= N <= 12:
-            profile_type = 'under_controlled_3'
+            profile_type = 'under_controlled'
         else:
-            profile_type = 'over_controlled_1'
+            profile_type = 'over_controlled'
 
-        current_user.investment_profile = profile_type
+        # Gender routing
+        gender_suffix = '1' if current_user.gender == 'Male' else '2'
+        profile_route = profile_type + '_' + gender_suffix
+
+        current_user.investment_profile = profile_route
         db.session.commit()
 
         flash('Your investment profile is now available.\nYou can always review it from the profile tab!', 'success')
-        return redirect(url_for(profile_type))
+        return redirect(url_for(profile_route))
 
     return render_template('personality_test.html', title='Personality Test', form=form, questions=questions, enumerate=enumerate)
 
+# The 1 represents user is Male.
 @app.route('/investment_profile/over_controlled_1')
 @login_required
 def over_controlled_1():
     return render_template('investment_profile/over_controlled_1.html')
+
+@app.route('/investment_profile/resilient_1')
+@login_required
+def resilient_1():
+    return render_template('investment_profile/resilient_1.html')
+
+@app.route('/investment_profile/under_controlled_1')
+@login_required
+def under_controlled_1():
+    return render_template('investment_profile/under_controlled_1.html')
+
+# The 2 represents user is Female.
+@app.route('/investment_profile/over_controlled_2')
+@login_required
+def over_controlled_2():
+    return render_template('investment_profile/over_controlled_2.html')
 
 @app.route('/investment_profile/resilient_2')
 @login_required
 def resilient_2():
     return render_template('investment_profile/resilient_2.html')
 
-@app.route('/investment_profile/under_controlled_3')
+@app.route('/investment_profile/under_controlled_2')
 @login_required
-def under_controlled_3():
-    return render_template('investment_profile/under_controlled_3.html')
+def under_controlled_2():
+    return render_template('investment_profile/under_controlled_2.html')
