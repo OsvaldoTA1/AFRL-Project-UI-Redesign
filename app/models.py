@@ -12,7 +12,7 @@ class User(db.Model, UserMixin):
     birth_date = db.Column(db.Date)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
-    gender = db.Column(db.String(10))
+    gender = db.Column(db.String(10), nullable=False)
     pronouns = db.Column(db.String(30))
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
@@ -26,7 +26,7 @@ class User(db.Model, UserMixin):
     investment_profile = db.Column(db.String(50), nullable=True) 
     
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f"User('{self.username}', '{self.email}', '{self.gender}', '{self.image_file}')"
 
 class ChatMessage(db.Model): 
     id = db.Column(db.Integer, primary_key=True)
