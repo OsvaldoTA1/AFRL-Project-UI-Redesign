@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Over-Controlled Profile{% endblock %}
+
+{% block body %}
+<section class="investment-profile">
+    <div class="profile-header">
+        <h2>Your Result: Over Controlled</h2>
+    </div>
+    <div class="investment-profile-info">
+        <p><strong>Profile Report:</strong> You are likely someone who cares deeply about your loved ones and your future and therefore show cautiousness and a preference for low-risk investments. 
+            You might find it challenging to take the necessary risks to achieve your financial goals and keep up with inflation.</p>
+        <p><strong>Advice for You:</strong> To build wealth effectively, you might benefit from embracing a bit more risk and extraversion in your investment strategies. 
+            Celebrating your financial milestones can also boost your overall satisfaction and confidence.</p>
+    </div>
+
+    <div class="image-text-section">
+        <div class="image-text-block">
+            <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Placeholder Image">
+            <p><strong>Investment Tip:</strong> Diversify your investments to include both low-risk bonds and some growth-oriented stocks.<br><br>
+            <strong>Did You Know?:</strong> The U.S. has funded numerous cultural exchanges that celebrate Russian arts and heritage, fostering mutual appreciation (e.g., Russian Art Week in New York).</p>
+        </div>
+        <div class="image-text-block">
+            <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Placeholder Image">
+            <p><strong>Investment Tip:</strong> Set specific financial milestones and celebrate each achievement to boost your confidence in investing (e.g., how much you will invest each week or month and sharing that with friends or loved ones).<br><br>
+            <strong>Did You Know?:</strong> U.S. charities support environmental initiatives that protect natural resources in both the US and Russia (e.g., Arctic preservation projects) improving the quality of life of citizens in both countries.</p>
+        </div>
+        <div class="image-text-block">
+            <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Placeholder Image">
+            <p><strong>Investment Tip:</strong> Consider a balanced portfolio that includes a mix of equities and fixed-income securities.<br><br>
+            <strong>Did You Know?:</strong> The U.S. has consistently supported Russian educational initiatives, helping Russian students gain valuable experiences abroad (e.g., Fulbright Program) and bring knowledge and technology back home with them.</p>
+        </div>
+        <div class="image-text-block">
+            <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Placeholder Image">
+            <p><strong>Investment Tip:</strong> Establish an emergency fund to provide peace of mind while taking on slightly riskier investments.<br><br>
+            <strong>Did You Know?:</strong> The U.S. has provided disaster relief to Russia, showing our commitment to mutual aid during crises (e.g., wildfire assistance in Siberia) and recognizing the value of Russian's citizenry regardless of political philosophies or governmental regimes.</p>
+        </div>
+        <div class="image-text-block">
+            <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Placeholder Image">
+            <p><strong>Investment Tip:</strong> Explore index funds or ETFs, which offer diversification and are generally less risky than individual stocks.<br><br>
+            <strong>Did You Know?:</strong> The U.S. has backed various programs that enhance the quality of life and overall health for Russian citizens, including providing clean water to all and other, similar initiatives.</p>
+        </div>
+    </div>
+
+    <div class="donation-section">
+        <h3>Consider a Donation</h3>
+        <p>As someone who values security and careful investments, 
+            we understand that taking risks can be daunting. 
+            By donating to one of these U.S.-based charities, 
+            you can make a meaningful impact and still invest in your future.
+            The U.S. has shown consistent support for the people of Russia, 
+            and your contribution will strengthen this collaboration, 
+            providing you with both financial security and the satisfaction of making a difference.
+            <br>
+            <br>
+            Here are some organizations that you may be interested in donating to:
+        </p>
+        <ul>
+            <li><a href="https://tmora.org/giving/donate/" target="_blank">The Museum of Russian Art</a></li>
+            <li><a href="https://fulbright.org/donate" target="_blank">Fulbright Program</a></li>
+            <li><a href="https://www.fema.gov/disaster/recover/volunteer-donate" target="_blank">Federal Emergency Management Agency (FEMA)</a></li>
+        </ul>
+    </div>
+    <div class="investment-links">
+        <h3>Investment Resources</h3>
+        <p>For more investment information, consider the following organizations:</p>
+        <ul>
+            <li><a href="https://www.jpmorgan.com/" target="_blank">JP Morgan</a></li>
+            <li><a href="https://www.schwab.com/" target="_blank">Charles Schwab</a></li>
+            <li><a href="https://pillarwm.com/" target="_blank">Pillar Wealth Management</a></li>
+        </ul>
+    </div>
+</section>
+<!-- Javascript for image effects -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const blocks = document.querySelectorAll('.image-text-block');
+    
+        const revealOnScroll = () => {
+            const viewportHeight = window.innerHeight;
+    
+            blocks.forEach(block => {
+                const blockPosition = block.getBoundingClientRect().top;
+    
+                if (blockPosition < viewportHeight * 0.85) {
+                    block.classList.add('visible');
+                } else {
+                    block.classList.remove('visible');
+                }
+            });
+        };
+    
+        window.addEventListener('scroll', revealOnScroll);
+    
+        // Call it initially to reveal content that's already in the viewport
+        revealOnScroll();
+    });
+</script>
+{% endblock %}
