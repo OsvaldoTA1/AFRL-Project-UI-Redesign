@@ -1,23 +1,66 @@
+:root {
+    /* Colors */
+    --color-primary: #ff1493;  /* Hot Pink */
+    --color-secondary: #ee1289; /* Darker Pink */
+    --color-text: #fff;
+    --color-text-muted: #ddd;
+    --color-background: #000;
+    --color-background-light: #222;
+    --color-background-lighter: #333;
+    --color-background-lightest: #444;
+    --color-input-bg: #b8b2b2;
+    --color-border: #555;
+    --color-shadow: rgba(0, 0, 0, 0.5);
+
+    /* Sizes */
+    --font-size-base: 18px;
+    --font-size-large: 24px;
+    --font-size-xlarge: 32px;
+    --font-size-xxlarge: 36px;
+    
+    /* Spacing */
+    --spacing-small: 10px;
+    --spacing-medium: 20px;
+    --spacing-large: 30px;
+    --spacing-xlarge: 40px;
+
+    /* Border Radius */
+    --border-radius-small: 4px;
+    --border-radius-medium: 8px;
+    --border-radius-large: 15px;
+}
+
+/* General Styles */
 body, h1, h2, h3, p {
-    color: #fff; /* White text for better visibility */
-    font-family: 'Arial', sans-serif; /* Consistent and clean font family */
+    color: var(--color-text);
+    font-family: 'Arial', sans-serif;
 }
 
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: column;  
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+/* Typography */
 p {
-    font-size: 18px; /* Increase paragraph text size */
-}
-
-.home-paragraph {
-    text-align: center;
+    font-size: var(--font-size-base);
 }
 
 h1, h2, h3 {
-    font-weight: bold; /* Bold headers */
+    font-weight: bold;
 }
 
 h1 {
     text-align: center;
-    font-size: 32px;
+    font-size: var(--font-size-xlarge);
 }
 
 h2 {
@@ -30,166 +73,16 @@ h3 {
     margin-top: 1em;
 }
 
-/* Profile setup section styling */
-.profile-setup {
+.home-paragraph {
     text-align: center;
-    margin: 40px 0;
 }
 
-.setup-steps {
-    list-style-type: decimal;
-    margin: 20px;
-    padding-left: 0;
-    text-align: left;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.setup-steps li {
-    background-color: #444;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    color: #ddd;
-}
-
-.setup-steps li h3 {
-    color: #ff1493; /* Hot Pink */
-    margin-bottom: 10px;
-}
-
-.setup-steps li p {
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-/* Styling for Feature Highlights Section */
-.features-highlight {
-    text-align: center;
-    margin: 40px 0;
-}
-
-.features-highlight h2.centered,
-.features-highlight h3.centered,
-.features-highlight p.centered {
-    text-align: center; /* Center-align text */
-}
-
-/* Grid styling for the feature highlights */
-.features-grid {
-    display: flex;
-    justify-content: center;
-    gap: 20px; /* Space between feature elements */
-    flex-wrap: wrap; /* Allows wrapping for smaller screens */
-}
-
-.feature {
-    background-color: #444; /* Dark background to match theme */
-    padding: 20px;
-    border-radius: 8px; /* Rounded corners to match theme */
-    width: 300px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for emphasis */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.feature img {
-    max-width: 100%; /* Responsive image handling */
-    border-radius: 8px; /* Match the border rounding */
-}
-
-.feature h3 {
-    margin-top: 10px;
-    color: #ff1493; /* Hot Pink to match theme */
-}
-
-.feature p {
-    font-size: 16px; /* Ensure readability */
-    color: #ddd; /* Light text color to match theme */
-}
-
-/* Rainbow wrapper for words of your choice */
-.rainbow {
-    background: linear-gradient(90deg, 
-        red, 
-        orange, 
-        yellow, 
-        green, 
-        blue, 
-        indigo, 
-        violet, 
-        red, 
-        orange, 
-        yellow, 
-        green, 
-        blue, 
-        indigo, 
-        violet,
-        red
-    );
-    background-size: 200% auto;
-
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    background-clip: text;
-    color: transparent;
-
-    animation: rainbowAnimation 10s linear infinite;
-}
-
-@keyframes rainbowAnimation {
-    0% { background-position: 200%; }
-    100% { background-position: 0%; }
-}
-
-/* Body, header, and navigation styles maintained */
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #000; /* Light background for contrast */
-    display: flex;
-    flex-direction: column;  
-    min-height: 100vh;
-}
-
-main {
-    flex: 1 0 auto;
-}
-
+/* Header and Navigation */
 header {
-    background-color: #000;
-    color: #fff;
-    padding: 20px 0;
-    text-align: center; /* Center-align header text */
-}
-
-footer {
-    width: 100%;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    padding: var(--spacing-medium) 0;
     text-align: center;
-    padding: 20px 0;
-    background-color: #000;  /* match with the body background color */
-    color: #fff;  /* white text */
-    flex-shrink: 0;
-}
-
-/* Change link's default color to pink when it hasn't been clicked */
-.purple-text-links {
-    color: #ff1493; /* Hot Pink */
-}
-
-/* Change link's color to a darker pink after being clicked (optional) */
-.purple-text-links:visited {
-    color: #ee1289; /* Darker Pink */
-}
-
-/* Change links color to white when being hovered upon (optional) */
-.purple-text-links:hover {
-    color: #fff; /* white */
 }
 
 nav ul {
@@ -197,216 +90,230 @@ nav ul {
     padding: 0;
     display: flex;
     justify-content: center;
-    margin: 0; /* Reset margin for consistency */
+    margin: 0;
 }
 
 nav ul li {
-    margin: 0 15px;
+    margin: 0 var(--spacing-small);
 }
 
 nav ul li a {
-    color: #fff;
+    color: var(--color-text);
     text-decoration: none;
-    padding: 5px 10px; /* Added padding for clickability */
-    border-radius: 5px; /* Rounded corners for nav links */
-}
-
-/* Flash messages decoration */
-.flashes {
-    list-style-type: none;
-    padding: 0;
-    margin: 10px 0;
-}
-
-.flashes li {
-    background-color: #f56bb5;
-    color: #fff;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #fff;
-    border-radius: 5px;
+    padding: 5px var(--spacing-small);
+    border-radius: var(--border-radius-small);
 }
 
 nav ul li a:hover, nav ul li.active a {
-    background-color: #ff1493; /* Hot Pink */
-    color: #fff;
+    background-color: var(--color-primary);
+    color: var(--color-text);
 }
 
-/* Updated styles for messages and input interaction enhancement */
+/* Footer */
+footer {
+    width: 100%;
+    text-align: center;
+    padding: var(--spacing-medium) 0;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    flex-shrink: 0;
+}
+
+/* Link Styles */
+.purple-text-links {
+    color: var(--color-primary);
+}
+
+.purple-text-links:visited {
+    color: var(--color-secondary);
+}
+
+.purple-text-links:hover {
+    color: var(--color-text);
+}
+
+/* Flash Messages */
+.flashes {
+    list-style-type: none;
+    padding: 0;
+    margin: var(--spacing-small) 0;
+}
+
+.flashes li {
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    padding: var(--spacing-small);
+    margin: 5px 0;
+    border: 1px solid var(--color-text);
+    border-radius: var(--border-radius-small);
+}
+
+/* Chat Box Styles */
 #chat-box {
     position: fixed;
-    bottom: 20%;  /* Adjust this to move up and down */
-    left: 25%;   /* Adjust this to move left and right */
-    width: 50%;  /* Adjust width as needed */
-    height: 60%;  /* Adjust this to your desired chatbox height */
+    bottom: 20%;
+    left: 25%;
+    width: 50%;
+    height: 60%;
     border: none;
-    border-radius: 8px;
-    background-color: #444; /* Darker Grey Color */
-    color: #fff;  /* White Text */
+    border-radius: var(--border-radius-medium);
+    background-color: var(--color-background-lightest);
     box-shadow: 0 35px 9px rgba(244, 142, 215, 0.956);
-    color: #857b7b;  /* Text color for the chat box, adjust if needed */
+    color: var(--color-text-muted);
 }
 
 #chat-box h2 {
-    background-color: #333;  /* Grey to match style */
+    background-color: var(--color-background-lighter);
     text-align: center;
     margin: 0;
-    padding: 12px;
-    font-size: 24px;
-    color: #ff1493; /* Pink Text */
+    padding: var(--spacing-small);
+    font-size: var(--font-size-large);
+    color: var(--color-primary);
 }
 
-/* Ensuring chat box has a functional and user-friendly scroll for messages */
 #chat-messages {
-    overflow-y: auto; /* Allows scrolling */
-    height: 80%;  /* Adjust this to take into account the other elements within the chat-box */
-    padding: 10px;
-    background-color: #444; /* Dark grey background for enhanced readability */
-    margin-bottom: 10px; /* Space between messages and input box */
-    color: #fff; /* White text for better contrast */
+    overflow-y: auto;
+    height: 80%;
+    padding: var(--spacing-small);
+    background-color: var(--color-background-lightest);
+    margin-bottom: var(--spacing-small);
+    color: var(--color-text);
 }
 
-/* This targets the form specifically within the chat box for any final adjustments */
 #chat-box form {
     display: flex;
-    gap: 10px; /* Ensures space between input and button */
-    padding: 10px;
-    background-color: #333; /* Even Darker Grey Color */
-    border-top: 1px solid #857b7b;
+    gap: var(--spacing-small);
+    padding: var(--spacing-small);
+    background-color: var(--color-background-lighter);
+    border-top: 1px solid var(--color-text-muted);
 }
 
 #chat-box form input[type="text"] {
-    flex: 1; /* Allow input to fill space */
-    padding: 10px;
-    margin-right: 10px; /* Add spacing between input box and button */
-    border: 1px solid #6d6969;
-    border-radius: 4px; /* Rounded corners for input box */
-    background-color: #b8b2b2;  /* White Input Field */
-    color: #000; /* Black Text */
+    flex: 1;
+    padding: var(--spacing-small);
+    margin-right: var(--spacing-small);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-small);
+    background-color: var(--color-input-bg);
+    color: var(--color-background);
 }
 
 #chat-box input[type="submit"] {
-    padding: 10px 20px;
-    background-color: #555; /* Lighter Grey for contrast */
-    color: #fff;
+    padding: var(--spacing-small) var(--spacing-medium);
+    background-color: var(--color-border);
+    color: var(--color-text);
     border: none;
-    border-radius: 4px;
+    border-radius: var(--border-radius-small);
     cursor: pointer;
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    transition: background-color 0.3s;
 }
 
-/* Style the input field when it's focused */
-#chat-box form input[type="text"]:focus {
-    outline: none; /* Remove the default blue outline */
-    border: 2px solid #ff1493; /* Hot Pink border */
-    box-shadow: 0 0 5px #ff1493; /* Optional: Add a pink shadow for emphasis */
-}
-
-/* Style the submit button when it's focused */
+/* Focus and Hover States */
+#chat-box form input[type="text"]:focus,
 #chat-box input[type="submit"]:focus {
-    outline: none; /* Remove the default blue outline */
-    border: 2px solid #ff1493; /* Hot Pink border */
-    box-shadow: 0 0 5px #ff1493; /* Optional: Add a pink shadow for emphasis */
+    outline: none;
+    border: 2px solid var(--color-primary);
+    box-shadow: 0 0 5px var(--color-primary);
 }
 
 #chat-box input[type="submit"]:hover {
-    background-color: #ff1493; /* Hot Pink */
+    background-color: var(--color-primary);
 }
 
 /* Custom Scrollbar */
 #chat-messages::-webkit-scrollbar {
-    width: 12px; /* Width of the scrollbar */
+    width: 12px;
 }
 
 #chat-messages::-webkit-scrollbar-track {
-    background: #333; /* Background of the scrollbar track */
-    border-radius: 10px; /* Rounded corners for the track */
+    background: var(--color-background-lighter);
+    border-radius: var(--border-radius-medium);
 }
 
 #chat-messages::-webkit-scrollbar-thumb {
-    background: #555; /* Color of the scrollbar thumb */
-    border-radius: 10px; /* Rounded corners of the scrollbar thumb */
-    border: 2px solid #333; /* Padding around the thumb for better appearance */
+    background: var(--color-border);
+    border-radius: var(--border-radius-medium);
+    border: 2px solid var(--color-background-lighter);
 }
 
 #chat-messages::-webkit-scrollbar-thumb:hover {
-    background: #ff1493; /* Hot Pink when hovering over the scrollbar thumb */
+    background: var(--color-primary);
 }
 
-/* General form styling */
+/* Form Styles */
 .form-wrapper {
-    background-color: #222; /* Dark background to contrast */
-    padding: 30px;
-    border-radius: 10px; /* Rounded corners for the form wrapper */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+    background-color: var(--color-background-light);
+    padding: var(--spacing-large);
+    border-radius: var(--border-radius-medium);
+    box-shadow: 0 2px 10px var(--color-shadow);
     max-width: 400px;
-    margin: 40px auto; /* Center form on the page */
+    margin: var(--spacing-xlarge) auto;
 }
 
 .form-wrapper h2 {
-    text-align: center;  /* Center-align header text for forms */
-    color: #ff1493;  /* Hot Pink color for headings */
+    text-align: center;
+    color: var(--color-primary);
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-medium);
 }
 
 .form-group label {
     display: block;
     margin-bottom: 5px;
-    color: #ddd; /* Light text color for labels */
+    color: var(--color-text-muted);
 }
 
 .form-input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #555;
-    border-radius: 5px; /* Rounded corners for inputs */
-    background-color: #333;
-    color: #fff; /* White text color for inputs */
+    padding: var(--spacing-small);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-small);
+    background-color: var(--color-background-lighter);
+    color: var(--color-text);
 }
 
 .form-input:focus {
     outline: none;
-    border-color: #ff1493; /* Pink border color on focus */
-    box-shadow: 0 0 5px #ff1493; /* Pink shadow for emphasis */
+    border-color: var(--color-primary);
+    box-shadow: 0 0 5px var(--color-primary);
 }
 
 .form-remember {
     display: flex;
     align-items: center;
-    color: #ddd; /* Light text color for remember me label */
+    color: var(--color-text-muted);
 }
 
 .form-remember input[type="checkbox"] {
-    margin-right: 10px; /* Space between checkbox and label */
+    margin-right: var(--spacing-small);
 }
 
-/* Adjustments for a more appealing submit button */
-.submit-btn {
+/* Button Styles */
+.submit-btn, .btn-info, .profile-edit-button a, .next-btn {
     width: 100%;
-    padding: 12px;
-    font-size: 16px; /* Slightly larger font size */
-    background-color: #555; /* Grey background for the submit button */
-    color: #fff; /* White text */
+    padding: var(--spacing-small);
+    font-size: var(--font-size-base);
+    background-color: var(--color-border);
+    color: var(--color-text);
     border: none;
-    border-radius: 5px; /* Rounded corners */
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
-    cursor: pointer; /* Pointer cursor */
-    margin-top: 10px;  /* Add margin to create space between input fields and button */
+    border-radius: var(--border-radius-small);
+    transition: background-color 0.3s;
+    cursor: pointer;
+    margin-top: var(--spacing-small);
+    text-decoration: none;
 }
 
-.submit-btn:hover {
-    background-color: #ff1493; /* Hot Pink background on hover */
-    color: #fff; /* Ensure text stays white */
+.submit-btn:hover, .btn-info:hover, .profile-edit-button a:hover, .next-btn:hover {
+    background-color: var(--color-primary);
 }
-  
-/* Gender radio buttons styles */
+
+/* Gender Radio Buttons */
 .gender-options {
     display: flex;
-    gap: 20px; /* space between radio buttons */
-    margin-bottom: 15px;
+    gap: var(--spacing-medium);
+    margin-bottom: var(--spacing-small);
 }
 
 .gender-options .form-radio {
@@ -418,165 +325,216 @@ nav ul li a:hover, nav ul li.active a {
 
 .gender-options .form-radio label {
     margin-left: 5px;
-    color: #ddd; /* Light text color for labels */
+    color: var(--color-text-muted);
 }
 
-/* Ensuring radio buttons have a white dot when checked */
 .gender-options input[type="radio"] {
-    accent-color: #ff1493;
+    accent-color: var(--color-primary);
 }
 
-/* Keeping focused styling for submit button consistent */
-.submit-btn:focus {
-    outline: none;
-    border: 2px solid #ff1493; /* Hot Pink border */
-    box-shadow: 0 0 5px #ff1493; /* Pink shadow for emphasis */
-}
-
-/* Add styles for profile header */
+/* Profile Styles */
 .profile-header h2 {
     text-align: center;
-    font-size: 36px;
-    color: #ff1493; /* Hot Pink */
-    margin-top: 20px;
+    font-size: var(--font-size-xxlarge);
+    color: var(--color-primary);
+    margin-top: var(--spacing-medium);
 }
 
-/* Style for profile information section */
-.profile-info {
-    padding: 20px;
-    background-color: #222; /* Dark background to contrast */
-    border-radius: 10px;
-    margin: 20px auto;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+.profile-info, .profile-traits, .investment-profile-info {
+    padding: var(--spacing-medium);
+    background-color: var(--color-background-light);
+    border-radius: var(--border-radius-medium);
+    margin: var(--spacing-medium) auto;
+    box-shadow: 0 2px 10px var(--color-shadow);
     max-width: 600px;
 }
 
-.profile-info p {
-    font-size: 18px;
-    color: #ddd; /* Light text color */
+.profile-info p, .profile-traits p, .investment-profile-info p {
+    font-size: var(--font-size-base);
+    color: var(--color-text-muted);
 }
 
-.profile-info p strong {
-    color: #ff1493; /* Hot Pink for highlighting */
-}
-
-.profile-traits {
-    padding: 20px;
-    background-color: #222; /* Dark background to contrast */
-    border-radius: 10px;
-    margin: 20px auto;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    max-width: 600px;
-}
-
-.profile-traits p {
-    font-size: 18px;
-    color: #ddd; /* Light text color */
-}
-
-.profile-traits p strong {
-    color: #ff1493; /* Hot Pink for highlighting */
-}
-
-/* Styling the edit button */
-.profile-edit-button {
-    text-align: center;
-    margin: 20px 0;
-}
-
-/* Investment Profile information section styling */
-.investment-profile-info {
-    padding: 20px;
-    background-color: #222; /* Dark background to contrast */
-    border-radius: 10px;
-    margin: 20px auto;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
-    max-width: 600px;
-}
-
-.investment-profile-info p {
-    font-size: 18px;
-    color: #ddd; /* Light text color */
-}
-
-.investment-profile-info p strong {
-    color: #ff1493; /* Hot Pink for highlighting */
-}
-
-.investment-profile-button, .profile-edit-button {
-    text-align: center;
-    margin: 20px auto;
-    max-width: 600px;
-}
-
-/* Button Styling - Shared Style */
-.btn-info, .profile-edit-button a {
-    background-color: #ff1493; /* Hot Pink for button */
-    border: none;
-    color: #fff; /* White text */
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px; /* Rounded corners */
-    transition: background-color 0.3s; /* Smooth transition for hover */
-    cursor: pointer;
-    text-decoration: none; /* Remove underline */
-}
-
-.btn-info:hover, .profile-edit-button a:hover {
-    background-color: #e01190; /* Darker pink on hover */
-}
-
-
-/* Extra spacing below input field */
-.form-group {
-    margin-bottom: 20px;
-}
-
-.test-wrapper {
-    background-color: #222; /* Dark background for contrast */
-    padding: 30px;
-    border-radius: 15px; /* Rounded corners for a modern look */
-    max-width: 700px; /* Ensures the form is centralized and not too wide */
-    margin: auto; /* Center-align the form on the page */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
-    margin-top: 2em;
-}
-
-.test-wrapper h2 {
-    color: #ff1493; /* Hot Pink color for headings */
-}
-
-.next-btn, .submit-btn {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #555; /* Grey background for the button */
-    color: #fff; /* White text */
-    border: none;
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor */
-    font-size: 16px; /* Slightly larger font size */
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
-    margin-top: 1.5em;
-}
-
-.next-btn:hover, .submit-btn:hover {
-    background-color: #ff1493; /* Hot Pink background on hover */
-}
-
-.form-input:focus, .next-btn:focus, .submit-btn:focus {
-    outline: none;
-    box-shadow: 0 0 5px #ff1493; /* Pink shadow for emphasis */
+.profile-info p strong, .profile-traits p strong, .investment-profile-info p strong {
+    color: var(--color-primary);
 }
 
 .trait-section, .question-section {
-    margin-bottom: 2em; /* Space between sections */
+    margin-bottom: 2em;
 }
 
-.form-group p {
-    margin: 1em 0; /* Space between questions */
+.profile-edit-button, .investment-profile-button {
+    text-align: center;
+    margin: var(--spacing-medium) auto;
+    max-width: 600px;
 }
 
+/* Test Wrapper Styles */
+.test-wrapper {
+    background-color: var(--color-background-light);
+    padding: var(--spacing-large);
+    border-radius: var(--border-radius-large);
+    max-width: 700px;
+    margin: 2em auto;
+    box-shadow: 0 4px 15px var(--color-shadow);
+}
+
+.test-wrapper h2 {
+    color: var(--color-primary);
+}
+
+/* Investment Profile Styles */
+.investment-profile {
+    padding: var(--spacing-medium);
+    background-color: var(--color-background-light);
+    border-radius: var(--border-radius-medium);
+    margin: var(--spacing-medium);
+    box-shadow: 0 2px 10px var(--color-shadow);
+}
+
+.investment-profile .profile-header {
+    text-align: center;
+    margin-bottom: var(--spacing-medium);
+}
+
+.investment-profile .profile-header h2 {
+    color: var(--color-primary);
+    font-size: var(--font-size-xlarge);
+}
+
+.investment-profile .investment-profile-info {
+    max-width: 800px;
+    margin: var(--spacing-medium) auto;
+    padding: var(--spacing-medium);
+    background-color: var(--color-background-lighter);
+    border-radius: var(--border-radius-medium); 
+    box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+/* Image and Text Section Styles */
+.image-text-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-medium);
+    margin: var(--spacing-xlarge) 0;
+    align-items: center; /* Center alignment */
+}
+
+.image-text-block {
+    width: 100%;  /* Full width */
+    max-width: 800px;  /* Max width to maintain readability */
+    background-color: var(--color-background-lightest);
+    padding: var(--spacing-medium);
+    border-radius: var(--border-radius-medium);
+    box-shadow: 0 2px 8px var(--color-shadow);
+    text-align: left;
+    opacity: 0; /* Initially hidden */
+    transform: translateY(50px); /* Slightly below the initial position */
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.image-text-block.visible {
+    opacity: 1; /* Fully visible */
+    transform: translateY(0); /* At original position */
+}
+
+.image-text-block:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px var(--color-shadow);
+}
+
+.image-text-block img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-medium);
+    margin-bottom: var(--spacing-small);
+}
+
+.image-text-block p {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+}
+
+/* Profile Setup Section */
+.profile-setup {
+    text-align: center;
+    margin: var(--spacing-xlarge) 0;
+}
+
+.setup-steps {
+    list-style-type: decimal;
+    margin: var(--spacing-medium);
+    padding-left: 0;
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.setup-steps li {
+    background-color: var(--color-background-lightest);
+    padding: var(--spacing-medium);
+    border-radius: var(--border-radius-medium);
+    margin-bottom: var(--spacing-medium);
+    box-shadow: 0 2px 8px var(--color-shadow);
+    color: var(--color-text-muted);
+}
+
+.setup-steps li h3 {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-small);
+}
+
+.setup-steps li p {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-small);
+}
+
+/* Features Highlight Section */
+.features-highlight {
+    text-align: center;
+    margin: var(--spacing-xlarge) 0;
+}
+
+.features-highlight h2.centered,
+.features-highlight h3.centered,
+.features-highlight p.centered {
+    text-align: center;
+}
+
+.features-grid {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-medium);
+    flex-wrap: wrap;
+}
+
+.feature {
+    background-color: var(--color-background-lightest);
+    padding: var(--spacing-medium);
+    border-radius: var(--border-radius-medium);
+    width: 300px;
+    box-shadow: 0 2px 8px var(--color-shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.feature img {
+    max-width: 100%;
+    border-radius: var(--border-radius-medium);
+}
+
+.feature h3 {
+    margin-top: var(--spacing-small);
+    color: var(--color-primary);
+}
+
+.feature p {
+    font-size: var(--font-size-base);
+    color: var(--color-text-muted);
+}
+
+/* Animation Classes */
 .fade-in {
     opacity: 0;
     animation: fadeIn 0.5s forwards;
@@ -595,4 +553,23 @@ nav ul li a:hover, nav ul li.active a {
 @keyframes fadeOut {
     from { opacity: 1; }
     to { opacity: 0; }
+}
+
+/* Rainbow Text Animation */
+.rainbow {
+    background: linear-gradient(90deg, 
+        red, orange, yellow, green, blue, indigo, violet, 
+        red, orange, yellow, green, blue, indigo, violet, red
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    animation: rainbowAnimation 10s linear infinite;
+}
+
+@keyframes rainbowAnimation {
+    0% { background-position: 200%; }
+    100% { background-position: 0%; }
 }
