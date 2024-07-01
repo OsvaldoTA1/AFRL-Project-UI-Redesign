@@ -358,10 +358,6 @@ footer {
     color: var(--color-primary);
 }
 
-.trait-section, .question-section {
-    margin-bottom: 2em;
-}
-
 .profile-edit-button, .investment-profile-button {
     text-align: center;
     margin: var(--spacing-medium) auto;
@@ -380,6 +376,25 @@ footer {
 
 .test-wrapper h2 {
     color: var(--color-primary);
+}
+
+/* Question Group Styles */
+.question-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.question-group {
+    margin-bottom: 2em;
+}
+
+.question-section {
+    margin-bottom: 1em;
+    background-color: var(--color-background);
+    padding: var(--spacing-medium);
+    border-radius: var(--border-radius-medium);
+    box-shadow: 0 2px 5px var(--color-shadow);
 }
 
 /* Investment Profile Styles */
