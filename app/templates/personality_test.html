@@ -7,67 +7,43 @@ Personality Test | OpenOcean.ai
 {% block body %}
 <div class="test-wrapper">
     <h2>Personality Test</h2>
-
     <form method="POST" id="personality-test-form">
         {{ form.hidden_tag() }}
-
-        {% for trait_idx, trait in enumerate(questions) %}
-            <div class="trait-section" id="trait-{{ trait_idx }}" {% if trait_idx != 0 %}style="display:none"{% endif %}>
-                <h3>{{ trait.capitalize() }}</h3>
-
-                {% for question_idx, (question, field_name) in enumerate(questions[trait]) %}
-                    <div class="question-section" id="question-{{ trait_idx }}-{{ question_idx }}" {% if not question_idx == 0 %}style="display:none"{% endif %}>
+        {% for group_idx, group in enumerate(question_groups) %}
+            <div class="question-group" id="group-{{ group_idx }}" {% if group_idx != 0 %}style="display:none"{% endif %}>
+                {% for trait, question, field_name in group %}
+                    <div class="question-section">
                         <p>{{ question }}</p>
-                        <p>{{ form[field_name]() }}</p> <!-- Rendering the dynamically added field -->
+                        <p>{{ form[field_name]() }}</p>
                     </div>
                 {% endfor %}
             </div>
         {% endfor %}
-
-        <button type="button" class="next-btn" onclick="showNextQuestion()">Next</button>
+        <button type="button" class="next-btn" onclick="showNextGroup()">Next</button>
         {{ form.submit(class="submit-btn", style="display:none") }}
     </form>
 </div>
-
 <script>
-    let currentTraitIdx = 0;
-    let currentQuestionIdx = 0;
-
-    function showNextQuestion() {
-        const currentQuestion = document.getElementById(`question-${currentTraitIdx}-${currentQuestionIdx}`);
-        const currentTrait = document.getElementById(`trait-${currentTraitIdx}`);
-
-        currentQuestion.classList.remove('fade-in');
-        currentQuestion.classList.add('fade-out');
+    let currentGroupIdx = 0;
+    function showNextGroup() {
+        const currentGroup = document.getElementById(`group-${currentGroupIdx}`);
+        currentGroup.classList.remove('fade-in');
+        currentGroup.classList.add('fade-out');
         
-        currentQuestionIdx++;
-        const nextQuestion = document.getElementById(`question-${currentTraitIdx}-${currentQuestionIdx}`);
+        currentGroupIdx++;
+        const nextGroup = document.getElementById(`group-${currentGroupIdx}`);
         
-        if (nextQuestion) {
+        if (nextGroup) {
             setTimeout(() => {
-                currentQuestion.style.display = 'none';
-                nextQuestion.style.display = 'block';
-                nextQuestion.classList.add('fade-in');
+                currentGroup.style.display = 'none';
+                nextGroup.style.display = 'block';
+                nextGroup.classList.add('fade-in');
             }, 500); // Match this timeout to the duration of the CSS animation
         } else {
-            const nextTrait = document.getElementById(`trait-${currentTraitIdx + 1}`);
-            
-            if (nextTrait) {
-                setTimeout(() => {
-                    currentTrait.style.display = 'none';
-                    currentTraitIdx++;
-                    currentQuestionIdx = 0;
-                    const firstQuestion = document.getElementById(`question-${currentTraitIdx}-0`);
-                    nextTrait.style.display = 'block';
-                    firstQuestion.style.display = 'block';
-                    firstQuestion.classList.add('fade-in');
-                }, 500); // Match this timeout to the duration of the CSS animation
-            } else {
-                setTimeout(() => {
-                    document.querySelector('.next-btn').style.display = 'none';
-                    document.querySelector('.submit-btn').style.display = 'block';
-                }, 500); // Match this timeout to the duration of the CSS animation
-            }
+            setTimeout(() => {
+                document.querySelector('.next-btn').style.display = 'none';
+                document.querySelector('.submit-btn').style.display = 'block';
+            }, 500); // Match this timeout to the duration of the CSS animation
         }
     }
 </script>
