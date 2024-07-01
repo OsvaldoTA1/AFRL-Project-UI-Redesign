@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from flask_socketio import emit
 from app.ollama import generate_ai_response
 from app.utils import load_questions
+import random
 
 # Home route
 @app.route("/")
@@ -154,6 +155,13 @@ def handleMessage(msg):
 def personality_test():
     form = PersonalityForm()
     questions = load_questions()
+    
+    # Flatten and randomize questions
+    all_questions = [(trait, q, field) for trait, qs in questions.items() for q, field in qs]
+    random.shuffle(all_questions)
+    
+    # Group questions into sets of three
+    question_groups = [all_questions[i:i+3] for i in range(0, len(all_questions), 3)]
 
     if form.validate_on_submit():
         traits = {
@@ -165,19 +173,15 @@ def personality_test():
         }
 
         # Calculate scores based on the form inputs
-        for trait, question_pairs in questions.items():
-            trait_score = sum(int(getattr(form, field).data) for _, field in question_pairs)
-            traits[trait] = trait_score
+        for trait, _, field in all_questions:
+            traits[trait] += int(getattr(form, field).data)
 
-        # Save the trait scores to user profile.
-        current_user.openness = traits['openness']
-        current_user.conscientiousness = traits['conscientiousness']
-        current_user.extraversion = traits['extraversion']
-        current_user.agreeableness = traits['agreeableness']
-        current_user.neuroticism = traits['neuroticism']
+        # Save the trait scores to user profile
+        for trait, score in traits.items():
+            setattr(current_user, trait, score)
 
         # Determine the investment profile
-        O, C, E, A, N = traits['openness'], traits['conscientiousness'], traits['extraversion'], traits['agreeableness'], traits['neuroticism']
+        O, C, E, A, N = traits.values()
         if 6 <= O <= 12 and 6 <= C <= 12 and 3 <= E <= 5 and 6 <= A <= 12 and 10 <= N <= 12:
             profile_type = 'over_controlled'
         elif 6 <= O <= 9 and 10 <= C <= 12 and 6 <= E <= 9 and 10 <= A <= 12 and 3 <= N <= 5:
@@ -197,7 +201,7 @@ def personality_test():
         flash('Your investment profile is now available.\nYou can always review it from the profile tab!', 'success')
         return redirect(url_for(profile_route))
 
-    return render_template('personality_test.html', title='Personality Test', form=form, questions=questions, enumerate=enumerate)
+    return render_template('personality_test.html', title='Personality Test', form=form, question_groups=question_groups, enumerate=enumerate)
 
 # The 1 represents user is Male.
 @app.route('/investment_profile/over_controlled_1')
