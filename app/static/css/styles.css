@@ -378,6 +378,24 @@ footer {
     color: var(--color-primary);
 }
 
+/* Progress Bar */
+.progress-bar {
+    width: 100%;
+    background-color: var(--color-background-lightest);
+    border-radius: var(--border-radius-small);
+    overflow: hidden;
+    margin-bottom: var(--spacing-large);
+    box-shadow: 0 2px 10px var(--color-shadow);
+    height: 10px;  /* Reduced height for a thinner progress bar */
+}
+
+.progress {
+    width: 0;
+    height: 100%; /* Ensures the progress fills the height of the bar */
+    background-color: var(--color-primary);
+    transition: width 0.5s ease;
+}
+
 /* Question Group Styles */
 .question-group {
     display: flex;
