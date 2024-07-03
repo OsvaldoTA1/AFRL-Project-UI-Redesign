@@ -1,13 +1,13 @@
 from flask import render_template, url_for, flash, redirect, request, jsonify
 from flask import current_app as app
+from flask_login import login_user, current_user, logout_user, login_required
+from flask_socketio import emit
+from datetime import datetime, timezone
 from app import db, bcrypt, socketio
 from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm
 from app.models import User, ChatMessage
-from flask_login import login_user, current_user, logout_user, login_required
-from datetime import datetime, timezone
-from flask_socketio import emit
 from app.ollama import generate_ai_response
-from app.utils import load_questions
+from app.utils import load_questions, calculate_trait_scores, determine_investment_profile
 import random
 
 # Home route
@@ -154,6 +154,8 @@ def handleMessage(msg):
 @login_required
 def personality_test():
     form = PersonalityForm()
+
+    # Use the loaded questions from utils
     questions = load_questions()
     
     # Flatten and randomize questions
@@ -164,32 +166,15 @@ def personality_test():
     question_groups = [all_questions[i:i+3] for i in range(0, len(all_questions), 3)]
 
     if form.validate_on_submit():
-        traits = {
-            'openness': 0,
-            'conscientiousness': 0,
-            'extraversion': 0,
-            'agreeableness': 0,
-            'neuroticism': 0,
-        }
-
         # Calculate scores based on the form inputs
-        for trait, _, field in all_questions:
-            traits[trait] += int(getattr(form, field).data)
+        traits = calculate_trait_scores(all_questions, form)
 
         # Save the trait scores to user profile
         for trait, score in traits.items():
             setattr(current_user, trait, score)
 
         # Determine the investment profile
-        O, C, E, A, N = traits.values()
-        if 6 <= O <= 12 and 6 <= C <= 12 and 3 <= E <= 5 and 6 <= A <= 12 and 10 <= N <= 12:
-            profile_type = 'over_controlled'
-        elif 6 <= O <= 9 and 10 <= C <= 12 and 6 <= E <= 9 and 10 <= A <= 12 and 3 <= N <= 5:
-            profile_type = 'resilient'
-        elif 3 <= O <= 9 and 6 <= C <= 9 and 10 <= E <= 12 and 3 <= A <= 9 and 3 <= N <= 12:
-            profile_type = 'under_controlled'
-        else:
-            profile_type = 'over_controlled'
+        profile_type = determine_investment_profile(traits)
 
         # Gender routing
         gender_suffix = '1' if current_user.gender == 'Male' else '2'
@@ -198,7 +183,7 @@ def personality_test():
         current_user.investment_profile = profile_route
         db.session.commit()
 
-        flash('Your investment profile is now available.\nYou can always review it from the profile tab!', 'success')
+        flash('Your investment profile is now available. You can always review it from the profile tab!', 'success')
         return redirect(url_for(profile_route))
 
     return render_template('personality_test.html', title='Personality Test', form=form, question_groups=question_groups, enumerate=enumerate)
