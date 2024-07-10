@@ -4,14 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <title>{% block title %}Home | OpenOcean.ai{% endblock %}</title>
+    <style>
+        .header-background {
+            background-image: url("{{ url_for('static', filename='img/header_background.png') }}");
+            background-size: cover;
+            background-position: center;
+            color: white; /* Ensure text is readable */
+            padding: 40px var(--spacing-medium); /* Use padding to increase header height */
+        }
+        
+        body {
+            background: url("{{ url_for('static', filename='img/body_background.png') }}") no-repeat center center fixed;
+            background-size: cover; /* Ensure the background image covers the entire viewport */
+        }
+    </style>
+    <title>{% block title %}Home | TrustVest{% endblock %}</title>
 </head>
 <body>
-    <header>
+    <header class="header-background">
         <nav>
-            <!-- Insert Your Brand Logo-->
-            <a class="purple-text-links" href="{{ url_for('home') }}">OpenOcean.ai</a>
-
             <!-- Navigation Links -->
             <ul>
                 <li {% if request.endpoint=='home' %}class="active"{% endif %}><a href="{{ url_for('home') }}">Home</a></li>
@@ -27,7 +38,7 @@
             </ul>
         </nav>
     </header>
-
+    
     <!-- Flash Messages Start Here -->
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -39,7 +50,7 @@
         {% endif %}
     {% endwith %}
     <!-- Flash Messages End Here -->
-
+    
     <main>
         {% block body %}
             <!-- This will be filled with each page's specific content -->
@@ -47,7 +58,9 @@
     </main>
 
     <footer>
-        &copy; {{ current_year }} - OpenOcean.ai
+        <div>
+            &copy; {{ current_year }} - TrustVest
+        </div>
     </footer>
 </body>
 </html>
