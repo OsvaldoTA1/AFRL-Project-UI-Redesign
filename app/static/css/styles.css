@@ -503,6 +503,48 @@ hr {
     font-size: var(--font-size-base);
 }
 
+/* Donation section styles (Investment Profile) */
+.donation-section, .investment-links {
+    margin: var(--spacing-medium) auto;
+    padding: var(--spacing-medium);
+    background-color: var(--color-background-lighter);
+    border-radius: var(--border-radius-medium);
+    box-shadow: 0 2px 8px var(--color-shadow);
+    max-width: 800px;
+    text-align: left;
+}
+
+.donation-section h3, .investment-links h3 {
+    color: var(--color-tertiary);
+    margin-bottom: var(--spacing-medium);
+    text-align: center;
+}
+
+.donation-section p, .investment-links p {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-small);
+}
+
+.donation-section ul, .investment-links ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.donation-section li, .investment-links li {
+    margin-bottom: var(--spacing-small);
+}
+
+.donation-section a, .investment-links a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.donation-section a:hover, .investment-links a:hover {
+    color: var(--color-primary);
+}
+
 /* Profile Setup Section */
 .profile-setup {
     text-align: center;
