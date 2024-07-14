@@ -1,8 +1,10 @@
-# OCEAN Social Media Flask App
+# TrustVest Media Flask Application
 
 ## Description
 
-This is a social media application built with Flask and Jinja templates. The standout feature of this app is the implementation of the OCEAN model of personality traits. Each user completes a personality test based on this model, and their results are stored and displayed on their profile.
+This is an investment assessment website built with Flask and Jinja templates. The standout feature of this app is the implementation of the OCEAN model of personality traits. Each user completes a personality test based on this model, and their results are stored and displayed on their profile. Based on the results, the website will route you automatically to your personalized investment strategy so that you can gain insights on how you invest and what methods resonate with your style. 
+
+*TrustVest does NOT offer real investment advice and should you feel like you need some, we recommend seeing a licensed financial advisor.*
 
 ## How to Install
 
