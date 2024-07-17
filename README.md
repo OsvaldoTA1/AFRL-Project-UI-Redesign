@@ -36,6 +36,8 @@ This is an investment assessment website built with Flask and Jinja templates. T
 
 6. Set up the database:
    ```
+   flask db stamp head
+   flask db migrate -m "Resetting migrations"
    flask db upgrade
    ```
 
