@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy=True)
     messages = db.relationship('ChatMessage', backref='author', lazy=True)
     is_profile_complete = db.Column(db.Boolean, default=False)
+    test_sessions = db.relationship('TestSession', backref='user', lazy=True)
     openness = db.Column(db.Integer, nullable=True)
     conscientiousness = db.Column(db.Integer, nullable=True)
     extraversion = db.Column(db.Integer, nullable=True)
@@ -39,6 +40,15 @@ class ChatMessage(db.Model):
     def __repr__(self):
         return f"ChatMessage('{self.message}', '{self.timestamp}')"
     
+class TestSession(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    acknowledgement = db.Column(db.Boolean, default=False)
+    timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+
+    def __repr__(self):
+        return f"TestSession(user_id={self.user_id}, acknowledgement={self.acknowledgement}, timestamp={self.timestamp})"
+
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(140), nullable=False)

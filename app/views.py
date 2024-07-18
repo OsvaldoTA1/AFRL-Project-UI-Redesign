@@ -5,7 +5,7 @@ from flask_socketio import emit
 from datetime import datetime, timezone
 from app import db, bcrypt, socketio
 from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm, PreTestAcknowledgementForm
-from app.models import User, ChatMessage
+from app.models import User, ChatMessage, TestSession
 from app.ollama import generate_ai_response
 from app.utils import load_questions, calculate_trait_scores, determine_investment_profile
 import random
@@ -156,8 +156,11 @@ def pre_test():
     form = PreTestAcknowledgementForm()
     if form.validate_on_submit():
         if form.acknowledge.data:
+            new_session = TestSession(user_id=current_user.id, acknowledgement=True)
+            db.session.add(new_session)
+            db.session.commit()
             flash('Thank you for acknowledging the terms. You may now proceed with the test.', 'success')
-            return redirect(url_for('personality_test'))
+            return redirect(url_for('personality_test', session_id=new_session.id))
     return render_template('pre_test.html', title='Pre-Test Acknowledgement', form=form)
 
 @app.route("/personality_test", methods=['GET', 'POST'])
