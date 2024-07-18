@@ -43,6 +43,10 @@ class ChatForm(FlaskForm):
     message = StringField('Message', validators=[DataRequired()])
     send = SubmitField('Send')
 
+class PreTestAcknowledgementForm(FlaskForm):
+    acknowledge = BooleanField('I acknowledge and agree to the terms', validators=[DataRequired()])
+    submit = SubmitField('Agree and Continue to Test')
+
 class PersonalityForm(FlaskForm):
     submit = SubmitField('Submit')
 
