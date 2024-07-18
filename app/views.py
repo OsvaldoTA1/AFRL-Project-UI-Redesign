@@ -4,7 +4,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from flask_socketio import emit
 from datetime import datetime, timezone
 from app import db, bcrypt, socketio
-from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm
+from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm, PreTestAcknowledgementForm
 from app.models import User, ChatMessage
 from app.ollama import generate_ai_response
 from app.utils import load_questions, calculate_trait_scores, determine_investment_profile
@@ -150,6 +150,16 @@ def handleMessage(msg):
         db.session.commit()
 
 # Personality test route
+@app.route("/pre_test", methods=['GET', 'POST'])
+@login_required
+def pre_test():
+    form = PreTestAcknowledgementForm()
+    if form.validate_on_submit():
+        if form.acknowledge.data:
+            flash('Thank you for acknowledging the terms. You may now proceed with the test.', 'success')
+            return redirect(url_for('personality_test'))
+    return render_template('pre_test.html', title='Pre-Test Acknowledgement', form=form)
+
 @app.route("/personality_test", methods=['GET', 'POST'])
 @login_required
 def personality_test():
