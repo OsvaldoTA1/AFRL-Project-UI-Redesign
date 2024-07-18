@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+Pre-Test Acknowledgement | TrustVest
+{% endblock %}
+
+{% block body %}
+<div class="form-wrapper">
+    <h2>Before We Begin</h2>
+    <p>Hello, {{ current_user.username }}!</p>
+    <p>You are about to take a personality assessment so that we may tie your traits to your investment profile, 
+        a profile which best resonates with your character.</p>
+    <p>By checking the box below, you agree to the following:</p>
+    <ul>
+        <li>Your responses will be used to create a personalized investment profile.</li>
+        <li>The assessment results are for informational purposes only.</li>
+        <li>This is not accredited investment advice.</li>
+    </ul>
+    <p>Remember, this assessment is just to help you determine best practices that we think would suit you. 
+        If you feel you need professional investment advice, 
+        we recommend that you consult with a licensed financial advisor.</p>
+    
+    <form method="POST" action="{{ url_for('pre_test') }}">
+        {{ form.hidden_tag() }}
+        
+        <div class="form-group form-remember">
+            {{ form.acknowledge() }}
+            <label for="acknowledge">{{ form.acknowledge.label }}</label>
+            {% for error in form.acknowledge.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        {{ form.submit(class="submit-btn") }}
+    </form>
+</div>
+{% endblock %}
