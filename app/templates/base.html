@@ -1,16 +1,77 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ g.language }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
+        /*Slider Button Style*/
+        .language-toggle-wrapper {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            
+        }
+
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 60px;
+          height: 34px;
+        }
+        
+        .switch input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+        
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #ccc;
+          transition: .4s;
+          border-radius: 34px;
+        }
+        
+        .slider:before {
+          position: absolute;
+          content: "";
+          height: 26px;
+          width: 26px;
+          border-radius: 50%;
+          left: 4px;
+          bottom: 4px;
+          background-size: 26px 26px;
+          background-image: url("{{ url_for('static', filename='img/usa_flag_icon.png') }}"); /* English flag */
+          transition: .4s;
+        }
+        
+        /* Checked state */
+        input:checked + .slider {
+          background-color: #ccc; /* Change if needed */
+        }
+        
+        input:checked + .slider:before {
+          transform: translateX(26px);
+          background-image: url("{{ url_for('static', filename='img/ru_flag_icon.png') }}"); /* Russian flag */
+        }
+
+        /* Header and body moved to base for CSS img properties to work */
         .header-background {
             background-image: url("{{ url_for('static', filename='img/header_background.png') }}");
             background-size: cover;
             background-position: center;
             color: white; /* Ensure text is readable */
             padding: 40px var(--spacing-medium); /* Use padding to increase header height */
+            position: relative; /* To contain the absolute positioned toggle button */
         }
         
         body {
@@ -18,25 +79,46 @@
             background-size: cover; /* Ensure the background image covers the entire viewport */
         }
     </style>
-    <title>{% block title %}Home | TrustVest{% endblock %}</title>
+    <title>{{ "Home | TrustVest" if g.language == 'en' else "Домой | TrustVest" }}</title>
 </head>
 <body>
     <header class="header-background">
         <nav>
             <!-- Navigation Links -->
             <ul>
-                <li {% if request.endpoint=='home' %}class="active"{% endif %}><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="{% if request.endpoint == 'home' %}active{% endif %}">
+                    <a href="{{ url_for('home') }}">{{ 'Home' if g.language == 'en' else 'Домой' }}</a>
+                </li>
                 {% if current_user.is_authenticated %}
-                    <li {% if request.endpoint=='profile' %}class="active"{% endif %}><a href="{{ url_for('profile', username=current_user.username) }}">Profile</a></li>
-                    <li {% if request.endpoint=='personality_test' %}class="active"{% endif %}><a href="{{ url_for('pre_test') }}">Personality Test</a></li>
-                    <li {% if request.endpoint=='chat' %}class="active"{% endif %}><a href="{{ url_for('chat') }}">AI</a></li>
-                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                    <li class="{% if request.endpoint == 'profile' %}active{% endif %}">
+                        <a href="{{ url_for('profile', username=current_user.username) }}">{{ 'Profile' if g.language == 'en' else 'Профиль' }}</a>
+                    </li>
+                    <li class="{% if request.endpoint == 'personality_test' %}active{% endif %}">
+                        <a href="{{ url_for('pre_test') }}">{{ 'Personality Test' if g.language == 'en' else 'Тест на личность' }}</a>
+                    </li>
+                    <li class="{% if request.endpoint == 'chat' %}active{% endif %}">
+                        <a href="{{ url_for('chat') }}">{{ 'AI' if g.language == 'en' else 'ИИ' }}</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('logout') }}">{{ 'Log Out' if g.language == 'en' else 'Выйти' }}</a>
+                    </li>
                 {% else %}
-                    <li {% if request.endpoint=='login' %}class="active"{% endif %}><a href="{{ url_for('login') }}">Log In</a></li>
-                    <li {% if request.endpoint=='register' %}class="active"{% endif %}><a href="{{ url_for('register') }}">Register</a></li>
+                    <li class="{% if request.endpoint == 'login' %}active{% endif %}">
+                        <a href="{{ url_for('login') }}">{{ 'Log In' if g.language == 'en' else 'Войти' }}</a>
+                    </li>
+                    <li class="{% if request.endpoint == 'register' %}active{% endif %}">
+                        <a href="{{ url_for('register') }}">{{ 'Register' if g.language == 'en' else 'Зарегистрироваться' }}</a>
+                    </li>
                 {% endif %}
             </ul>
         </nav>
+        <!-- Language Toggle Button Wrapper -->
+        <div class="language-toggle-wrapper">
+          <label class="switch">
+            <input type="checkbox" id="language-toggle" {% if g.language == 'ru' %}checked{% endif %}>
+            <span class="slider round"></span>
+          </label>
+        </div>
     </header>
     
     <!-- Flash Messages Start Here -->
@@ -62,5 +144,24 @@
             &copy; {{ current_year }} - TrustVest
         </div>
     </footer>
+    <!-- Script to support language toggling -->
+    <script>
+        document.getElementById('language-toggle').addEventListener('change', function () {
+            const currentLang = "{{ g.language }}";
+            const newLang = currentLang === 'en' ? 'ru' : 'en';
+            fetch('{{ url_for("toggle_language") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ language: newLang })
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
