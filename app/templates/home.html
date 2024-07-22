@@ -3,61 +3,61 @@
 {% block body %}
 {% if current_user.is_authenticated %}
 <div class="profile-setup">
-    <h1>Welcome, {{ current_user.username }}</h1>
+    <h1>{% if g.language == 'ru' %}Добро пожаловать, {{ current_user.username }}{% else %}Welcome, {{ current_user.username }}{% endif %}</h1>
 
-    <h2>Let's Get Started!</h2>
-    <p>Please complete the steps below to set up your profile and explore our features:</p>
+    <h2>{% if g.language == 'ru' %}Давайте начнем!{% else %}Let's Get Started!{% endif %}</h2>
+    <p>{% if g.language == 'ru' %}Пожалуйста, выполните шаги ниже, чтобы настроить свой профиль и исследовать наши функции:{% else %}Please complete the steps below to set up your profile and explore our features:{% endif %}</p>
 
     <ol class="setup-steps">
         <li>
-            <h3>Step 1: Complete Your Profile</h3>
-            <p>This step ensures we have the necessary details to personalize your experience.</p>
-            <p><a class="pastel-text-links" href="{{ url_for('edit_profile') }}">Complete Profile</a></p>
+            <h3>{% if g.language == 'ru' %}Шаг 1: Заполните профиль{% else %}Step 1: Complete Your Profile{% endif %}</h3>
+            <p>{% if g.language == 'ru' %}Этот шаг гарантирует, что y нас есть все необходимые данные для персонализации вашего опыта.{% else %}This step ensures we have the necessary details to personalize your experience.{% endif %}</p>
+            <p><a class="pastel-text-links" href="{{ url_for('edit_profile') }}">{% if g.language == 'ru' %}Заполнить профиль{% else %}Complete Profile{% endif %}</a></p>
         </li>
         <li>
-            <h3>Step 2: Explore the Personality Test</h3>
-            <p>Understand your personality better through our tailored personality test. This provides insights based on your traits and preferences.</p>
-            <p><a class="pastel-text-links" href="{{ url_for('pre_test') }}">Take the Test</a></p>
+            <h3>{% if g.language == 'ru' %}Шаг 2: Пройдите тест личности{% else %}Step 2: Explore the Personality Test{% endif %}</h3>
+            <p>{% if g.language == 'ru' %}Поймите свою личность лучше c помощью нашего персонализированного теста. Вы получите анализ на основе ваших черт и предпочтений.{% else %}Understand your personality better through our tailored personality test. This provides insights based on your traits and preferences.{% endif %}</p>
+            <p><a class="pastel-text-links" href="{{ url_for('pre_test') }}">{% if g.language == 'ru' %}Пройти тест{% else %}Take the Test{% endif %}</a></p>
         </li>
         <li>
-            <h3>Step 3: Learn About Your Investment Strategy</h3>
-            <p>Gain deeper insights into your strategy with your custom results, which provides valuable information about your investment style and preferences.</p>
-            <p><a class="pastel-text-links" href="{{ url_for('profile', username=current_user.username) }}">Access Profile</a></p>
+            <h3>{% if g.language == 'ru' %}Шаг 3: Узнайте o своей стратегии инвестирования{% else %}Step 3: Learn About Your Investment Strategy{% endif %}</h3>
+            <p>{% if g.language == 'ru' %}Получите глубокие знания o вашей стратегии c помощью индивидуальных результатов, предоставляющих ценную информацию o вашем стиле и предпочтениях инвестирования.{% else %}Gain deeper insights into your strategy with your custom results, which provides valuable information about your investment style and preferences.{% endif %}</p>
+            <p><a class="pastel-text-links" href="{{ url_for('profile', username=current_user.username) }}">{% if g.language == 'ru' %}Доступ к профилю{% else %}Access Profile{% endif %}</a></p>
         </li>
         <li>
-            <h3>Optional: Engage with Interactive AI (Powered by Ollama)</h3>
-            <p>Interact with our Meche Bot, powered by Ollama, for real-time conversations and dynamic responses tailored for you.</p>
-            <p><a class="pastel-text-links" href="{{ url_for('chat') }}">Start Chatting</a></p>
+            <h3>{% if g.language == 'ru' %}Дополнительно: Взаимодействие c Интерактивным ИИ (на основе Ollama){% else %}Optional: Engage with Interactive AI (Powered by Ollama){% endif %}</h3>
+            <p>{% if g.language == 'ru' %}Взаимодействуйте c нашим Meche Bot, работающим на основе Ollama, для проведения живых разговоров и получения динамичных ответов, адаптированных для вас.{% else %}Interact with our Meche Bot, powered by Ollama, for real-time conversations and dynamic responses tailored for you.{% endif %}</p>
+            <p><a class="pastel-text-links" href="{{ url_for('chat') }}">{% if g.language == 'ru' %}Начать общение{% else %}Start Chatting{% endif %}</a></p>
         </li>
     </ol>
 </div>
 {% else %}
     <div class="home-hero">
-        <h1>Welcome to TrustVest</h1>
-        <p class="home-paragraph"><a class="pastel-text-links" href="{{ url_for('login') }}">Log in</a> to get started. New here? It takes less than 5 minutes to <a class="pastel-text-links" href="{{ url_for('register') }}">Sign up</a>!</p>
+        <h1>{% if g.language == 'ru' %}Добро пожаловать в TrustVest{% else %}Welcome to TrustVest{% endif %}</h1>
+        <p class="home-paragraph"><a class="pastel-text-links" href="{{ url_for('login') }}">{% if g.language == 'ru' %}Войдите{% else %}Log in{% endif %}</a> {% if g.language == 'ru' %}чтобы начать. Вы здесь впервые? Регистрация займет менее 5 минут. <a class="pastel-text-links" href="{{ url_for('register') }}">Зарегистрироваться</a>!{% else %}to get started. New here? It takes less than 5 minutes to <a class="pastel-text-links" href="{{ url_for('register') }}">Sign up</a>!{% endif %}</p>
     </div>
     
     <!-- Feature Highlights Section -->
     <section class="features-highlight">
-        <h2 class="centered">Explore the Features</h2>
+        <h2 class="centered">{% if g.language == 'ru' %}Исследуйте функции{% else %}Explore the Features{% endif %}</h2>
         <div class="features-grid">
             <div class="feature">
                 <img src="{{ url_for('static', filename='img/personality_test_feature.png') }}" alt="Personality Test Feature">
-                <h3 class="centered">Personality Tests</h3>
-                <p>Take personalized tests to understand your personality traits and receive insightful analysis.</p>
+                <h3 class="centered">{% if g.language == 'ru' %}Тесты на личность{% else %}Personality Tests{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Пройдите персонализированные тесты, чтобы понять свои черты личности и получить полезный анализ.{% else %}Take personalized tests to understand your personality traits and receive insightful analysis.{% endif %}</p>
             </div>
             <div class="feature">
                 <img src="{{ url_for('static', filename='img/investment_profile_feature.png') }}" alt="Investment Profile Feature">
-                <h3 class="centered">Discover Your Investment Profile</h3>
-                <p>Get tailored insights and recommendations based on your personality test results to optimize your investment strategy.</p>
+                <h3 class="centered">{% if g.language == 'ru' %}Узнайте свой инвестиционный профиль{% else %}Discover Your Investment Profile{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Получите персонализированные рекомендации на основе результатов вашего теста, чтобы оптимизировать вашу инвестиционную стратегию.{% else %}Get tailored insights and recommendations based on your personality test results to optimize your investment strategy.{% endif %}</p>
             </div>
             <div class="feature">
                 <img src="{{ url_for('static', filename='img/chat_feature.png') }}" alt="Chat Feature">
-                <h3 class="centered">Interactive AI</h3>
-                <p>Engage in real-time conversations with the Meche Bot and explore dynamic responses powered by Ollama.</p>
+                <h3 class="centered">{% if g.language == 'ru' %}Интерактивный ИИ{% else %}Interactive AI{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Общайтесь в реальном времени c Meche Bot и получайте динамичные ответы на основе Ollama.{% else %}Engage in real-time conversations with the Meche Bot and explore dynamic responses powered by Ollama.{% endif %}</p>
             </div>
         </div>
-        <p class="centered">Sign up and uncover your investment strategy today!</p>
+        <p class="centered">{% if g.language == 'ru' %}Зарегистрируйтесь и узнайте свою инвестиционную стратегию уже сегодня!{% else %}Sign up and uncover your investment strategy today!{% endif %}</p>
     </section>
 {% endif %}
 {% endblock %}
