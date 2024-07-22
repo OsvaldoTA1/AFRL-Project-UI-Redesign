@@ -1,14 +1,28 @@
-from flask import render_template, url_for, flash, redirect, request, jsonify
-from flask import current_app as app
+from flask import render_template, url_for, flash, redirect, request, jsonify, g, session, current_app as app
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_socketio import emit
 from datetime import datetime, timezone
-from app import db, bcrypt, socketio
+from app import db, bcrypt, socketio, csrf
 from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm, PreTestAcknowledgementForm
 from app.models import User, ChatMessage, TestSession
 from app.ollama import generate_ai_response
 from app.utils import load_questions, calculate_trait_scores, determine_investment_profile
 import random
+
+# Toggle language route
+@app.before_request
+def set_language():
+    g.language = session.get('language', 'en')
+
+@app.route('/toggle_language', methods=['POST'])
+@csrf.exempt  # To exempt this route from CSRF protection
+def toggle_language():
+    data = request.get_json()
+    new_language = data.get('language')
+    if new_language:
+        session['language'] = new_language
+        return jsonify({'status': 'success'})
+    return jsonify({'status': 'failure'}), 400
 
 # Home route
 @app.route("/")
