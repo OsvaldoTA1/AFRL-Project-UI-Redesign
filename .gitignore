@@ -5,3 +5,4 @@ instance/site.db
 app/llama3.py
 responses.csv
 .DS_Store
+cred.py
