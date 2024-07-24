@@ -668,3 +668,21 @@ hr {
 ::-webkit-scrollbar-thumb:hover {
     background-color: var(--color-primary);
 }
+
+.recaptcha-container {
+    margin-bottom: 10px; /* Space for the custom message */
+}
+
+.recaptcha-container.error-highlight {
+    border: 2px solid red; /* Highlight border */
+    padding: 10px; /* Add padding to show the border */
+    border-radius: 5px; /* Optional: Rounded corners */
+    background-color: #fdd; /* Optional: Light red background */
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    display: none; /* Hide by default */
+}

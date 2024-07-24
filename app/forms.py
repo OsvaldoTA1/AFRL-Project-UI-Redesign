@@ -1,17 +1,24 @@
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, RadioField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length, Regexp
 from wtforms.fields import DateField
 from app.models import User
 from app.utils import add_personality_questions, load_questions
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
+    #Username can only be alphameric with a minimum length of 4
+    username = StringField('Username', validators=[DataRequired(), Length(min = 4, message = "The username must be a minimum of 4 characters in length."),
+                                                   Regexp(regex =r"^(?=.*[a-zA-Z])[a-zA-Z\d]*$", message="Usernames may only contain letters and numbers.")])
     birth_date = DateField('BirthDate', format='%Y-%m-%d', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     gender = RadioField('Gender', choices=[('Male', 'Male'), ('Female', 'Female')], validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
+
+    #Password must be a minimum length of 12 with a combination of lowercase and uppercase letters, numbers, and special special characters (!@#$%^&*,?+=)
+    password = PasswordField('Password', validators=[DataRequired(), Length(min = 12, message = "The password must be a minimum of 12 characters in length."), Regexp(
+        regex= r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*,?+=])[A-Za-z\d!@#$%^&*?+=]*$", message = "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character."
+    )])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    recaptcha = RecaptchaField('Recaptcha')
     submit = SubmitField('Sign Up')
 
     def validate_username(self, username):

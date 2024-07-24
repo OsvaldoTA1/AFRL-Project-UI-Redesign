@@ -5,6 +5,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from flask_socketio import SocketIO
+import cred
 
 socketio = SocketIO()
 db = SQLAlchemy()
@@ -19,6 +20,9 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with secure key in production
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+    app.config['RECAPTCHA_PUBLIC_KEY'] = cred.RECAPTCHA_PUBLIC_KEY
+    app.config['RECAPTCHA_PRIVATE_KEY'] = cred.RECAPTCHA_PRIVATE_KEY
+
 
     app.static_folder = 'static'
     
