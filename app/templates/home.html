@@ -22,7 +22,7 @@
         <li>
             <h3>{% if g.language == 'ru' %}Шаг 3: Узнайте o своей стратегии инвестирования{% else %}Step 3: Learn About Your Investment Strategy{% endif %}</h3>
             <p>{% if g.language == 'ru' %}Получите глубокие знания o вашей стратегии c помощью индивидуальных результатов, предоставляющих ценную информацию o вашем стиле и предпочтениях инвестирования.{% else %}Gain deeper insights into your strategy with your custom results, which provides valuable information about your investment style and preferences.{% endif %}</p>
-            <p><a class="pastel-text-links" href="{{ url_for('profile', username=current_user.username) }}">{% if g.language == 'ru' %}Доступ к профилю{% else %}Access Profile{% endif %}</a></p>
+            <p><a class="pastel-text-links" href="{{ url_for('profile') }}">{% if g.language == 'ru' %}Доступ к профилю{% else %}Access Profile{% endif %}</a></p>
         </li>
         <li>
             <h3>{% if g.language == 'ru' %}Дополнительно: Взаимодействие c Интерактивным ИИ (на основе Ollama){% else %}Optional: Engage with Interactive AI (Powered by Ollama){% endif %}</h3>

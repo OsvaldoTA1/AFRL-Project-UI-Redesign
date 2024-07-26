@@ -78,10 +78,10 @@ def logout():
     return redirect(url_for('login'))
 
 # Profile routes
-@app.route("/profile/<username>")
+@app.route("/profile")
 @login_required
-def profile(username):
-    user = User.query.filter_by(username=username).first_or_404()
+def profile():
+    user = current_user
     return render_template('profile.html', title='Profile', user=user)
 
 @app.route("/edit_profile", methods=['GET', 'POST'])
