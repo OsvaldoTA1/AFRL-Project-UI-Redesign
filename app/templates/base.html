@@ -91,7 +91,7 @@
                 </li>
                 {% if current_user.is_authenticated %}
                     <li class="{% if request.endpoint == 'profile' %}active{% endif %}">
-                        <a href="{{ url_for('profile', username=current_user.username) }}">{{ 'Profile' if g.language == 'en' else 'Профиль' }}</a>
+                        <a href="{{ url_for('profile')}}">{{ 'Profile' if g.language == 'en' else 'Профиль' }}</a>
                     </li>
                     <li class="{% if request.endpoint == 'personality_test' %}active{% endif %}">
                         <a href="{{ url_for('pre_test') }}">{{ 'Personality Test' if g.language == 'en' else 'Тест на личность' }}</a>
