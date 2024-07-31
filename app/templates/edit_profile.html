@@ -6,6 +6,34 @@ Edit Profile | TrustVest
 <div class="form-wrapper">
     <h2>Edit Profile</h2>
 
+    <h3>Edit Login</h3>
+    <form method="POST" class="form-group">
+        {{ form_login.hidden_tag() }}
+        <div class="form-group">
+            {{ form_login.username.label }} 
+            {{ form_login.username(class="form-input") }}
+        </div>
+        <div class="form-group">
+            {{ form_login.email.label }} 
+            {{ form_login.email(class="form-input") }}
+        </div>
+        <div class="form-group">
+            {{ form_login.old_password.label }} 
+            {{ form_login.old_password(class="form-input") }}
+        </div>
+        <div class="form-group">
+            {{ form_login.new_password.label }} 
+            {{ form_login.new_password(class="form-input") }}
+        </div>
+        <div class="form-group">
+            {{ form_login.confirm_password.label }} 
+            {{ form_login.confirm_password(class="form-input") }}
+        </div>        
+        <div class="form-group">
+            {{ form_login.submit(class="submit-btn") }}
+        </div>
+    </form>
+
     <h3>Edit Birthday</h3>
     <form method="POST" class="form-group">
         {{ form_birthday.hidden_tag() }}   

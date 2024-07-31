@@ -1,9 +1,9 @@
 from flask import render_template, url_for, flash, redirect, request, jsonify, g, session, current_app as app
-from flask_login import login_user, current_user, logout_user, login_required
+from flask_login import login_user, current_user, logout_user, login_required, fresh_login_required
 from flask_socketio import emit
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from app import db, bcrypt, socketio, csrf
-from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm, PreTestAcknowledgementForm
+from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm, PreTestAcknowledgementForm, EditLoginForm
 from app.models import User, ChatMessage, TestSession
 from app.ollama import generate_ai_response
 from app.utils import load_questions, calculate_trait_scores, determine_investment_profile
@@ -85,28 +85,44 @@ def profile():
     return render_template('profile.html', title='Profile', user=user)
 
 @app.route("/edit_profile", methods=['GET', 'POST'])
-@login_required
+@fresh_login_required
 def edit_profile():
     form_birthday = EditBirthdayForm()
     form_gender_pronouns = EditGenderPronounsForm()
+    form_login = EditLoginForm()
+
+    if form_login.validate_on_submit():
+        current_user.username = form_login.username.data
+        current_user.email = form_login.email.data
+        if bcrypt.check_password_hash(current_user.password, form_login.old_password.data):
+            hashed_password = bcrypt.generate_password_hash(form_login.new_password.data).decode('utf-8')
+            current_user.password = hashed_password
+            db.session.commit()
+            flash('Your login information has been updated!', 'success')
+        else:
+            flash("Incorrect previous password. Please enter again.")
 
     if form_birthday.validate_on_submit():
         current_user.birth_date = form_birthday.birth_date.data
         current_user.is_profile_complete = True
         db.session.commit()
         flash('Your birthdate has been updated!', 'success')
+        return redirect(url_for('edit_profile'))
 
-    if form_gender_pronouns.validate_on_submit():
+    if form_gender_pronouns.validate_on_submit() and form_gender_pronouns.pronouns.data != None:
         current_user.pronouns = form_gender_pronouns.pronouns.data
         db.session.commit()
         flash('Your pronouns have been updated!', 'success')
+        return redirect(url_for('edit_profile'))
 
     if request.method == 'GET':
+        form_login.username.data = current_user.username
+        form_login.email.data = current_user.email
         form_birthday.birth_date.data = current_user.birth_date
         form_gender_pronouns.gender.data = current_user.gender
         form_gender_pronouns.pronouns.data = current_user.pronouns
 
-    return render_template('edit_profile.html', title='Edit Profile', form_birthday=form_birthday, form_gender_pronouns=form_gender_pronouns)
+    return render_template('edit_profile.html', title='Edit Profile', form_birthday=form_birthday, form_gender_pronouns=form_gender_pronouns, form_login=form_login)
 
 # Chat routes
 @app.route("/chat", methods=['GET', 'POST'])
@@ -246,3 +262,17 @@ def resilient_2():
 @login_required
 def under_controlled_2():
     return render_template('investment_profile/under_controlled_2.html')
+
+# Renewing the persistant cookie every 2 days while there is user activity
+@app.before_request
+def renew_persistent_cookies():
+    session.modified = True
+    if current_user.is_authenticated and request.cookies.get("remember-token"):
+        last_renewal = session.get("last_renewal")
+        if last_renewal:
+            last_renewal = datetime.fromisoformat(last_renewal) 
+
+            if datetime.utcnow() - last_renewal > timedelta(days = 2):
+                login_user(user, remember=True)
+
+        session['last_renewal'] = datetime.utcnow().isoformat()

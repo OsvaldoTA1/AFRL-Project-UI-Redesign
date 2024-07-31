@@ -46,6 +46,17 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+class EditLoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min = 4, message = "The username must be a minimum of 4 characters in length."),
+                                                   Regexp(regex =r"^(?=.*[a-zA-Z])[a-zA-Z\d]*$", message="Usernames may only contain letters and numbers.")])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    old_password = PasswordField('Old Password', validators=[DataRequired()])
+    new_password = PasswordField('Password', validators=[DataRequired(), Length(min = 12, message = "The password must be a minimum of 12 characters in length."), Regexp(
+        regex= r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*,?+=])[A-Za-z\d!@#$%^&*?+=]*$", message = "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character."
+    )])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('new_password')])    
+    submit = SubmitField('Save')
+
 class ChatForm(FlaskForm):
     message = StringField('Message', validators=[DataRequired()])
     send = SubmitField('Send')
