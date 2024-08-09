@@ -44,6 +44,7 @@ class LoginForm(FlaskForm):
     user_id = StringField('Username/Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
+    recaptcha = RecaptchaField('Recaptcha')
     submit = SubmitField('Login')
 
 class EditLoginForm(FlaskForm):
@@ -67,6 +68,15 @@ class PreTestAcknowledgementForm(FlaskForm):
 
 class PersonalityForm(FlaskForm):
     submit = SubmitField('Submit')
+
+class TwoFactorSetupForm(FlaskForm):
+    enable = RadioField('Enable Two Factor Authenication with Email.', choices=[('Yes', 'Yes'), ('No', 'No')], validators=[DataRequired()])
+    submit = SubmitField('Save')
+
+class TwoFactorVerifyForm(FlaskForm):
+    token = StringField("Token", validators=[Length(min = 0, max = 6)])
+    submit = SubmitField("Verify")
+    resend = SubmitField("Resend Verification Code")
 
 # Dynamically adds test questions from JSON (utils.py)
 questions = load_questions()
