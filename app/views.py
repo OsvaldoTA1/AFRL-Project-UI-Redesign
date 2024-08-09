@@ -2,12 +2,16 @@ from flask import render_template, url_for, flash, redirect, request, jsonify, g
 from flask_login import login_user, current_user, logout_user, login_required, fresh_login_required
 from flask_socketio import emit
 from datetime import datetime, timezone, timedelta
-from app import db, bcrypt, socketio, csrf
-from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm, PreTestAcknowledgementForm, EditLoginForm
+from app import db, bcrypt, socketio, csrf, mail
+from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm, PreTestAcknowledgementForm, EditLoginForm, TwoFactorSetupForm, TwoFactorVerifyForm
 from app.models import User, ChatMessage, TestSession
 from app.ollama import generate_ai_response
 from app.utils import load_questions, calculate_trait_scores, determine_investment_profile
+from flask_mailman import EmailMessage
+import pyotp
+import time
 import random
+import cred
 
 # Toggle language route
 @app.before_request
@@ -50,20 +54,152 @@ def register():
             flash(f"Error in {getattr(form, field).label.text}: {error}", 'danger')
     return render_template('register.html', title='Register', form=form)
 
+@app.route("/two_factor_setup", methods = ['GET', 'POST'])
+def two_factor_setup():
+    # Partial Authenication
+    user_id = session.get('user_id')
+    if user_id == None:
+        return redirect(url_for("login"))
+    user = User.query.filter(User.id == user_id).first()
+
+    form = TwoFactorSetupForm()
+    if form.validate_on_submit():
+        # Enabling 2FA
+        if form.enable.data == "Yes":
+            user.tf_active = True 
+            user.totp_secret = pyotp.random_base32()   
+            db.session.commit()
+            return redirect(url_for('two_factor_verify'))
+        else:
+        # Disabling 2FA
+            user.tf_active = False
+            user.is_tf_complete = True
+            db.session.commit()
+            login_user(user, remember = session.get('remember'))
+            if not user.is_profile_complete:
+                    flash('Please complete your profile.', 'warning')
+                    return redirect(url_for('edit_profile'))
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page and next_page.startswith('/') else redirect(url_for('home'))
+
+    return render_template('two_factor_setup.html', title = 'Two Factor Setup', form = form)
+
+@app.route("/two_factor_verify", methods = ['GET', 'POST'])
+def two_factor_verify():
+    if 'verify' in session:
+        return redirect(url_for('home'))
+
+    # Partial Authenication
+    user_id = session.get('user_id')
+    if user_id == None:
+        return redirect(url_for("login"))
+    user = User.query.filter(User.id == user_id).first()
+    
+    # Generating TOTP Object and Code
+    if "totp" not in session:
+        session["totp"] = True
+        send_email()
+
+    # Verification Code expires after 5 minutes.
+    totp_object = pyotp.TOTP(user.totp_secret, interval = 300)
+
+    # Confirm it is the correct code
+    form = TwoFactorVerifyForm()
+    if form.validate_on_submit():
+        if form.submit.data:
+            if totp_object.verify(form.token.data, valid_window = 1):
+                login_user(user, remember=session.get('remember'))
+                user.last_tf = datetime.utcnow()
+                user.is_tf_complete = True
+                db.session.commit()
+                session['verify'] = True
+                session.pop("remember")
+                session.pop("user_id")
+                session.pop("totp")
+                return redirect(url_for('home'))
+            else:
+                form.token.data = ""
+                flash('Verification Unsuccessful. Please either re-enter your verification code.', 'danger')
+        
+        if form.resend.data:
+            send_email()
+            flash('Verification Code has been sent to your email!', 'success')
+            return redirect(url_for('two_factor_verify'))
+
+    return render_template('two_factor_verify.html', title = "Two Factor Verify", form = form)
+
+@app.route("/send_verification_code", methods = ['GET'])
+def send_email():
+    user_id = session.get('user_id')
+    if user_id == None:
+        return redirect(url_for("home"))
+    user = User.query.filter(User.id == user_id).first()
+
+    email = user.email
+    totp = pyotp.TOTP(user.totp_secret, interval = 300)
+    verification_code = totp.now()
+
+    # Design for Email
+    emailContent = f"""
+    <html>
+        <body>
+            <h3>Your Verification Code:</h3>
+            <h2 style = "color: red;">{verification_code}</h2>
+            <p>This is your verification code for your TrustVest Media account. Please make sure to verify within 5 minutes. Please do not reply to this automatically generated email.
+            </p>
+            <p>Sincerely,</p>
+            <p>TrustVest Media Support</p>
+        </body>
+    </html>
+    """
+
+    # Constructing EmailMessage Object
+    msg = EmailMessage(
+        subject="Your TrustVest Media Verification Code",
+        body=emailContent,
+        to=[email],
+    )
+    msg.content_subtype = "html"
+
+    # Send email and check for errors
+    try:
+        msg.send()
+    except Exception as e:
+        return f"Failed to send email: {e}"        
+    
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    # Checking if the user is authenticated
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        # Check to see if the 2FA setup is complete
+        if not current_user.is_tf_complete:
+            session['user_id'] = current_user.id
+            session['remember'] = False
+            return redirect(url_for('two_factor_setup'))
+        else:
+            return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter((User.username == form.user_id.data) | (User.email == form.user_id.data)).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
-            if not user.is_profile_complete:
-                flash('Please complete your profile.', 'warning')
-                return redirect(url_for('edit_profile'))
-            next_page = request.args.get('next')
-            return redirect(next_page) if next_page and next_page.startswith('/') else redirect(url_for('home'))
+            # If User's 2FA is not completely setup
+            if not user.is_tf_complete:
+                session['user_id'] = user.id
+                session['remember'] = form.remember.data
+                return redirect(url_for('two_factor_setup'))
+            # If 2FA is active and it has been 7 days since the last verify
+            elif user.tf_active and datetime.utcnow() - user.last_tf > timedelta(minutes = 4) :
+                session['user_id'] = user.id
+                session['remember'] = form.remember.data
+                return redirect(url_for('two_factor_verify'))
+            else:
+                login_user(user, remember=form.remember.data)
+                if not user.is_profile_complete:
+                    flash('Please complete your profile.', 'warning')
+                    return redirect(url_for('edit_profile'))
+                next_page = request.args.get('next')
+                return redirect(next_page) if next_page and next_page.startswith('/') else redirect(url_for('home'))
         flash('Login Unsuccessful. Please check your username/email and password', 'danger')
     for field, errors in form.errors.items():
         for error in errors:
@@ -74,6 +210,8 @@ def login():
 def logout():
     ChatMessage.query.filter_by(user_id=current_user.id).delete()
     db.session.commit()
+    if 'verify' in session:
+        session.pop('verify')
     logout_user()
     return redirect(url_for('login'))
 
