@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}
+2FA Verify | TrustVest
+{% endblock %}
+
+{% block body %}
+<div class="form-wrapper">
+    <h2>2 Factor Authenication Verify</h2>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.token.label }} 
+            {{ form.token(class="form-input") }}
+        </div>
+    
+        <div class="form-group">
+            {{ form.submit(class="submit-btn") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.resend(class="submit-btn", style="background-color: blue;") }}
+        </div>
+
+    </form>
+</div>
+{% endblock %}
