@@ -74,7 +74,7 @@ class TwoFactorSetupForm(FlaskForm):
     submit = SubmitField('Save')
 
 class TwoFactorVerifyForm(FlaskForm):
-    token = StringField("Token", validators=[Length(min = 0, max = 6)])
+    token = StringField("Token", validators=[Length(max = 6)])
     submit = SubmitField("Verify")
     resend = SubmitField("Resend Verification Code")
 
