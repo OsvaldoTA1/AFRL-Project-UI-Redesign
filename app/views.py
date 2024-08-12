@@ -86,14 +86,19 @@ def two_factor_setup():
 
 @app.route("/two_factor_verify", methods = ['GET', 'POST'])
 def two_factor_verify():
-    if 'verify' in session:
-        return redirect(url_for('home'))
+    if "edit" not in session:
+        if 'verify' in session:
+            return redirect(url_for('home'))
 
-    # Partial Authenication
-    user_id = session.get('user_id')
-    if user_id == None:
-        return redirect(url_for("login"))
-    user = User.query.filter(User.id == user_id).first()
+        # Partial Authenication
+        user_id = session.get('user_id')
+        if user_id == None:
+            return redirect(url_for("login"))
+        user = User.query.filter(User.id == user_id).first()
+            
+    else:
+        user = current_user
+        session['user_id'] = user.id
     
     # Generating TOTP Object and Code
     if "totp" not in session:
@@ -108,19 +113,22 @@ def two_factor_verify():
     if form.validate_on_submit():
         if form.submit.data:
             if totp_object.verify(form.token.data, valid_window = 1):
-                login_user(user, remember=session.get('remember'))
                 user.last_tf = datetime.utcnow()
                 user.is_tf_complete = True
                 db.session.commit()
                 session['verify'] = True
-                session.pop("remember")
                 session.pop("user_id")
                 session.pop("totp")
+                if current_user.is_authenticated:
+                    session.pop("edit")
+                    return redirect(url_for('edit_profile'))
+                login_user(user, remember=session.get('remember'))
+                session.pop("remember")
                 return redirect(url_for('home'))
             else:
                 form.token.data = ""
                 flash('Verification Unsuccessful. Please either re-enter your verification code.', 'danger')
-        
+
         if form.resend.data:
             send_email()
             flash('Verification Code has been sent to your email!', 'success')
@@ -228,6 +236,7 @@ def edit_profile():
     form_birthday = EditBirthdayForm()
     form_gender_pronouns = EditGenderPronounsForm()
     form_login = EditLoginForm()
+    form_2FA = TwoFactorSetupForm()
 
     if form_login.validate_on_submit():
         current_user.username = form_login.username.data
@@ -239,6 +248,21 @@ def edit_profile():
             flash('Your login information has been updated!', 'success')
         else:
             flash("Incorrect previous password. Please enter again.")
+    
+    if form_2FA.validate_on_submit():
+        if form_2FA.enable.data == "Yes":
+            current_user.tf_active = True
+            current_user.is_tf_complete = True
+            db.session.commit()
+            session['edit'] = True
+            return redirect(url_for('two_factor_verify'))
+        else:
+            current_user.tf_active = False
+            current_user.is_tf_complete = True
+            db.session.commit()
+            flash('Your 2-Factor Authenication has been updated!', 'success')
+            return redirect(url_for('edit_profile'))
+
 
     if form_birthday.validate_on_submit():
         current_user.birth_date = form_birthday.birth_date.data
@@ -256,11 +280,15 @@ def edit_profile():
     if request.method == 'GET':
         form_login.username.data = current_user.username
         form_login.email.data = current_user.email
+        if current_user.tf_active:
+            form_2FA.enable.data = "Yes"
+        else:
+            form_2FA.enable.data = "No"
         form_birthday.birth_date.data = current_user.birth_date
         form_gender_pronouns.gender.data = current_user.gender
         form_gender_pronouns.pronouns.data = current_user.pronouns
 
-    return render_template('edit_profile.html', title='Edit Profile', form_birthday=form_birthday, form_gender_pronouns=form_gender_pronouns, form_login=form_login)
+    return render_template('edit_profile.html', title='Edit Profile', form_birthday=form_birthday, form_gender_pronouns=form_gender_pronouns, form_login=form_login, form_2FA = form_2FA)
 
 # Chat routes
 @app.route("/chat", methods=['GET', 'POST'])
