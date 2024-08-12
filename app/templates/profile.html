@@ -12,6 +12,8 @@
     <p><strong>Birthdate:</strong> {% if user.birth_date %}{{ user.birth_date.strftime('%Y-%m-%d') }}{% else %}Not Set{% endif %}</p>
     <p><strong>Gender:</strong> {% if user.gender %}{{ user.gender }}{% else %}Not Set{% endif %}</p>
     <p><strong>Pronouns:</strong> {% if user.pronouns %}{{ user.pronouns }}{% else %}Not Set{% endif %}</p>
+    <p><strong>2-Factor Authenication:</strong> {% if user.tf_active %}Enabled{% else %}Disabled{% endif %}</p>
+
 </div>
 
 {% if user == current_user %}
