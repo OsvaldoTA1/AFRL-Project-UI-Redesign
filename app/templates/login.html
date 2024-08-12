@@ -20,7 +20,39 @@ Login | TrustVest
       {{ form.remember() }}  <!-- Move checkbox before the label for visual consistency -->
       {{ form.remember.label }}
     </div>
+        
+    <div class = "form-group">
+      <div class="recaptcha-container">
+        {{ form.recaptcha() }}
+        <div id="recaptcha-error-message" class="error-message"></div>
+      </div>
+    </div>
+
     {{ form.submit(class="submit-btn") }}  <!-- Using the existing submit button style -->
   </form>
 </div>
+
+
+<script>
+  const form = document.querySelector('form');
+  const recaptchaContainer = document.querySelector('.recaptcha-container');
+  const recaptchaErrorMessage = document.getElementById('recaptcha-error-message');
+
+  form.addEventListener('submit', (e) =>{
+    const captchaResponse = grecaptcha.getResponse();
+
+    if (captchaResponse.length === 0) {
+        e.preventDefault();
+        recaptchaContainer.classList.add('error-highlight');
+        recaptchaErrorMessage.textContent = "Please complete the reCAPTCHA.";
+        recaptchaErrorMessage.style.display = 'block';
+      } else {
+        recaptchaContainer.classList.remove('error-highlight');
+        recaptchaErrorMessage.textContent = '';
+        recaptchaErrorMessage.style.display = 'none';
+      }
+
+  });
+
+</script>
 {% endblock %}

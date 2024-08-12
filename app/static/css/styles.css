@@ -272,7 +272,7 @@ footer {
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 0px;
     color: var(--color-text-muted);
 }
 
@@ -325,6 +325,7 @@ footer {
     display: flex;
     gap: var(--spacing-medium);
     margin-bottom: var(--spacing-small);
+    margin-top: var(--spacing-small);
 }
 
 .gender-options .form-radio {
@@ -685,4 +686,16 @@ hr {
     font-size: 14px;
     margin-top: 5px;
     display: none; /* Hide by default */
+}
+
+.enable-options {
+    display: block;
+    gap: var(--spacing-medium);
+}
+
+.enable-radio-options{
+    display: flex;
+    gap: var(--spacing-small);   
+    align-items: center;
+    margin-top: 10px;
 }

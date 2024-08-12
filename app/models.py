@@ -25,6 +25,10 @@ class User(db.Model, UserMixin):
     agreeableness = db.Column(db.Integer, nullable=True)
     neuroticism = db.Column(db.Integer, nullable=True)
     investment_profile = db.Column(db.String(50), nullable=True) 
+    totp_secret = db.Column(db.String(16), nullable=True) 
+    tf_active = db.Column(db.Boolean(), nullable=True)
+    is_tf_complete = db.Column(db.Boolean(), default=False)
+    last_tf = db.Column(db.DateTime)
     
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.gender}', '{self.image_file}')"
