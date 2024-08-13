@@ -34,6 +34,25 @@ Edit Profile | TrustVest
         </div>
     </form>
 
+    <h3>2-Factor Authenication</h3>
+        <form method="POST">
+        {{ form_2FA.hidden_tag() }}
+        <div class="form-group">
+            {{ form_2FA.enable.label }}
+            <div class="enable-options">
+            {% for subfield in form_2FA.enable %}
+                <div class="enable-radio-options">
+                {{ subfield }} {{ subfield.label }}
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            {{ form_2FA.submit(class="submit-btn") }}
+        </div>
+    </form>
+
     <h3>Edit Birthday</h3>
     <form method="POST" class="form-group">
         {{ form_birthday.hidden_tag() }}   
