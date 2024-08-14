@@ -18,19 +18,27 @@ Edit Profile | TrustVest
             {{ form_login.email(class="form-input") }}
         </div>
         <div class="form-group">
-            {{ form_login.old_password.label }} 
-            {{ form_login.old_password(class="form-input") }}
+            {{ form_login.submitLogin(class="submit-btn") }}
+        </div>
+    </form>
+
+    <h3>Password</h3>
+    <form method="POST" class="form-group">
+        {{ form_password.hidden_tag() }}
+        <div class="form-group">
+            {{ form_password.old_password.label }} 
+            {{ form_password.old_password(class="form-input") }}
         </div>
         <div class="form-group">
-            {{ form_login.new_password.label }} 
-            {{ form_login.new_password(class="form-input") }}
+            {{ form_password.new_password.label }} 
+            {{ form_password.new_password(class="form-input") }}
         </div>
         <div class="form-group">
-            {{ form_login.confirm_password.label }} 
-            {{ form_login.confirm_password(class="form-input") }}
+            {{ form_password.confirm_password.label }} 
+            {{ form_password.confirm_password(class="form-input") }}
         </div>        
         <div class="form-group">
-            {{ form_login.submit(class="submit-btn") }}
+            {{ form_password.submitPassword(class="submit-btn") }}
         </div>
     </form>
 
@@ -57,15 +65,24 @@ Edit Profile | TrustVest
     <form method="POST" class="form-group">
         {{ form_birthday.hidden_tag() }}   
         {{ form_birthday.birth_date.label }} {{ form_birthday.birth_date(class="form-input") }}
-        {{ form_birthday.submit(class="submit-btn") }}
+        {{ form_birthday.submitBirthday(class="submit-btn") }}
     </form>
 
     <h3>Edit Gender and Pronouns</h3>
-    <form method="POST" class="form-group">
+    <form method="POST">
         {{ form_gender_pronouns.hidden_tag() }}  
-        {{ form_gender_pronouns.gender.label }} {{ form_gender_pronouns.gender(class="form-input") }}
-        {{ form_gender_pronouns.pronouns.label }} {{ form_gender_pronouns.pronouns(class="form-input") }}
-        {{ form_gender_pronouns.submit(class="submit-btn") }}
+        <div class = "form-group">
+            {{ form_gender_pronouns.gender.label }} 
+            {{ form_gender_pronouns.gender(class="form-input") }}
+        </div>
+       <div class = "form-group">
+            {{ form_gender_pronouns.pronouns.label }} 
+            {{ form_gender_pronouns.pronouns(class="form-input") }}
+       </div>
+
+       <div class = "form-group">
+            {{ form_gender_pronouns.submitGenderPronouns(class="submit-btn") }}
+       </div>
     </form>
 </div>
 {% endblock %}

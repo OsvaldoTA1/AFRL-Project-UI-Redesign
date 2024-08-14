@@ -3,7 +3,7 @@ from flask_login import login_user, current_user, logout_user, login_required, f
 from flask_socketio import emit
 from datetime import datetime, timezone, timedelta
 from app import db, bcrypt, socketio, csrf, mail
-from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm, PreTestAcknowledgementForm, EditLoginForm, TwoFactorSetupForm, TwoFactorVerifyForm
+from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm, PreTestAcknowledgementForm, EditLoginForm, TwoFactorSetupForm, TwoFactorVerifyForm, EditPasswordForm
 from app.models import User, ChatMessage, TestSession
 from app.ollama import generate_ai_response
 from app.utils import load_questions, calculate_trait_scores, determine_investment_profile
@@ -236,46 +236,70 @@ def edit_profile():
     form_birthday = EditBirthdayForm()
     form_gender_pronouns = EditGenderPronounsForm()
     form_login = EditLoginForm()
+    form_password = EditPasswordForm()
     form_2FA = TwoFactorSetupForm()
 
-    if form_login.validate_on_submit():
-        current_user.username = form_login.username.data
-        current_user.email = form_login.email.data
-        if bcrypt.check_password_hash(current_user.password, form_login.old_password.data):
-            hashed_password = bcrypt.generate_password_hash(form_login.new_password.data).decode('utf-8')
-            current_user.password = hashed_password
+    # Check to see if the Edit Login Form was submitted
+    if form_login.submitLogin.data:
+        if form_login.validate_on_submit():
+            current_user.username = form_login.username.data
+            current_user.email = form_login.email.data
             db.session.commit()
             flash('Your login information has been updated!', 'success')
         else:
-            flash("Incorrect previous password. Please enter again.")
-    
-    if form_2FA.validate_on_submit():
-        if form_2FA.enable.data == "Yes":
-            current_user.tf_active = True
-            current_user.is_tf_complete = True
-            db.session.commit()
-            session['edit'] = True
-            return redirect(url_for('two_factor_verify'))
+            for field, errors in form_login.errors.items():
+                for error in errors:
+                    flash(f"Error in {getattr(form_login, field).label.text}: {error}", 'danger')
+        return redirect(url_for('edit_profile'))
+
+    # Check to see if the Edit Password Form was submitted
+    if form_password.submitPassword.data:
+        if form_password.validate_on_submit():
+            if bcrypt.check_password_hash(current_user.password, form_password.old_password.data):
+                hashed_password = bcrypt.generate_password_hash(form_password.new_password.data).decode('utf-8')
+                current_user.password = hashed_password
+                db.session.commit()
+                flash('Your login information has been updated!', 'success')
+            else:
+                flash("Incorrect previous password. Please enter again.", 'danger')
         else:
-            current_user.tf_active = False
-            current_user.is_tf_complete = True
+            for field, errors in form_password.errors.items():
+                for error in errors:
+                    flash(f"Error in {getattr(form_password, field).label.text}: {error}", 'danger')
+        return redirect(url_for('edit_profile'))
+
+    # Check to see if the 2FA form was submitted
+    if form_2FA.submit.data:
+        if form_2FA.validate_on_submit():
+            if form_2FA.enable.data == "Yes":
+                current_user.tf_active = True
+                current_user.is_tf_complete = True
+                db.session.commit()
+                session['edit'] = True
+                return redirect(url_for('two_factor_verify'))
+            else:
+                current_user.tf_active = False
+                current_user.is_tf_complete = True
+                db.session.commit()
+                flash('Your 2-Factor Authenication has been updated!', 'success')
+                return redirect(url_for('edit_profile'))
+
+    # Check to see if the Birthday form was submitted
+    if form_birthday.submitBirthday.data:
+        if form_birthday.validate_on_submit():
+            current_user.birth_date = form_birthday.birth_date.data
+            current_user.is_profile_complete = True
             db.session.commit()
-            flash('Your 2-Factor Authenication has been updated!', 'success')
+            flash('Your birthdate has been updated!', 'success')
             return redirect(url_for('edit_profile'))
 
-
-    if form_birthday.validate_on_submit():
-        current_user.birth_date = form_birthday.birth_date.data
-        current_user.is_profile_complete = True
-        db.session.commit()
-        flash('Your birthdate has been updated!', 'success')
-        return redirect(url_for('edit_profile'))
-
-    if form_gender_pronouns.validate_on_submit() and form_gender_pronouns.pronouns.data != None:
-        current_user.pronouns = form_gender_pronouns.pronouns.data
-        db.session.commit()
-        flash('Your pronouns have been updated!', 'success')
-        return redirect(url_for('edit_profile'))
+    # Check to see if the Gender and Pronouns form was submitted
+    if form_gender_pronouns.submitGenderPronouns.data:
+        if form_gender_pronouns.validate_on_submit() and form_gender_pronouns.pronouns.data != None:
+            current_user.pronouns = form_gender_pronouns.pronouns.data
+            db.session.commit()
+            flash('Your pronouns have been updated!', 'success')
+            return redirect(url_for('edit_profile'))
 
     if request.method == 'GET':
         form_login.username.data = current_user.username
@@ -288,7 +312,7 @@ def edit_profile():
         form_gender_pronouns.gender.data = current_user.gender
         form_gender_pronouns.pronouns.data = current_user.pronouns
 
-    return render_template('edit_profile.html', title='Edit Profile', form_birthday=form_birthday, form_gender_pronouns=form_gender_pronouns, form_login=form_login, form_2FA = form_2FA)
+    return render_template('edit_profile.html', title='Edit Profile', form_birthday=form_birthday, form_gender_pronouns=form_gender_pronouns, form_login=form_login, form_2FA = form_2FA, form_password = form_password)
 
 # Chat routes
 @app.route("/chat", methods=['GET', 'POST'])

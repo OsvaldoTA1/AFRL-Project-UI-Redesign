@@ -33,12 +33,12 @@ class RegistrationForm(FlaskForm):
 
 class EditBirthdayForm(FlaskForm):
     birth_date = DateField('Birthdate', format='%Y-%m-%d', validators=[DataRequired()])
-    submit = SubmitField('Save')
+    submitBirthday = SubmitField('Save')
 
 class EditGenderPronounsForm(FlaskForm):
     gender = StringField('Gender', render_kw={'readonly': True})
     pronouns = StringField('Pronouns')
-    submit = SubmitField('Save')
+    submitGenderPronouns = SubmitField('Save')
 
 class LoginForm(FlaskForm):
     user_id = StringField('Username/Email', validators=[DataRequired()])
@@ -48,15 +48,18 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 class EditLoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min = 4, message = "The username must be a minimum of 4 characters in length."),
+    username = StringField('Username', validators=[Length(min = 4, message = "The username must be a minimum of 4 characters in length."),
                                                    Regexp(regex =r"^(?=.*[a-zA-Z])[a-zA-Z\d]*$", message="Usernames may only contain letters and numbers.")])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[Email()])
+    submitLogin = SubmitField('Save')
+
+class EditPasswordForm(FlaskForm):
     old_password = PasswordField('Old Password', validators=[DataRequired()])
     new_password = PasswordField('Password', validators=[DataRequired(), Length(min = 12, message = "The password must be a minimum of 12 characters in length."), Regexp(
         regex= r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*,?+=])[A-Za-z\d!@#$%^&*?+=]*$", message = "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character."
     )])
-    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('new_password')])    
-    submit = SubmitField('Save')
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('new_password', message = "Passwords must match!")])    
+    submitPassword = SubmitField('Save')
 
 class ChatForm(FlaskForm):
     message = StringField('Message', validators=[DataRequired()])
