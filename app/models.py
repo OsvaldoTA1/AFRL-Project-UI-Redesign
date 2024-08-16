@@ -29,6 +29,7 @@ class User(db.Model, UserMixin):
     tf_active = db.Column(db.Boolean(), nullable=True)
     is_tf_complete = db.Column(db.Boolean(), default=False)
     last_tf = db.Column(db.DateTime)
+    last_password_renewal = db.Column(db.DateTime)
     
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.gender}', '{self.image_file}')"
