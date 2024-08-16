@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, jsonify, g, session, current_app as app
+from flask import render_template, url_for, make_response, flash, redirect, request, jsonify, g, session, current_app as app
 from flask_login import login_user, current_user, logout_user, login_required, fresh_login_required
 from flask_socketio import emit
 from datetime import datetime, timezone, timedelta
@@ -187,6 +187,7 @@ def login():
             return redirect(url_for('two_factor_setup'))
         else:
             return redirect(url_for('home'))
+
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter((User.username == form.user_id.data) | (User.email == form.user_id.data)).first()
@@ -452,17 +453,3 @@ def resilient_2():
 @login_required
 def under_controlled_2():
     return render_template('investment_profile/under_controlled_2.html')
-
-# Renewing the persistant cookie every 2 days while there is user activity
-@app.before_request
-def renew_persistent_cookies():
-    session.modified = True
-    if current_user.is_authenticated and request.cookies.get("remember-token"):
-        last_renewal = session.get("last_renewal")
-        if last_renewal:
-            last_renewal = datetime.fromisoformat(last_renewal) 
-
-            if datetime.utcnow() - last_renewal > timedelta(days = 2):
-                login_user(user, remember=True)
-
-        session['last_renewal'] = datetime.utcnow().isoformat()
