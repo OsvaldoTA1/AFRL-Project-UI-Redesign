@@ -7,6 +7,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_socketio import SocketIO
 from flask_mailman import Mail
 from datetime import timedelta
+from flask_caching import Cache
 import cred
 
 socketio = SocketIO()
@@ -18,6 +19,7 @@ login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 csrf = CSRFProtect()
 mail = Mail()
+cache = Cache()
 
 def create_app():
     app = Flask(__name__)
@@ -49,6 +51,9 @@ def create_app():
     app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
 
+    # Configuration for Flask Caching
+    app.config['CACHE_TYPE'] = 'SimpleCache'
+
     app.static_folder = 'static'
     
     db.init_app(app)
@@ -58,6 +63,7 @@ def create_app():
     csrf.init_app(app)
     socketio.init_app(app)
     mail.init_app(app)
+    cache.init_app(app)
 
     with app.app_context():
         from . import views
