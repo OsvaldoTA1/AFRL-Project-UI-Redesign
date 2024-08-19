@@ -2,8 +2,8 @@ from flask import render_template, url_for, make_response, flash, redirect, requ
 from flask_login import login_user, current_user, logout_user, login_required, fresh_login_required
 from flask_socketio import emit
 from datetime import datetime, timezone, timedelta
-from app import db, bcrypt, socketio, csrf, mail
-from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm, PreTestAcknowledgementForm, EditLoginForm, TwoFactorSetupForm, TwoFactorVerifyForm, EditPasswordForm
+from app import db, bcrypt, socketio, csrf, mail, cache
+from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm, PreTestAcknowledgementForm, EditLoginForm, TwoFactorSetupForm, TwoFactorVerifyForm, EditPasswordForm, ForgotPasswordForm, ResetPasswordForm
 from app.models import User, ChatMessage, TestSession
 from app.ollama import generate_ai_response
 from app.utils import load_questions, calculate_trait_scores, determine_investment_profile
@@ -453,3 +453,77 @@ def resilient_2():
 @login_required
 def under_controlled_2():
     return render_template('investment_profile/under_controlled_2.html')
+
+@app.route('/forgot_password', methods = ['GET', 'POST'])
+def forgot_password():
+    form = ForgotPasswordForm()
+
+    if form.validate_on_submit():
+        email = form.email.data
+        user = User.query.filter((User.email == email)).first()
+        if user is None:
+            flash("Invalid email. Please try again.")
+            return redirect(url_for('forgot_password'))
+        token = user.get_token()
+        link = url_for('reset_password', token = token, _external = True)
+        reset_password(email, link)
+        flash("Password reset email has been sent. Please check your email.", 'success')
+
+    return render_template('forgot_password.html', form = form)
+
+@app.route('/forgot_password/<token>', methods = ['GET', 'POST'])
+def reset_password(token):
+    user = User.verify_token(token)
+    
+    if isinstance(user, str):  
+        flash(user, 'error')  
+        return redirect(url_for('forgot_password'))
+
+    if cache.get(token) is not None:
+        flash("Reset password link has already been used. Please try again.")
+        return redirect(url_for('forgot_password'))
+
+    form = ResetPasswordForm()
+
+    if form.validate_on_submit():
+       hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+       user.password = hashed_password
+       cache.set(token, "", timeout = 1800)
+       db.session.commit()
+       flash("Your password has been updated.")
+       return redirect(url_for('login'))
+    else:
+        for field, errors in form.errors.items():
+                for error in errors:
+                    flash(f"Error in {getattr(form, field).label.text}: {error}", 'danger')
+
+    return render_template('reset_password.html', form = form)
+
+def reset_password(email, link):
+    # Design for Email
+    emailContent = f"""
+    <html>
+        <body>
+            <h3>Password Reset Request</h3>
+            <p>To reset your password, please click the following link: </p>
+            <p style = "color: blue">{link}</p><br>
+            <p>If you did not request a password reset, please ignore this email.</p>
+            <p>Sincerely,</p>
+            <p>TrustVest Media Support</p>
+        </body>
+    </html>
+    """
+
+    # Constructing EmailMessage Object
+    msg = EmailMessage(
+        subject="TrustVest Media Account Password Reset",
+        body=emailContent,
+        to=[email],
+    )
+    msg.content_subtype = "html"
+
+    # Send email and check for errors
+    try:
+        msg.send()
+    except Exception as e:
+        return f"Failed to send email: {e}"        
