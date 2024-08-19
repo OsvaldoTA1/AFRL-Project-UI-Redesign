@@ -36,6 +36,7 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.gender}', '{self.image_file}')"
 
+    # Generates a secure token with the user's id 
     def get_token(self):
         token = jwt.encode({
             "exp" : datetime.utcnow() + timedelta(minutes = 30),
@@ -43,6 +44,7 @@ class User(db.Model, UserMixin):
         }, current_app.config['SECRET_KEY'], algorithm = 'HS256')
         return token
     
+    # Decodes and verifies the token and returns the corresponding user ID
     def verify_token(token):
         try:
             decode = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms='HS256')
