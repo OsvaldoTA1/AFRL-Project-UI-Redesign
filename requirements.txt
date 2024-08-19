@@ -39,3 +39,5 @@ wsproto==1.2.0
 WTForms==3.1.2
 pyotp==2.9.0
 Flask-Mailman==1.1.1
+pyJWT==2.9.0
+Flask-Caching==2.3.0

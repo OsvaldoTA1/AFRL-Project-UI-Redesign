@@ -1,6 +1,8 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from app import db, login_manager
 from flask_login import UserMixin
+from flask import current_app
+import jwt
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -33,6 +35,24 @@ class User(db.Model, UserMixin):
     
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.gender}', '{self.image_file}')"
+
+    # Generates a secure token with the user's id 
+    def get_token(self):
+        token = jwt.encode({
+            "exp" : datetime.utcnow() + timedelta(minutes = 30),
+            "user_id" : self.id
+        }, current_app.config['SECRET_KEY'], algorithm = 'HS256')
+        return token
+    
+    # Decodes and verifies the token and returns the corresponding user ID
+    def verify_token(token):
+        try:
+            decode = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms='HS256')
+        except jwt.ExpiredSignatureError:
+            return "Token has expired. Please restart the reset password process."
+        except jwt.InvalidTokenError:
+            return "Token is invalid. Please try again."
+        return User.query.get(decode['user_id'])
 
 class ChatMessage(db.Model): 
     id = db.Column(db.Integer, primary_key=True)
