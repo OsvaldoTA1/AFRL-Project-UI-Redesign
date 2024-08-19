@@ -454,6 +454,7 @@ def resilient_2():
 def under_controlled_2():
     return render_template('investment_profile/under_controlled_2.html')
 
+# Route for submitting the request to reset password
 @app.route('/forgot_password', methods = ['GET', 'POST'])
 def forgot_password():
     form = ForgotPasswordForm()
@@ -461,24 +462,33 @@ def forgot_password():
     if form.validate_on_submit():
         email = form.email.data
         user = User.query.filter((User.email == email)).first()
-        if user is None:
+
+        # If there is no user in the database that has the entered email
+        if user is None:   
             flash("Invalid email. Please try again.")
             return redirect(url_for('forgot_password'))
+        
+        # Generate Token and custom link for password reset
         token = user.get_token()
         link = url_for('reset_password', token = token, _external = True)
+
+        # Send a email with the password reset link
         reset_password(email, link)
         flash("Password reset email has been sent. Please check your email.", 'success')
 
     return render_template('forgot_password.html', form = form)
 
+# Route for processing the reset request
 @app.route('/forgot_password/<token>', methods = ['GET', 'POST'])
 def reset_password(token):
     user = User.verify_token(token)
     
+    # Displays any errors with the token in the form of flashes
     if isinstance(user, str):  
         flash(user, 'error')  
         return redirect(url_for('forgot_password'))
 
+    # Check if the password reset link has been used
     if cache.get(token) is not None:
         flash("Reset password link has already been used. Please try again.")
         return redirect(url_for('forgot_password'))
@@ -486,9 +496,13 @@ def reset_password(token):
     form = ResetPasswordForm()
 
     if form.validate_on_submit():
+       # Hashing and storing new password
        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
        user.password = hashed_password
+
+       # Adding the token of the password reset link to the cache with an expire time of 30 minutes
        cache.set(token, "", timeout = 1800)
+       
        db.session.commit()
        flash("Your password has been updated.")
        return redirect(url_for('login'))
