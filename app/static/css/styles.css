@@ -699,3 +699,10 @@ hr {
     align-items: center;
     margin-top: 10px;
 }
+
+.forgot-password{
+    color: var(--color-primary);
+    text-decoration: none;
+    padding-left: 110px;
+    text-shadow: none;
+}
