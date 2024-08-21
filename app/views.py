@@ -44,7 +44,7 @@ def register():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=form.username.data, email=form.email.data, birth_date=form.birth_date.data,
                     gender=form.gender.data,
-                    password=hashed_password, is_profile_complete=bool(form.birth_date.data))
+                    password=hashed_password, is_profile_complete=bool(form.birth_date.data), last_password_renewal = datetime.utcnow())
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
@@ -207,6 +207,12 @@ def login():
                 if not user.is_profile_complete:
                     flash('Please complete your profile.', 'warning')
                     return redirect(url_for('edit_profile'))
+                
+                # If the user has not updated their password within 2 month
+                if datetime.utcnow() - user.last_password_renewal > timedelta(months = 2):
+                    flash('For security purposes, please update your password.', 'warning')
+                    return redirect(url_for('edit_profile'))
+
                 next_page = request.args.get('next')
                 return redirect(next_page) if next_page and next_page.startswith('/') else redirect(url_for('home'))
         flash('Login Unsuccessful. Please check your username/email and password', 'danger')
@@ -259,6 +265,7 @@ def edit_profile():
             if bcrypt.check_password_hash(current_user.password, form_password.old_password.data):
                 hashed_password = bcrypt.generate_password_hash(form_password.new_password.data).decode('utf-8')
                 current_user.password = hashed_password
+                current_user.last_password_renewal = datetime.utcnow()
                 db.session.commit()
                 flash('Your login information has been updated!', 'success')
             else:
@@ -499,6 +506,7 @@ def reset_password(token):
        # Hashing and storing new password
        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
        user.password = hashed_password
+       user.last_password_renewal = datetime.utcnow()
 
        # Adding the token of the password reset link to the cache with an expire time of 30 minutes
        cache.set(token, "", timeout = 1800)
