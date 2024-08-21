@@ -208,8 +208,10 @@ def login():
                     flash('Please complete your profile.', 'warning')
                     return redirect(url_for('edit_profile'))
                 
-                # If the user has not updated their password within 2 month
-                if datetime.utcnow() - user.last_password_renewal > timedelta(months = 2):
+                # If the user has not updated their password within 2 month, prompt them to edit it
+                if datetime.utcnow() - user.last_password_renewal > timedelta(weeks = 8):
+                    user.last_password_renewal = datetime.utcnow()
+                    db.session.commit()
                     flash('For security purposes, please update your password.', 'warning')
                     return redirect(url_for('edit_profile'))
 
