@@ -284,6 +284,7 @@ def edit_profile():
             if form_2FA.enable.data == "Yes":
                 current_user.tf_active = True
                 current_user.is_tf_complete = True
+                current_user.totp_secret = pyotp.random_base32()   
                 db.session.commit()
                 session['edit'] = True
                 return redirect(url_for('two_factor_verify'))
