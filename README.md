@@ -41,7 +41,27 @@ This is an investment assessment website built with Flask and Jinja templates. T
    flask db upgrade
    ```
 
-7. Run the Flask server:
+7. In the main directory, create a file named `cred.py`
+
+8. In `cred.py`, include the following:
+   ```
+   - RECAPTCHA_PUBLIC_KEY = ''
+   - RECAPTCHA_PRIVATE_KEY = ''
+   - MAIL_USERNAME = ''
+   - MAIL_PASSWORD = ''
+   ```
+
+8. Create the following keys:
+   - **ReCaptcha:**
+     - [ReCaptcha Documentation](https://cloud.google.com/security/products/recaptcha)
+     - [Signing up for ReCaptcha](https://www.google.com/recaptcha/admin/create) (*Note: For ReCaptcha type, select "Challenge" and "I'm not a robot" checkbox. For the domain, you could put localhost or 127.0.0.1*)
+     - [YouTube Video Walkthrough for Signing Up for ReCaptcha API Keys](https://www.youtube.com/watch?v=KqDW69BSdEo)
+
+   - **Flask Mailman:**
+     - [Application Password Documentation](https://support.google.com/accounts/answer/185833?hl=en)
+     - [Creating Application Password](https://myaccount.google.com/apppasswords) (*Note: Save the application password as it will be used for the "MAIL_PASSWORD" field, and use the associated email address for the "MAIL_USERNAME" field in the `cred.py` file.*)
+
+9. Run the Flask server:
    ```
    flask run
    ```
