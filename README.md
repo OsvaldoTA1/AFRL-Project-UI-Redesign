@@ -55,10 +55,13 @@ This is an investment assessment website built with Flask and Jinja templates. T
      - [ReCaptcha Documentation](https://cloud.google.com/security/products/recaptcha)
      - [Signing up for ReCaptcha](https://www.google.com/recaptcha/admin/create) (*Note: For ReCaptcha type, select "Challenge" and "I'm not a robot" checkbox. For the domain, you could put localhost or 127.0.0.1*)
      - [YouTube Video Walkthrough for Signing Up for ReCaptcha API Keys](https://www.youtube.com/watch?v=KqDW69BSdEo)
+   - Once you have signed up for ReCaptcha, paste the keys into their respective variables in the `cred.py` file.
 
    - **Flask Mailman:**
      - [Application Password Documentation](https://support.google.com/accounts/answer/185833?hl=en)
-     - [Creating Application Password](https://myaccount.google.com/apppasswords) (*Note: Save the application password as it will be used for the "MAIL_PASSWORD" field, and use the associated email address for the "MAIL_USERNAME" field in the `cred.py` file.*)
+     - [Creating Application Password](https://myaccount.google.com/apppasswords) (*Note: Save the application password.*)
+   - In the `cred.py` file, paste the application password into the "MAIL_PASSWORD" variable, and use the associated email address for the "MAIL_USERNAME" variable.
+
 
 10. Set up the database:
    ```
