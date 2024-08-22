@@ -44,8 +44,8 @@ This is an investment assessment website built with Flask and Jinja templates. T
 
 8. In `cred.py`, include the following:
    ```
-   RECAPTCHA_PUBLIC_KEY = ''
-   RECAPTCHA_PRIVATE_KEY = ''
+   RECAPTCHA_SITE_KEY = ''
+   RECAPTCHA_SECRET_KEY = ''
    MAIL_USERNAME = ''
    MAIL_PASSWORD = ''
    ```
@@ -53,7 +53,7 @@ This is an investment assessment website built with Flask and Jinja templates. T
 9. Create the following keys:
    - **ReCaptcha:**
      - [ReCaptcha Documentation](https://cloud.google.com/security/products/recaptcha)
-     - [Signing up for ReCaptcha](https://www.google.com/recaptcha/admin/create) (*Note: For ReCaptcha type, select "Challenge" and "I'm not a robot" checkbox. For the domain, you could put localhost or 127.0.0.1*)
+     - [Signing up for ReCaptcha](https://www.google.com/recaptcha/admin/create) (*Note: For ReCaptcha type, select "Challenge" and "I'm not a robot" checkbox. For the domain, add both localhost and 127.0.0.1*)
      - [YouTube Video Walkthrough for Signing Up for ReCaptcha API Keys](https://www.youtube.com/watch?v=KqDW69BSdEo)
    - Once you have signed up for ReCaptcha, paste the keys into their respective variables in the `cred.py` file.
 
@@ -62,15 +62,20 @@ This is an investment assessment website built with Flask and Jinja templates. T
      - [Creating Application Password](https://myaccount.google.com/apppasswords) (*Note: Save the application password.*)
    - In the `cred.py` file, paste the application password into the "MAIL_PASSWORD" variable, and use the associated email address for the "MAIL_USERNAME" variable.
 
+10. Open the terminal in your IDE and enter your virtual environment:
+   - On Mac/Linux:
+     ```
+     source myenv/bin/activate
+     ```
 
-10. Set up the database:
+11. Set up the database:
    ```
    flask db stamp head
    flask db migrate -m "Resetting migrations"
    flask db upgrade
    ```
 
-11. Run the Flask server:
+12. Run the Flask server:
    ```
    flask run
    ```
