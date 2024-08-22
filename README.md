@@ -34,12 +34,11 @@ This is an investment assessment website built with Flask and Jinja templates. T
    pip install -r requirements.txt
    ```
 
-6. Set up the database:
-   ```
-   flask db stamp head
-   flask db migrate -m "Resetting migrations"
-   flask db upgrade
-   ```
+6. Open the codebase with your IDE
+   - Visual Studio Code:
+      ```
+      code .
+      ```
 
 7. In the main directory, create a file named `cred.py`
 
@@ -51,7 +50,7 @@ This is an investment assessment website built with Flask and Jinja templates. T
    - MAIL_PASSWORD = ''
    ```
 
-8. Create the following keys:
+9. Create the following keys:
    - **ReCaptcha:**
      - [ReCaptcha Documentation](https://cloud.google.com/security/products/recaptcha)
      - [Signing up for ReCaptcha](https://www.google.com/recaptcha/admin/create) (*Note: For ReCaptcha type, select "Challenge" and "I'm not a robot" checkbox. For the domain, you could put localhost or 127.0.0.1*)
@@ -61,7 +60,14 @@ This is an investment assessment website built with Flask and Jinja templates. T
      - [Application Password Documentation](https://support.google.com/accounts/answer/185833?hl=en)
      - [Creating Application Password](https://myaccount.google.com/apppasswords) (*Note: Save the application password as it will be used for the "MAIL_PASSWORD" field, and use the associated email address for the "MAIL_USERNAME" field in the `cred.py` file.*)
 
-9. Run the Flask server:
+10. Set up the database:
+   ```
+   flask db stamp head
+   flask db migrate -m "Resetting migrations"
+   flask db upgrade
+   ```
+
+11. Run the Flask server:
    ```
    flask run
    ```
