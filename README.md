@@ -44,10 +44,10 @@ This is an investment assessment website built with Flask and Jinja templates. T
 
 8. In `cred.py`, include the following:
    ```
-   - RECAPTCHA_PUBLIC_KEY = ''
-   - RECAPTCHA_PRIVATE_KEY = ''
-   - MAIL_USERNAME = ''
-   - MAIL_PASSWORD = ''
+   RECAPTCHA_PUBLIC_KEY = ''
+   RECAPTCHA_PRIVATE_KEY = ''
+   MAIL_USERNAME = ''
+   MAIL_PASSWORD = ''
    ```
 
 9. Create the following keys:
