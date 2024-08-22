@@ -9,7 +9,7 @@ class RegistrationForm(FlaskForm):
     #Username can only be alphameric with a minimum length of 4
     username = StringField('Username', validators=[DataRequired(), Length(min = 4, message = "The username must be a minimum of 4 characters in length."),
                                                    Regexp(regex =r"^(?=.*[a-zA-Z])[a-zA-Z\d]*$", message="Usernames may only contain letters and numbers.")])
-    birth_date = DateField('BirthDate', format='%Y-%m-%d', validators=[DataRequired()])
+    birth_date = DateField('Birth Date', format='%Y-%m-%d', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     gender = RadioField('Gender', choices=[('Male', 'Male'), ('Female', 'Female')], validators=[DataRequired()])
 
