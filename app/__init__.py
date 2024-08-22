@@ -28,8 +28,8 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
     
     # Keys necessary for running the reCaptcha
-    app.config['RECAPTCHA_PUBLIC_KEY'] = cred.RECAPTCHA_PUBLIC_KEY
-    app.config['RECAPTCHA_PRIVATE_KEY'] = cred.RECAPTCHA_PRIVATE_KEY
+    app.config['RECAPTCHA_PUBLIC_KEY'] = cred.RECAPTCHA_SITE_KEY
+    app.config['RECAPTCHA_PRIVATE_KEY'] = cred.RECAPTCHA_SECRET_KEY
 
     # Configuration for Session Management
     app.config['REMEMBER_COOKIE_SECURE'] = True # Persistant Cookies can only be sent through secure HTTPS connections
