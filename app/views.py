@@ -121,6 +121,7 @@ def two_factor_verify():
                 session.pop("totp")
                 if current_user.is_authenticated:
                     session.pop("edit")
+                    flash("Your two-factor authentication settings have been updated.")
                     return redirect(url_for('edit_profile'))
                 login_user(user, remember=session.get('remember'))
                 session.pop("remember")
