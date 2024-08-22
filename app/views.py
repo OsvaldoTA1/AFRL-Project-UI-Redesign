@@ -100,7 +100,7 @@ def two_factor_verify():
         user = current_user
         session['user_id'] = user.id
     
-    # Generating TOTP Object and Code
+    # Sending verification code
     if "totp" not in session:
         session["totp"] = True
         send_email()
@@ -138,12 +138,15 @@ def two_factor_verify():
 
 @app.route("/send_verification_code", methods = ['GET'])
 def send_email():
+    # Retrieving user based on user_id
     user_id = session.get('user_id')
     if user_id == None:
         return redirect(url_for("home"))
     user = User.query.filter(User.id == user_id).first()
 
     email = user.email
+
+    # Generating verification code
     totp = pyotp.TOTP(user.totp_secret, interval = 300)
     verification_code = totp.now()
 
