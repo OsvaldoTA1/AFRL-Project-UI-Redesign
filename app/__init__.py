@@ -32,11 +32,11 @@ def create_app():
     app.config['RECAPTCHA_PRIVATE_KEY'] = cred.RECAPTCHA_SECRET_KEY
 
     # Configuration for Session Management
-    app.config['REMEMBER_COOKIE_SECURE'] = True # Persistant Cookies can only be sent through secure HTTPS connections
+    app.config['REMEMBER_COOKIE_SECURE'] = False # Persistant Cookies can only be sent through secure HTTPS connections
     app.config['REMEMBER_COOKIE_DURATION'] = timedelta(hours = 12) # Persistant cookies expires within 12 hours of creation
-    app.config['REMEMBER_COOKIE_REFRESH_EACH_REQUEST'] = True # Persistant cookie's expire time refreshes with each request
+    app.config['REMEMBER_COOKIE_REFRESH_EACH_REQUEST'] = False # Persistant cookie's expire time refreshes with each request
 
-    app.config['SESSION_COOKIE_SECURE'] = True # Session Cookies can only be sent through secure HTTPS connection
+    app.config['SESSION_COOKIE_SECURE'] = False # Session Cookies can only be sent through secure HTTPS connection
 
     # Session cookies expire after 10 minutes or if the browser is closed, but gets automatically renewed if persistant cookie is active by Flask Login 
     # or if there is user activity
