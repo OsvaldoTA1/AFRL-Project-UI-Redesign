@@ -7,38 +7,33 @@ This is an investment assessment website built with Flask and Jinja templates. T
 *TrustVest does NOT offer real investment advice and should you feel like you need some, we recommend seeing a licensed financial advisor.*
 
 ## How to Install
+1. Open the terminal in your IDE and navigate to where you want the project located.
 
-1. Clone the repository:
+2. Clone the repository, in your terminal run:
    ```
    git clone https://github.com/Fabeo10/AFRL-Project.git
    ```
 
-2. Navigate to the project directory:
+3. Navigate to the project directory:
    ```
-   cd AFRL
+   cd AFRL_Project
    ```
 
-3. Create a virtual environment:
+4. Create a virtual environment:
    ```
    python3 -m venv myenv
    ```
 
-4. Activate the virtual environment:
+5. Activate the virtual environment:
    - On Mac/Linux:
      ```
      source myenv/bin/activate
      ```
 
-5. Install the requirements:
+6. Install the requirements:
    ```
    pip install -r requirements.txt
    ```
-
-6. Open the codebase with your IDE
-   - Visual Studio Code:
-      ```
-      code .
-      ```
 
 7. In the main directory, create a file named `cred.py`
 
@@ -62,17 +57,18 @@ This is an investment assessment website built with Flask and Jinja templates. T
      - [Creating Application Password](https://myaccount.google.com/apppasswords) (*Note: Save the application password.*)
    - In the `cred.py` file, paste the application password into the "MAIL_PASSWORD" variable, and use the associated email address for the "MAIL_USERNAME" variable.
 
-10. Open the terminal in your IDE and enter your virtual environment:
-   - On Mac/Linux:
-     ```
-     source myenv/bin/activate
-     ```
-
-11. Set up the database:
+10. Set up the database:
    ```
    flask db stamp head
    flask db migrate -m "Resetting migrations"
    flask db upgrade
+   ```
+
+11. (macOS only) If you encounter an SSL certificate error when logging in or during reCAPTCHA validation, run this once to install the necessary certificates:
+
+   ```
+   /Applications/Python\ 3.11/Install\ Certificates.command
+
    ```
 
 12. Run the Flask server:
