@@ -202,7 +202,7 @@ def login():
                 session['remember'] = form.remember.data
                 return redirect(url_for('two_factor_setup'))
             # If 2FA is active and it has been 14 days since the last verify
-            elif user.tf_active and datetime.utcnow() - user.last_tf > timedelta(days = 14) :
+            elif user.tf_active and user.last_tf and datetime.utcnow() - user.last_tf > timedelta(days=14):
                 session['user_id'] = user.id
                 session['remember'] = form.remember.data
                 return redirect(url_for('two_factor_verify'))
