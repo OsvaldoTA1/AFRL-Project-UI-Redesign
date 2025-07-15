@@ -2,8 +2,10 @@
 
 :root {
     /* Colors */
-    --color-primary: #4682b4; /* Steel Blue */
-    --color-secondary: #5f9ea0; /* Cadet Blue */
+    --color-primary: #b9b9b9; /* Light Gray */
+    /* --color-primary: #4682b4; Steel Blue */
+    --color-secondary: #CEB280; /* Sandy Brown */
+    /* --color-secondary: #5f9ea0; Cadet Blue */
     --color-tertiary: #b0c4de; /* Light Steel Blue */
     --color-accent: #20b2aa; /* Light Sea Green */
     --color-text: #333;
@@ -110,7 +112,7 @@ nav ul li {
 
 /* Ensure nav links within header have readable color */
 nav ul li a {
-    color: #ffffff; /* Ensure link text is white */
+    color: #000000; /* Ensure link text is black */
     text-decoration: none;
     padding: 5px var(--spacing-small);
     border-radius: var(--border-radius-small);
@@ -576,11 +578,16 @@ hr {
     margin: var(--spacing-xlarge) 0;
     padding: var(--spacing-medium);
     padding-top: 0;
+    font-weight: bolder;
+}
+.profile-setup p {
+    color: var(--color-background-light);
 }
 
 .profile-setup h1,
 .profile-setup h2 {
     text-align: left; /* Override global heading style */
+    color: var(--color-background-light);
 }
 
 .setup-steps {
@@ -603,11 +610,12 @@ hr {
 }
 
 .setup-steps li h3 {
-    color: var(--color-primary);
+    color: var(--color-text);
     margin-bottom: var(--spacing-small);
 }
 
 .setup-steps li p {
+    color: var(--color-text);
     font-size: var(--font-size-base);
     margin-bottom: var(--spacing-small);
 }
