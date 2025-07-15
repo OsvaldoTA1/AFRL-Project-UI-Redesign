@@ -5,20 +5,21 @@ Discover AI | TrustVest
 {% endblock %}
 
 {% block body %}
-<h1>Discover More (Powered by: Ollama)</h1>
+
 <div id="chat-box">
+    <h1>Discover More (Powered by: Ollama)</h1>
     <h2>Meche Bot</h2>
-    <form method="POST" id="chat-form">
-        {{ form.hidden_tag() }}
-        {{ form.message.label }}{{ form.message() }}
-        {{ form.send() }}
-    </form>
     <div id="chat-messages">
         <!-- Existing messages should appear here -->
         {% for message in messages %}
             <p>{{ message.username }}: {{ message.message }}</p>
         {% endfor %}
     </div>
+    <form method="POST" id="chat-form">
+        {{ form.hidden_tag() }}
+        {{ form.message.label }}{{ form.message() }}
+        {{ form.send() }}
+    </form>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
