@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 :root {
     /* Colors */
     --color-primary: #4682b4; /* Steel Blue */
@@ -33,7 +35,7 @@
 /* General Styles */
 body, h1, h2, h3, p {
     color: var(--color-text);
-    font-family: 'Arial', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 html, body {
@@ -98,8 +100,8 @@ nav ul {
     list-style-type: none;
     padding: 0;
     display: flex;
-    justify-content: center;
     margin: 0;
+    justify-self: flex-end;
 }
 
 nav ul li {
@@ -548,8 +550,15 @@ hr {
 
 /* Profile Setup Section */
 .profile-setup {
-    text-align: center;
+    text-align: left;
     margin: var(--spacing-xlarge) 0;
+    padding: var(--spacing-medium);
+    padding-top: 0;
+}
+
+.profile-setup h1,
+.profile-setup h2 {
+    text-align: left; /* Override global heading style */
 }
 
 .setup-steps {
@@ -558,8 +567,8 @@ hr {
     padding-left: 0;
     text-align: left;
     max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    /* margin-left: auto;
+    margin-right: auto; */
 }
 
 .setup-steps li {

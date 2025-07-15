@@ -7,13 +7,10 @@
     <style>
         /*Slider Button Style*/
         .language-toggle-wrapper {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+            /*removed top and right to allow flexbox to handle positioning*/
             display: flex;
             align-items: center;
             gap: 10px;
-            
         }
 
         .switch {
@@ -72,6 +69,17 @@
             color: white; /* Ensure text is readable */
             padding: 40px var(--spacing-medium); /* Use padding to increase header height */
             position: relative; /* To contain the absolute positioned toggle button */
+            display: flex; /* Use flexbox for layout */
+            justify-content: end; /* Space between nav and toggle button */
+            align-items: center; /* Center items vertically */
+        }
+
+        .header-right-content {
+            display: flex;
+            align-items: center;
+            gap: 30px; /* Space between nav and toggle button */
+            background: none; /* Ensure no background color */
+            padding: 0; /* Reset padding */
         }
         
         body {
@@ -83,41 +91,44 @@
 </head>
 <body>
     <header class="header-background">
-        <nav>
-            <!-- Navigation Links -->
-            <ul>
-                <li class="{% if request.endpoint == 'home' %}active{% endif %}">
-                    <a href="{{ url_for('home') }}">{{ 'Home' if g.language == 'en' else 'Домой' }}</a>
-                </li>
-                {% if current_user.is_authenticated %}
-                    <li class="{% if request.endpoint == 'profile' %}active{% endif %}">
-                        <a href="{{ url_for('profile')}}">{{ 'Profile' if g.language == 'en' else 'Профиль' }}</a>
+        <!-- New div to position nav links to the right without conflict-->
+        <div class="header-right-content">
+            <nav>
+                <!-- Navigation Links -->
+                <ul>
+                    <li class="{% if request.endpoint == 'home' %}active{% endif %}">
+                        <a href="{{ url_for('home') }}">{{ 'Home' if g.language == 'en' else 'Домой' }}</a>
                     </li>
-                    <li class="{% if request.endpoint == 'personality_test' %}active{% endif %}">
-                        <a href="{{ url_for('pre_test') }}">{{ 'Personality Test' if g.language == 'en' else 'Тест на личность' }}</a>
-                    </li>
-                    <li class="{% if request.endpoint == 'chat' %}active{% endif %}">
-                        <a href="{{ url_for('chat') }}">{{ 'AI' if g.language == 'en' else 'ИИ' }}</a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('logout') }}">{{ 'Log Out' if g.language == 'en' else 'Выйти' }}</a>
-                    </li>
-                {% else %}
-                    <li class="{% if request.endpoint == 'login' %}active{% endif %}">
-                        <a href="{{ url_for('login') }}">{{ 'Log In' if g.language == 'en' else 'Войти' }}</a>
-                    </li>
-                    <li class="{% if request.endpoint == 'register' %}active{% endif %}">
-                        <a href="{{ url_for('register') }}">{{ 'Register' if g.language == 'en' else 'Зарегистрироваться' }}</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-        <!-- Language Toggle Button Wrapper -->
-        <div class="language-toggle-wrapper">
-          <label class="switch">
-            <input type="checkbox" id="language-toggle" {% if g.language == 'ru' %}checked{% endif %}>
-            <span class="slider round"></span>
-          </label>
+                    {% if current_user.is_authenticated %}
+                        <li class="{% if request.endpoint == 'profile' %}active{% endif %}">
+                            <a href="{{ url_for('profile')}}">{{ 'Profile' if g.language == 'en' else 'Профиль' }}</a>
+                        </li>
+                        <li class="{% if request.endpoint == 'personality_test' %}active{% endif %}">
+                            <a href="{{ url_for('pre_test') }}">{{ 'Personality Test' if g.language == 'en' else 'Тест на личность' }}</a>
+                        </li>
+                        <li class="{% if request.endpoint == 'chat' %}active{% endif %}">
+                            <a href="{{ url_for('chat') }}">{{ 'AI' if g.language == 'en' else 'ИИ' }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('logout') }}">{{ 'Log Out' if g.language == 'en' else 'Выйти' }}</a>
+                        </li>
+                    {% else %}
+                        <li class="{% if request.endpoint == 'login' %}active{% endif %}">
+                            <a href="{{ url_for('login') }}">{{ 'Log In' if g.language == 'en' else 'Войти' }}</a>
+                        </li>
+                        <li class="{% if request.endpoint == 'register' %}active{% endif %}">
+                            <a href="{{ url_for('register') }}">{{ 'Register' if g.language == 'en' else 'Зарегистрироваться' }}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <!-- Language Toggle Button Wrapper -->
+            <div class="language-toggle-wrapper">
+            <label class="switch">
+                <input type="checkbox" id="language-toggle" {% if g.language == 'ru' %}checked{% endif %}>
+                <span class="slider round"></span>
+            </label>
+            </div>
         </div>
     </header>
     
