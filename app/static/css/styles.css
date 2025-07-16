@@ -6,7 +6,7 @@
     /* --color-primary: #4682b4; Steel Blue */
     --color-secondary: #CEB280; /* Sandy Brown */
     /* --color-secondary: #5f9ea0; Cadet Blue */
-    --color-tertiary: #b0c4de; /* Light Steel Blue */
+    --color-tertiary: #cedceb; /* Light Steel Blue */
     --color-accent: #20b2aa; /* Light Sea Green */
     --color-text: #333;
     --color-text-muted: #666;
@@ -503,6 +503,36 @@ footer {
     font-size: 12px;
     font-weight: bold;
     text-align: center;
+}
+
+.profile-traits-header {
+    flex-basis: 100%;
+}
+
+.profile-traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.profile-traits p {
+    background-color: var(--color-tertiary);
+    padding: var(--spacing-small);
+    margin: var(--spacing-small);
+    border-radius: var(--border-radius-large);
+    font-weight: 550;
+}
+
+.investment-profile-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
 }
 
 /* Styled Horizontal Rules */
