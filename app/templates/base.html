@@ -66,8 +66,9 @@
             /* background-image: url("{{ url_for('static', filename='img/header_background.png') }}"); Only being used by the home page now*/
             background-size: cover;
             background-position: center;
-            color: white; /* Ensure text is readable */
-            padding: 40px var(--spacing-medium); /* Use padding to increase header height */
+            color: rgb(255, 0, 0); /* Ensure text is readable */
+            padding: 32px var(--spacing-medium); /* Use padding to increase header height */
+            padding-bottom: 20px;
             position: relative; /* To contain the absolute positioned toggle button */
             display: flex; /* Use flexbox for layout */
             justify-content: end; /* Space between nav and toggle button */
@@ -80,6 +81,12 @@
             gap: 30px; /* Space between nav and toggle button */
             background: none; /* Ensure no background color */
             padding: 0; /* Reset padding */
+        }
+
+        .header-divider {
+            border-top: 3px solid #D9D9D9; /* Divider color */
+            opacity: 0.9;
+            margin: 0; /* Reset margin */
         }
         
         body {
@@ -131,6 +138,8 @@
             </div>
         </div>
     </header>
+
+    <hr class="header-divider">
     
     <!-- Flash Messages Start Here -->
     {% with messages = get_flashed_messages() %}

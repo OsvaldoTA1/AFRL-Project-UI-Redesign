@@ -2,7 +2,7 @@
 
 :root {
     /* Colors */
-    --color-primary: #b9b9b9; /* Light Gray */
+    --color-primary: #4B5D67; /* Slate Blue */
     /* --color-primary: #4682b4; Steel Blue */
     --color-secondary: #CEB280; /* Sandy Brown */
     /* --color-secondary: #5f9ea0; Cadet Blue */
@@ -10,6 +10,7 @@
     --color-accent: #20b2aa; /* Light Sea Green */
     --color-text: #333;
     --color-text-muted: #666;
+    --color-text-light: #FDFBF6; /* Off-white */
     --color-background: #f5f5f5;
     --color-background-light: #ffffff;
     --color-background-lighter: #e8f0ff;
@@ -127,7 +128,7 @@ nav ul li a:hover, nav ul li.active a {
 /* Footer */
 footer {
     background: none; /* Remove any background color or images */
-    color: var(--color-text); /* Set the text color to the default text color */
+    color: var(--color-text-light);
     padding: var(--spacing-medium) 0;
     text-align: center;
     flex-shrink: 0;
@@ -287,6 +288,15 @@ footer {
     color: var(--color-background);
 }
 
+.register-container {
+    display: flex;
+    justify-content: center;
+}
+
+.login-container {
+
+}
+
 /* Form Styles */
 .form-wrapper {
     background-color: var(--color-background-light);
@@ -294,9 +304,8 @@ footer {
     border-radius: var(--border-radius-medium);
     box-shadow: 0 2px 10px var(--color-shadow);
     max-width: 400px;
-    margin-right: var(--spacing-medium);
-    margin-top: 1em;
-    margin-bottom: 1em;
+    margin: 1em auto; 
+    flex-shrink: 0; /* Prevent shrinking */
 }
 
 .form-wrapper h2 {
@@ -643,16 +652,31 @@ hr {
     margin-bottom: var(--spacing-small);
 }
 
+.home-hero h1{
+    color:var(--color-text-light);
+    font-size: 300%;
+    margin-bottom: 0;
+}
+
+.home-hero p {
+    color: var(--color-text-light);
+}
+
 /* Feature Highlights Section */
 .features-highlight {
     text-align: center;
     margin: var(--spacing-xlarge) 0;
+    margin-top: 0;
 }
 
 .features-highlight h2.centered,
-.features-highlight h3.centered,
+.features-highlight h3.centered {
+    text-align: center;
+}
+
 .features-highlight p.centered {
     text-align: center;
+    color: var(--color-text-light);
 }
 
 .features-grid {
