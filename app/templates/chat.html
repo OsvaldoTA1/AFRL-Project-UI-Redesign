@@ -5,7 +5,14 @@ Discover AI | TrustVest
 {% endblock %}
 
 {% block body %}
-
+<style>
+    /* Added to override background image default from base.html */
+    body {
+        background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)),
+            url("{{ url_for('static', filename='img/body_background.png') }}") no-repeat center center fixed;
+        background-size: cover !important;
+    }
+</style>
 <div id="chat-box">
     <h1>Discover More (Powered by: Ollama)</h1>
     <h2>Meche Bot</h2>
@@ -14,6 +21,9 @@ Discover AI | TrustVest
         {% for message in messages %}
             <p>{{ message.username }}: {{ message.message }}</p>
         {% endfor %}
+        <div class="chat-bubble">
+            <p>TEST MESSAGE</p>
+        </div>
     </div>
     <form method="POST" id="chat-form">
         {{ form.hidden_tag() }}

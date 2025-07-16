@@ -173,34 +173,34 @@ footer {
     height: 57%;
     border: none;
     border-radius: var(--border-radius-medium);
-    background-color: var(--color-background-light);
+    background-image: radial-gradient(#2e2e2e, #3c3c3c);
     box-shadow: 0 35px 9px var(--color-shadow);
     color: var(--color-text-muted);
 }
 
 #chat-box h1 {
-    background-color: var(--color-background-lighter);
+    color: var(--color-text-light);
     margin: 0;
     padding-top: var(--spacing-small);
 }
 
 #chat-box h2 {
-    background-color: var(--color-background-lighter);
+    color: var(--color-text-light);
     text-align: center;
     margin: 0;
     padding: var(--spacing-small);
     font-size: var(--font-size-large);
-    color: var(--color-primary);
     font-weight: bold;
 }
 
 #chat-messages {
     overflow-y: auto;
-    height: 80%;
+    height: 70%;
     padding: var(--spacing-small);
-    background-color: var(--color-background-light);
-    /* margin-bottom: var(--spacing-small); Removed for a better design*/
-    color: var(--color-text);
+}
+
+#chat-messages p{
+    color: var(--color-text-light);
 }
 
 #chat-box form {
@@ -249,18 +249,18 @@ footer {
 }
 
 #chat-messages::-webkit-scrollbar-track {
-    background: var(--color-background-lighter);
+    background: #1d1d1d;
     border-radius: var(--border-radius-medium);
 }
 
 #chat-messages::-webkit-scrollbar-thumb {
-    background: var(--color-border);
+    background: #bdbdbd;
     border-radius: var(--border-radius-medium);
-    border: 2px solid var(--color-background-lighter);
+    border: 2px solid #1d1d1d;
 }
 
 #chat-messages::-webkit-scrollbar-thumb:hover {
-    background: var(--color-primary);
+    background: var(--color-secondary);
 }
 
 /* Pre Test Content */
