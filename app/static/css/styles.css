@@ -277,16 +277,20 @@ footer {
     flex: 1;
     background: none;
     margin-left: var(--spacing-medium);
+    margin-right: 300px;
+    padding: var(--spacing-large);
 }
 
 .pre-test-intro h1{
     text-align: left;
     font-size: 3em;
+    font-weight: bolder;
     color: var(--color-secondary);
 }
 
 .pre-test-intro p{
     color: var(--color-background);
+    font-weight: 700;
 }
 
 .register-container {
@@ -306,7 +310,7 @@ footer {
     border-radius: var(--border-radius-medium);
     box-shadow: 0 2px 10px var(--color-shadow);
     max-width: 400px;
-    margin: 1em auto; 
+    margin: 1em; 
     flex-shrink: 0; /* Prevent shrinking */
 }
 
