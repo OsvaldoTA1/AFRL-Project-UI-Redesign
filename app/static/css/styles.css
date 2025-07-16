@@ -741,11 +741,13 @@ hr {
     padding-left: 0;
     text-align: left;
     max-width: 600px;
-    /* margin-left: auto;
-    margin-right: auto; */
 }
 
 .setup-steps li {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-medium);
+    padding: var(--spacing-small);
     background-color: var(--color-background-light);
     padding: var(--spacing-medium);
     border-radius: var(--border-radius-medium);

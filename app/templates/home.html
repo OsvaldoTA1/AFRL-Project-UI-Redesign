@@ -17,24 +17,36 @@
 
     <ol class="setup-steps">
         <li>
-            <h3>{% if g.language == 'ru' %}Шаг 1: Заполните профиль{% else %}Step 1: Complete Your Profile{% endif %}</h3>
-            <p>{% if g.language == 'ru' %}Этот шаг гарантирует, что y нас есть все необходимые данные для персонализации вашего опыта.{% else %}This step ensures we have the necessary details to personalize your experience.{% endif %}</p>
-            <p><a class="pastel-text-links" href="{{ url_for('edit_profile') }}">{% if g.language == 'ru' %}Заполнить профиль{% else %}Complete Profile{% endif %}</a></p>
+            <img src="{{ url_for('static', filename='img/account_circle_icon.png') }}" alt="Account Circle Icon" class="setup-icon">
+            <div>
+                <h3>{% if g.language == 'ru' %}Шаг 1: Заполните профиль{% else %}Step 1: Complete Your Profile{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Этот шаг гарантирует, что y нас есть все необходимые данные для персонализации вашего опыта.{% else %}This step ensures we have the necessary details to personalize your experience.{% endif %}</p>
+                <p><a class="pastel-text-links" href="{{ url_for('edit_profile') }}">{% if g.language == 'ru' %}Заполнить профиль{% else %}Complete Profile{% endif %}</a></p>
+            </div>
         </li>
         <li>
-            <h3>{% if g.language == 'ru' %}Шаг 2: Пройдите тест личности{% else %}Step 2: Explore the Personality Test{% endif %}</h3>
-            <p>{% if g.language == 'ru' %}Поймите свою личность лучше c помощью нашего персонализированного теста. Вы получите анализ на основе ваших черт и предпочтений.{% else %}Understand your personality better through our tailored personality test. This provides insights based on your traits and preferences.{% endif %}</p>
-            <p><a class="pastel-text-links" href="{{ url_for('pre_test') }}">{% if g.language == 'ru' %}Пройти тест{% else %}Take the Test{% endif %}</a></p>
+            <img src="{{ url_for('static', filename='img/fingerprint_icon.png') }}" alt="Finger Print Icon" class="setup-icon">
+            <div>
+                <h3>{% if g.language == 'ru' %}Шаг 2: Пройдите тест личности{% else %}Step 2: Explore the Personality Test{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Поймите свою личность лучше c помощью нашего персонализированного теста. Вы получите анализ на основе ваших черт и предпочтений.{% else %}Understand your personality better through our tailored personality test. This provides insights based on your traits and preferences.{% endif %}</p>
+                <p><a class="pastel-text-links" href="{{ url_for('pre_test') }}">{% if g.language == 'ru' %}Пройти тест{% else %}Take the Test{% endif %}</a></p>
+            </div>
         </li>
         <li>
-            <h3>{% if g.language == 'ru' %}Шаг 3: Узнайте o своей стратегии инвестирования{% else %}Step 3: Learn About Your Investment Strategy{% endif %}</h3>
-            <p>{% if g.language == 'ru' %}Получите глубокие знания o вашей стратегии c помощью индивидуальных результатов, предоставляющих ценную информацию o вашем стиле и предпочтениях инвестирования.{% else %}Gain deeper insights into your strategy with your custom results, which provides valuable information about your investment style and preferences.{% endif %}</p>
-            <p><a class="pastel-text-links" href="{{ url_for('profile') }}">{% if g.language == 'ru' %}Доступ к профилю{% else %}Access Profile{% endif %}</a></p>
+            <img src="{{ url_for('static', filename='img/chart_icon.png') }}" alt="4 Bar Chart Icon" class="setup-icon">
+            <div>
+                <h3>{% if g.language == 'ru' %}Шаг 3: Узнайте o своей стратегии инвестирования{% else %}Step 3: Learn About Your Investment Strategy{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Получите глубокие знания o вашей стратегии c помощью индивидуальных результатов, предоставляющих ценную информацию o вашем стиле и предпочтениях инвестирования.{% else %}Gain deeper insights into your strategy with your custom results, which provides valuable information about your investment style and preferences.{% endif %}</p>
+                <p><a class="pastel-text-links" href="{{ url_for('profile') }}">{% if g.language == 'ru' %}Доступ к профилю{% else %}Access Profile{% endif %}</a></p>
+            </div>
         </li>
         <li>
-            <h3>{% if g.language == 'ru' %}Дополнительно: Взаимодействие c Интерактивным ИИ (на основе Ollama){% else %}Optional: Engage with Interactive AI (Powered by Ollama){% endif %}</h3>
-            <p>{% if g.language == 'ru' %}Взаимодействуйте c нашим Meche Bot, работающим на основе Ollama, для проведения живых разговоров и получения динамичных ответов, адаптированных для вас.{% else %}Interact with our Meche Bot, powered by Ollama, for real-time conversations and dynamic responses tailored for you.{% endif %}</p>
-            <p><a class="pastel-text-links" href="{{ url_for('chat') }}">{% if g.language == 'ru' %}Начать общение{% else %}Start Chatting{% endif %}</a></p>
+            <img src="{{ url_for('static', filename='img/artificial_intelligence_icon.png') }}" alt="AI Icon" class="setup-icon">
+            <div>        
+                <h3>{% if g.language == 'ru' %}Дополнительно: Взаимодействие c Интерактивным ИИ (на основе Ollama){% else %}Optional: Engage with Interactive AI (Powered by Ollama){% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Взаимодействуйте c нашим Meche Bot, работающим на основе Ollama, для проведения живых разговоров и получения динамичных ответов, адаптированных для вас.{% else %}Interact with our Meche Bot, powered by Ollama, for real-time conversations and dynamic responses tailored for you.{% endif %}</p>
+                <p><a class="pastel-text-links" href="{{ url_for('chat') }}">{% if g.language == 'ru' %}Начать общение{% else %}Start Chatting{% endif %}</a></p>
+            </div>
         </li>
     </ol>
 </div>
