@@ -208,6 +208,8 @@ footer {
     overflow-y: auto;
     max-height: 70%;
     padding: var(--spacing-small);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .chat-message-user,
@@ -246,11 +248,17 @@ footer {
     display: flex;
     gap: var(--spacing-small);
     padding: var(--spacing-small);
-    background-color: var(--color-background-lighter);
-    border-top: 1px solid var(--color-border);
+    background-color: var(--color-text-muted);
+    border-top: 1px rgba(0, 0, 0, 0.1) solid;
     border-radius: var(--border-radius-medium);
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+    color: var(--color-text-light);
+}
+
+#chat-form label{
+    align-self: center;
+    font-weight: bolder;
 }
 
 #chat-form input[type="text"] {
@@ -258,17 +266,18 @@ footer {
     padding: var(--spacing-small);
     margin-right: var(--spacing-small);
     border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-small);
+    border-radius: var(--border-radius-large);
     background-color: var(--color-background-light);
     color: var(--color-text);
+    font-weight: 700;
 }
 
 #chat-form input[type="submit"] {
     padding: var(--spacing-small) var(--spacing-medium);
-    background-color: var(--color-accent);
+    background-color: var(--color-primary);
     color: var(--color-background-light);
-    border: none;
-    border-radius: var(--border-radius-small);
+    border: 3px rgba(0, 0, 0, 0.1) solid;
+    border-radius: var(--border-radius-large);
     cursor: pointer;
     transition: background-color 0.3s;
 }
