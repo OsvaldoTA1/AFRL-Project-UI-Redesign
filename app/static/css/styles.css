@@ -744,14 +744,14 @@ hr {
     margin: var(--spacing-medium);
     padding-left: 0;
     text-align: left;
-    max-width: 600px;
+    max-width: 650px;
 }
 
 .setup-steps li {
     display: flex;
     align-items: center;
     gap: var(--spacing-medium);
-    padding: var(--spacing-small);
+    padding: var(--spacing-large);
     background-color: var(--color-background-light);
     padding: var(--spacing-medium);
     border-radius: var(--border-radius-medium);
