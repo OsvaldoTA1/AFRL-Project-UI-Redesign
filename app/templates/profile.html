@@ -6,22 +6,42 @@
 <div class="profile-header">
     <h2>{{ user.username }}'s Profile</h2>
 </div>
-
-<div class="profile-info">
-    <p><strong>Email:</strong> {{ user.email }}</p>
-    <p><strong>Birthdate:</strong> {% if user.birth_date %}{{ user.birth_date.strftime('%Y-%m-%d') }}{% else %}Not Set{% endif %}</p>
-    <p><strong>Gender:</strong> {% if user.gender %}{{ user.gender }}{% else %}Not Set{% endif %}</p>
-    <p><strong>Pronouns:</strong> {% if user.pronouns %}{{ user.pronouns }}{% else %}Not Set{% endif %}</p>
-    <p><strong>2-Factor Authenication:</strong> {% if user.tf_active %}Enabled{% else %}Disabled{% endif %}</p>
-
-</div>
-
-{% if user == current_user %}
-    <div class="profile-edit-button">
-        <a class="btn-info" href="{{ url_for('edit_profile') }}">Edit Profile</a>
+<div class="profile-info-container">
+    <img class="profile-icon" src="{{ url_for('static', filename='img/account_circle_icon.png') }}" alt="Profile Icon">
+    <div class="header-button-wrapper">
+        <h1 class="profile-info-header">Personal Information</h1>
+        {% if user == current_user %}
+            <div class="profile-edit-button">
+                <a class="btn-info" href="{{ url_for('edit_profile') }}">Edit Profile</a>
+            </div>
+        {% endif %}
     </div>
-{% endif %}
-
+    <hr class="profile-info-divider">
+    <div class="profile-info">
+            <div>
+                <strong>Email:</strong> 
+                <p>{{ user.email }}</p>
+            </div>
+            <div>
+                <strong>Birthdate:</strong> 
+                <p>{% if user.birth_date %}{{ user.birth_date.strftime('%Y-%m-%d') }}{% else %}Not Set{% endif %}</p>
+            </div>
+            <div>
+                <strong>Gender:</strong>
+                <p>{% if user.gender %}{{ user.gender }}{% else %}Not Set{% endif %}</p>
+            </div>
+            <div>
+                <strong>Pronouns:</strong>
+                <p>{% if user.pronouns %}{{ user.pronouns }}{% else %}Not Set{% endif %}</p>
+                </div>
+            <div class="two-factor-status">
+                <strong>2-Factor Status:</strong>
+                <div class="status-pill{% if user.tf_active %}-enabled{% else %}-disabled{% endif %}">
+                    {% if user.tf_active %}Enabled{% else %}Disabled{% endif %}
+                </div>
+            </div>
+    </div>
+</div>
 <hr> <!-- Optional: This can be styled using CSS -->
 
 <div class="profile-traits">
@@ -35,20 +55,21 @@
 <hr> <!-- Optional: This can be styled using CSS -->
 
 <!-- Investment Profile Information -->
-<div class="investment-profile-info">
-    <p><strong>Investment Profile:</strong> 
-        {% if user.investment_profile %}
-            {{ user.investment_profile.replace('_', ' ').title() }}
-        {% else %}
-            Determined after test is taken
-        {% endif %}
-    </p>
-</div>
-
-{% if user.investment_profile %}
-    <div class="investment-profile-button">
-        <a class="btn btn-info" href="{{ url_for(user.investment_profile) }}">View Investment Profile</a>
+<div class="investment-profile-container">
+    <div class="investment-profile-info">
+        <p><strong>Investment Profile:</strong> 
+            {% if user.investment_profile %}
+                {{ user.investment_profile.replace('_', ' ').title() }}
+            {% else %}
+                Determined after test is taken
+            {% endif %}
+        </p>
     </div>
-{% endif %}
 
+    {% if user.investment_profile %}
+        <div class="investment-profile-button">
+            <a class="btn btn-info" href="{{ url_for(user.investment_profile) }}">View Investment Profile</a>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}
