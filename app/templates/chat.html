@@ -13,16 +13,37 @@ Discover AI | TrustVest
         background-size: cover !important;
     }
 </style>
-<div id="chat-box">
-    <h1>Discover More (Powered by: Ollama)</h1>
-    <h2>Meche Bot</h2>
-    <div id="chat-messages">
-        <!-- Existing messages should appear here -->
-        {% for message in messages %}
-            <p>{{ message.username }}: {{ message.message }}</p>
-        {% endfor %}
-        <div class="chat-bubble">
-            <p>TEST MESSAGE</p>
+<div class="chat-container">
+    <div id="chat-box">
+        <h1>Discover More (Powered by: Ollama)</h1>
+        <h2>Meche Bot</h2>
+        <div id="chat-messages">
+            <!-- Existing messages should appear here -->
+            {% for message in messages %}
+                <p>{{ message.username }}: {{ message.message }}</p>
+            {% endfor %}
+            <!-- AFTER THE CHAT BOT IS FIXED WE CAN ADD JINJA TEMPLATING -->
+            <div class="chat-message-user">
+                <p class="chat-text">
+                    Lorem ipsum dolor sit amet. Ea quidem vero est officiis omnis hic omnis voluptate quo rerum commodi et quos nihil et adipisci atque. Ut tenetur dolores ab eius veritatis qui voluptas accusamus rem odit labore eum officiis iusto est cupiditate modi.
+                    Aut autem dolorum qui atque eveniet eum nemo odit id porro facilis aut sunt dignissimos sed voluptas dolore et laboriosam dolor. Ea officiis nemo sit pariatur vitae et voluptas velit eos Quis deleniti aut voluptas enim ut autem veniam. Quo maxime quam et atque consequatur et quia quam. Et tempora amet in consequatur reiciendis
+                </p>
+            </div>
+            <div class="chat-message-ai">
+                <p class="chat-text">Lorem ipsum dolor sit amet</p>
+            </div>
+            <div class="chat-message-user">
+                <p class="chat-text">
+                    Lorem ipsum dolor sit amet. Ea quidem vero est officiis omnis hic omnis voluptate quo rerum commodi et quos nihil et adipisci atque. Ut tenetur dolores ab eius veritatis qui voluptas accusamus rem odit labore eum officiis iusto est cupiditate modi.
+                    Aut autem dolorum qui atque eveniet eum nemo odit id porro facilis aut sunt dignissimos sed voluptas dolore et laboriosam dolor. Ea officiis nemo sit pariatur vitae et voluptas velit eos Quis deleniti aut voluptas enim ut autem veniam. Quo maxime quam et atque consequatur et quia quam. Et tempora amet in consequatur reiciendis
+                </p>
+            </div>
+            <div class="chat-message-ai">
+                <p class="chat-text">
+                    Lorem ipsum dolor sit amet. Ea quidem vero est officiis omnis hic omnis voluptate quo rerum commodi et quos nihil et adipisci atque. Ut tenetur dolores ab eius veritatis qui voluptas accusamus rem odit labore eum officiis iusto est cupiditate modi.
+                    Aut autem dolorum qui atque eveniet eum nemo odit id porro facilis aut sunt dignissimos sed voluptas dolore et laboriosam dolor. Ea officiis nemo sit pariatur vitae et voluptas velit eos Quis deleniti aut voluptas enim ut autem veniam. Quo maxime quam et atque consequatur et quia quam. Et tempora amet in consequatur reiciendis
+                </p>
+            </div>
         </div>
     </div>
     <form method="POST" id="chat-form">
