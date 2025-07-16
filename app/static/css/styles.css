@@ -407,7 +407,7 @@ footer {
 }
 
 .profile-info-container, .profile-traits, .investment-profile-container {
-    padding: var(--spacing-medium);
+    padding: var(--spacing-large);
     background-color: var(--color-background-light);
     border-radius: var(--border-radius-medium);
     margin: var(--spacing-medium) auto;
