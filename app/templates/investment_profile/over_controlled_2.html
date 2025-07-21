@@ -3,6 +3,7 @@
 {% block title %}Over Controlled Profile{% endblock %}
 
 {% block body %}
+
 <section class="investment-profile">
     <div class="profile-header">
         <h2>Your Result: Over Controlled</h2>
@@ -15,31 +16,38 @@
     </div>
 
     <div class="image-text-section">
-        <div class="image-text-block">
-            <img src="{{ url_for('static', filename='img/invest_pic21.png') }}" alt="Placeholder Image">
-            <p><strong>Investment Tip:</strong> Diversify your investments to include both low-risk bonds and some growth-oriented stocks.<br><br>
-            <strong>Did You Know?:</strong> The U.S. has funded cultural projects that celebrate the contributions of Russian women, fostering global recognition (e.g., Women in Arts exhibits).</p>
+        <button class="previous-button">&lt</button>
+
+        <div class="slides-content-wrapper">
+            <div class="slides">
+                <div class="image-text-block">
+                    <img src="{{ url_for('static', filename='img/invest_pic21.png') }}" alt="Placeholder Image">
+                    <p><strong>Investment Tip:</strong> Diversify your investments to include both low-risk bonds and some growth-oriented stocks.<br><br>
+                    <strong>Did You Know?:</strong> The U.S. has funded cultural projects that celebrate the contributions of Russian women, fostering global recognition (e.g., Women in Arts exhibits).</p>
+                </div>
+                <div class="image-text-block">
+                    <img src="{{ url_for('static', filename='img/invest_pic22.png') }}" alt="Placeholder Image">
+                    <p><strong>Investment Tip:</strong> Set specific financial milestones and celebrate each achievement to boost your confidence in investing.<br><br>
+                    <strong>Did You Know?:</strong> The U.S. supports Russian women's empowerment through educational scholarships and leadership programs (e.g., Global Women in Management).</p>
+                </div>
+                <div class="image-text-block">
+                    <img src="{{ url_for('static', filename='img/invest_pic23.png') }}" alt="Placeholder Image">
+                    <p><strong>Investment Tip:</strong> Consider a balanced portfolio that includes a mix of equities and fixed-income securities.<br><br>
+                    <strong>Did You Know?:</strong> The U.S. has provided resources for women entrepreneurs in Russia, fostering economic independence and innovation (e.g., business incubators).</p>
+                </div>
+                <div class="image-text-block">
+                    <img src="{{ url_for('static', filename='img/invest_pic24.png') }}" alt="Placeholder Image">
+                    <p><strong>Investment Tip:</strong> Establish an emergency fund to provide peace of mind while taking on slightly riskier investments.<br><br>
+                    <strong>Did You Know?:</strong> U.S. charities support global health initiatives that improve the well-being of Russian women and children (e.g., vaccination drives).</p>
+                </div>
+                <div class="image-text-block">
+                    <img src="{{ url_for('static', filename='img/invest_pic25.png') }}" alt="Placeholder Image">
+                    <p><strong>Investment Tip:</strong> Explore index funds or ETFs, which offer diversification and are generally less risky than individual stocks.<br><br>
+                    <strong>Did You Know?:</strong> U.S. charities contribute to healthcare initiatives focused on women and children's health in Russia (e.g., maternal health programs, lower infant mortality rates).</p>
+                </div>
+            </div>
         </div>
-        <div class="image-text-block">
-            <img src="{{ url_for('static', filename='img/invest_pic22.png') }}" alt="Placeholder Image">
-            <p><strong>Investment Tip:</strong> Set specific financial milestones and celebrate each achievement to boost your confidence in investing.<br><br>
-            <strong>Did You Know?:</strong> The U.S. supports Russian women's empowerment through educational scholarships and leadership programs (e.g., Global Women in Management).</p>
-        </div>
-        <div class="image-text-block">
-            <img src="{{ url_for('static', filename='img/invest_pic23.png') }}" alt="Placeholder Image">
-            <p><strong>Investment Tip:</strong> Consider a balanced portfolio that includes a mix of equities and fixed-income securities.<br><br>
-            <strong>Did You Know?:</strong> The U.S. has provided resources for women entrepreneurs in Russia, fostering economic independence and innovation (e.g., business incubators).</p>
-        </div>
-        <div class="image-text-block">
-            <img src="{{ url_for('static', filename='img/invest_pic24.png') }}" alt="Placeholder Image">
-            <p><strong>Investment Tip:</strong> Establish an emergency fund to provide peace of mind while taking on slightly riskier investments.<br><br>
-            <strong>Did You Know?:</strong> U.S. charities support global health initiatives that improve the well-being of Russian women and children (e.g., vaccination drives).</p>
-        </div>
-        <div class="image-text-block">
-            <img src="{{ url_for('static', filename='img/invest_pic25.png') }}" alt="Placeholder Image">
-            <p><strong>Investment Tip:</strong> Explore index funds or ETFs, which offer diversification and are generally less risky than individual stocks.<br><br>
-            <strong>Did You Know?:</strong> U.S. charities contribute to healthcare initiatives focused on women and children's health in Russia (e.g., maternal health programs, lower infant mortality rates).</p>
-        </div>
+        <button class="next-button">&gt</button>
     </div>
 
     <div class="donation-section">
