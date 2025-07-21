@@ -76,6 +76,24 @@ This is an investment assessment website built with Flask and Jinja templates. T
    flask run
    ```
 
+13. To make sure the chatbot works on your local you need to do the following:
+   - Download ollama on your local machine (choose the right version for your local machine): https://ollama.com/ 
+   - Run the installer and follow the on-screen instructions
+   - After installation confirm that you successfully installed ollama by running this command on a **new** terminal/command prompt window.
+        ```
+        ollama --version
+        ```
+   - Restart your workspace and reactivate your virtual environment (Only if you haven't already, otherwise skip this step)
+   - In your virtual environment download the llama3 model with this command. This might take several minutes depending on your internet connection.
+        ```
+        ollama pull llama3
+        ```
+   - Verify that llama3 was downloaded by running:
+        ```
+        ollama3
+        ```
+   - Restart the Flask Server and enjoy!
+
 ## How to Contribute
 
 1. Fork the project on GitHub.
