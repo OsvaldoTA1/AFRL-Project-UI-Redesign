@@ -2,7 +2,8 @@ from openai import OpenAI
 
 def generate_ai_response(chat_history):
     client = OpenAI(
-        base_url='http://172.20.10.9:11434/v1',  # Replace IP Address, keep 11434/v1
+        # base_url='http://172.20.10.9:11434/v1',  Replace IP Address, keep 11434/v1
+        base_url='http://127.0.0.1:11434/v1', # Note: Run ollama server locally before running flask server or it will not work.
         api_key='ollama',  # Note: API key is required but unused in this snippet.
     )
 
