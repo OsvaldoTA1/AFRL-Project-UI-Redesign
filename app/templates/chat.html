@@ -20,10 +20,12 @@ Discover AI | TrustVest
         <div id="chat-messages">
             <!-- Existing messages should appear here -->
             {% for message in messages %}
-                <p>{{ message.username }}: {{ message.message }}</p>
+                <div class="{% if message.username == 'AI' %}chat-message-ai{% else %}chat-message-user{% endif %}">
+                    <p class="chat-text">{{ message.username }}: {{ message.message }}</p>
+                </div>
             {% endfor %}
             <!-- AFTER THE CHAT BOT IS FIXED WE CAN ADD JINJA TEMPLATING -->
-            <div class="chat-message-user">
+            <!-- <div class="chat-message-user">
                 <p class="chat-text">
                     Lorem ipsum dolor sit amet. Ea quidem vero est officiis omnis hic omnis voluptate quo rerum commodi et quos nihil et adipisci atque. Ut tenetur dolores ab eius veritatis qui voluptas accusamus rem odit labore eum officiis iusto est cupiditate modi.
                     Aut autem dolorum qui atque eveniet eum nemo odit id porro facilis aut sunt dignissimos sed voluptas dolore et laboriosam dolor. Ea officiis nemo sit pariatur vitae et voluptas velit eos Quis deleniti aut voluptas enim ut autem veniam. Quo maxime quam et atque consequatur et quia quam. Et tempora amet in consequatur reiciendis
@@ -43,7 +45,8 @@ Discover AI | TrustVest
                     Lorem ipsum dolor sit amet. Ea quidem vero est officiis omnis hic omnis voluptate quo rerum commodi et quos nihil et adipisci atque. Ut tenetur dolores ab eius veritatis qui voluptas accusamus rem odit labore eum officiis iusto est cupiditate modi.
                     Aut autem dolorum qui atque eveniet eum nemo odit id porro facilis aut sunt dignissimos sed voluptas dolore et laboriosam dolor. Ea officiis nemo sit pariatur vitae et voluptas velit eos Quis deleniti aut voluptas enim ut autem veniam. Quo maxime quam et atque consequatur et quia quam. Et tempora amet in consequatur reiciendis
                 </p>
-            </div>
+            </div> -->
+            <!-- PLACEHOLDER ENDS HERE -->
         </div>
     </div>
     <form method="POST" id="chat-form">
@@ -68,8 +71,13 @@ $(document).ready(function() {
     }
 
     function addMessageToChat(username, message, timestamp) {
-        var newMessage = $('<p>').text(username + " (" + timestamp + "): " + message);
-        chatBox.append(newMessage);
+        var messageClass = $('<div>').addClass(
+            username === 'AI' ? 'chat-message-ai' : 'chat-message-user'
+        )
+        var newMessage = $('<p>').addClass('chat-text').text(username + " (" + timestamp + "): " + message);
+        
+        messageClass.append(newMessage);
+        chatBox.append(messageClass);
         scrollChatToBottom();
     }
 

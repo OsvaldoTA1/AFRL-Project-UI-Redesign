@@ -174,18 +174,20 @@ footer {
     padding: var(--spacing-medium);
     max-height: 72.5vh;
     max-width: 85%;
+    width: 85%;
     margin-top: var(--spacing-small);
 }
 #chat-box {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex: 1;
     overflow: hidden;
     border: none;
     border-radius: var(--border-radius-medium);
     background-image: radial-gradient(#2e2e2e, #3c3c3c);
     box-shadow: 0 35px 9px var(--color-shadow);
     color: var(--color-text-muted);
+    min-height: 70vh;
 }
 
 #chat-box h1 {
@@ -207,6 +209,7 @@ footer {
     flex-grow: 1;
     overflow-y: auto;
     max-height: 70%;
+    height: 70%;
     padding: var(--spacing-small);
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
