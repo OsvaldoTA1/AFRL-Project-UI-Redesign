@@ -3,86 +3,88 @@
 Edit Profile | TrustVest
 {% endblock %}
 {% block body %}
-<div class="form-wrapper">
-    <h2>Edit Profile</h2>
+<div class="edit-profile-container">
+    <div class="form-wrapper">
+        <h2>Edit Profile</h2>
 
-    <h3>Edit Login</h3>
-    <form method="POST" class="form-group">
-        {{ form_login.hidden_tag() }}
-        <div class="form-group">
-            {{ form_login.username.label }} 
-            {{ form_login.username(class="form-input") }}
-        </div>
-        <div class="form-group">
-            {{ form_login.email.label }} 
-            {{ form_login.email(class="form-input") }}
-        </div>
-        <div class="form-group">
-            {{ form_login.submitLogin(class="submit-btn") }}
-        </div>
-    </form>
-
-    <h3>Password</h3>
-    <form method="POST" class="form-group">
-        {{ form_password.hidden_tag() }}
-        <div class="form-group">
-            {{ form_password.old_password.label }} 
-            {{ form_password.old_password(class="form-input") }}
-        </div>
-        <div class="form-group">
-            {{ form_password.new_password.label }} 
-            {{ form_password.new_password(class="form-input") }}
-        </div>
-        <div class="form-group">
-            {{ form_password.confirm_password.label }} 
-            {{ form_password.confirm_password(class="form-input") }}
-        </div>        
-        <div class="form-group">
-            {{ form_password.submitPassword(class="submit-btn") }}
-        </div>
-    </form>
-
-    <h3>2-Factor Authenication</h3>
-        <form method="POST">
-        {{ form_2FA.hidden_tag() }}
-        <div class="form-group">
-            {{ form_2FA.enable.label }}
-            <div class="enable-options">
-            {% for subfield in form_2FA.enable %}
-                <div class="enable-radio-options">
-                {{ subfield }} {{ subfield.label }}
-                </div>
-            {% endfor %}
+        <h3>Edit Login</h3>
+        <form method="POST" class="form-group">
+            {{ form_login.hidden_tag() }}
+            <div class="form-group">
+                {{ form_login.username.label }} 
+                {{ form_login.username(class="form-input") }}
             </div>
-        </div>
-        
-        <div class="form-group">
-            {{ form_2FA.submit(class="submit-btn") }}
-        </div>
-    </form>
+            <div class="form-group">
+                {{ form_login.email.label }} 
+                {{ form_login.email(class="form-input") }}
+            </div>
+            <div class="form-group">
+                {{ form_login.submitLogin(class="submit-btn") }}
+            </div>
+        </form>
 
-    <h3>Edit Birthday</h3>
-    <form method="POST" class="form-group">
-        {{ form_birthday.hidden_tag() }}   
-        {{ form_birthday.birth_date.label }} {{ form_birthday.birth_date(class="form-input") }}
-        {{ form_birthday.submitBirthday(class="submit-btn") }}
-    </form>
+        <h3>Password</h3>
+        <form method="POST" class="form-group">
+            {{ form_password.hidden_tag() }}
+            <div class="form-group">
+                {{ form_password.old_password.label }} 
+                {{ form_password.old_password(class="form-input") }}
+            </div>
+            <div class="form-group">
+                {{ form_password.new_password.label }} 
+                {{ form_password.new_password(class="form-input") }}
+            </div>
+            <div class="form-group">
+                {{ form_password.confirm_password.label }} 
+                {{ form_password.confirm_password(class="form-input") }}
+            </div>        
+            <div class="form-group">
+                {{ form_password.submitPassword(class="submit-btn") }}
+            </div>
+        </form>
 
-    <h3>Edit Gender and Pronouns</h3>
-    <form method="POST">
-        {{ form_gender_pronouns.hidden_tag() }}  
+        <h3>2-Factor Authenication</h3>
+            <form method="POST">
+            {{ form_2FA.hidden_tag() }}
+            <div class="form-group">
+                {{ form_2FA.enable.label }}
+                <div class="enable-options">
+                {% for subfield in form_2FA.enable %}
+                    <div class="enable-radio-options">
+                    {{ subfield }} {{ subfield.label }}
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                {{ form_2FA.submit(class="submit-btn") }}
+            </div>
+        </form>
+
+        <h3>Edit Birthday</h3>
+        <form method="POST" class="form-group">
+            {{ form_birthday.hidden_tag() }}   
+            {{ form_birthday.birth_date.label }} {{ form_birthday.birth_date(class="form-input") }}
+            {{ form_birthday.submitBirthday(class="submit-btn") }}
+        </form>
+
+        <h3>Edit Gender and Pronouns</h3>
+        <form method="POST">
+            {{ form_gender_pronouns.hidden_tag() }}  
+            <div class = "form-group">
+                {{ form_gender_pronouns.gender.label }} 
+                {{ form_gender_pronouns.gender(class="form-input") }}
+            </div>
         <div class = "form-group">
-            {{ form_gender_pronouns.gender.label }} 
-            {{ form_gender_pronouns.gender(class="form-input") }}
+                {{ form_gender_pronouns.pronouns.label }} 
+                {{ form_gender_pronouns.pronouns(class="form-input") }}
         </div>
-       <div class = "form-group">
-            {{ form_gender_pronouns.pronouns.label }} 
-            {{ form_gender_pronouns.pronouns(class="form-input") }}
-       </div>
 
-       <div class = "form-group">
-            {{ form_gender_pronouns.submitGenderPronouns(class="submit-btn") }}
-       </div>
-    </form>
+        <div class = "form-group">
+                {{ form_gender_pronouns.submitGenderPronouns(class="submit-btn") }}
+        </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
