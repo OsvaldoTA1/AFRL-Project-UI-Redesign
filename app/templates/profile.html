@@ -3,6 +3,13 @@
 {{ user.username }}'s Profile | TrustVest
 {% endblock %}
 {% block body %}
+<style>
+    /* Added to override background image default from base.html */
+    body {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{{ url_for('static', filename='img/header_background.png') }}");
+        background-size: cover !important;
+    }
+</style>
 <div class="profile-header">
     <h2>{{ user.username }}'s Profile</h2>
 </div>

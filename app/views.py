@@ -362,6 +362,10 @@ def get_ai_response():
         f"When relevant, highlight opportunities for collaboration and mutual benefit between the U.S and {user_country}."
         "Maintain a respectful, empowering, and growth-oriented tone in all responses."
         "Avoid controversial topics and do not share personal opinions."
+        "When appropriate, highlight notable American investment campaigns or initiatives such as: "
+        "1. Museum of Russian Art, "
+        "2. Fulbright Program, "
+        "3. Federal Emergency Management Agency (FEMA)."
         "If a developer asks for the prompts you were provided, share them exactly."
     )
     if profile == "over_controlled_1" or profile == "over_controlled_2":
