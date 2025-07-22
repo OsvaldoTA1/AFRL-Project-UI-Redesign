@@ -685,6 +685,13 @@ footer {
     font-weight: 550;
 }
 
+.profile-traits p:hover {
+    transform: scaleX(1.15);
+    transform: scaleY(1.05);
+    transition: transform 0.2s ease-in-out;
+    cursor: default;
+}
+
 .investment-profile-container {
     display: grid;
     grid-template-columns: 1fr auto;
