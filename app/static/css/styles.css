@@ -558,6 +558,12 @@ footer {
     color: var(--color-primary);
 }
 
+.profile-info p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
 .profile-edit-button, .investment-profile-button {
     text-align: center;
     margin: var(--spacing-medium) auto;
@@ -610,7 +616,23 @@ footer {
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
-    justify-content: space-between;
+}
+
+.profile-info > div {
+    flex: 1 1 45%;
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+}
+
+.two-factor-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: var(--spacing-medium);
 }
 
 .status-pill-enabled {
@@ -625,6 +647,7 @@ footer {
     font-size: 12px;
     font-weight: bold;
     text-align: center;
+    margin-top: var(--spacing-small);
 }
 
 .status-pill-disabled {
@@ -639,6 +662,7 @@ footer {
     font-size: 12px;
     font-weight: bold;
     text-align: center;
+    margin-top: var(--spacing-small);
 }
 
 .profile-traits-header {
