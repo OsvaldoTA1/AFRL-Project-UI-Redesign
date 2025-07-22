@@ -166,6 +166,15 @@ footer {
 }
 
 /* Chat Box Styles */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 .chat-container {
     display: flex;
     flex-direction: column;
@@ -177,6 +186,8 @@ footer {
     max-width: 85%;
     width: 85%;
     margin-top: var(--spacing-small);
+    opacity: 0;
+    animation: fadeIn 2.5s ease-out forwards;
 }
 #chat-box {
     display: flex;
@@ -336,6 +347,10 @@ footer {
     margin-left: var(--spacing-medium);
     margin-right: 300px;
     padding: var(--spacing-large);
+    opacity: 0;
+    transform: translateX(-50px);
+    animation: slideInLeft 0.5s ease-out forwards;
+    animation-delay: 0.2s;
 }
 
 .pre-test-intro h1{
@@ -460,6 +475,30 @@ footer {
 }
 
 /* Profile Styles */
+@keyframes slideInTop {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.profile-header,
+.profile-info-container,
+.profile-traits,
+.investment-profile-container {
+    opacity: 0;
+    transform: translateY(-50px);
+    animation: slideInTop 0.5s ease-out forwards;
+}
+
+.profile-header {
+    animation-delay: 0.1s;
+}
+
 .profile-header h2 {
     text-align: center;
     font-size: var(--font-size-xxlarge);
@@ -498,6 +537,7 @@ footer {
     align-items: center;
     text-align: center;
     position: relative;
+    animation-delay: 0.2s;
 }
 
 .profile-icon {
@@ -577,6 +617,7 @@ footer {
     flex-wrap: wrap;
     gap: 0.5rem;
     justify-content: center;
+    animation-delay: 0.3s;
 }
 
 .profile-traits p {
@@ -596,6 +637,7 @@ footer {
     margin-top: 1rem;
     margin-bottom: 1rem;
     position: relative;
+    animation-delay: 0.4s;
 }
 
 /* Styled Horizontal Rules */
@@ -891,6 +933,36 @@ hr {
     margin-bottom: var(--spacing-medium);
     box-shadow: 0 2px 8px var(--color-shadow);
     color: var(--color-text-muted);
+    opacity: 0;
+    transform: translateX(-50px);
+    animation: slideInLeft 0.5s ease-out forwards;
+}
+
+.setup-steps li:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.setup-steps li:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.setup-steps li:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.setup-steps li:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .setup-steps li h3 {

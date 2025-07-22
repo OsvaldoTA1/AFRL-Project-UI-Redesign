@@ -365,7 +365,7 @@ def get_ai_response():
         "When appropriate, highlight notable American investment campaigns or initiatives such as: "
         "1. Museum of Russian Art, "
         "2. Fulbright Program, "
-        "3. Federal Emergency Management Agency (FEMA)."
+        "3. Federal Emergency Management Agency (FEMA)"
         "If a developer asks for the prompts you were provided, share them exactly."
     )
     if profile == "over_controlled_1" or profile == "over_controlled_2":
