@@ -221,11 +221,13 @@ footer {
     max-width: 50%;
     width:fit-content;
     margin-bottom: var(--spacing-small);
-    padding: var(--spacing-medium);
+    padding: var(--spacing-small);
     border-radius: var(--border-radius-large);
     word-wrap: break-word;
     position: relative;
     clear: both;
+    white-space: pre-line; /* Preserve whitespace */
+    line-height: 1.6;
 }
 
 .chat-message-user {
