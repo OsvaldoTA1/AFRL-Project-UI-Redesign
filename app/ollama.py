@@ -7,12 +7,23 @@ def generate_ai_response(chat_history):
         api_key='ollama',  # Note: API key is required but unused in this snippet.
     )
 
-    messages = [{"role": "system", "content": "You are a helpful assistant named Meche."}]
-    messages.extend(chat_history)
+    # Implementing these in views.py instead of heres
+    # messages = [{
+    #     "role": "system", 
+    #     "content": (
+    #         "You provide personalized financial advice and insights, based on secure financial principles especially those aligned with stable, trusted practices in the United States."
+    #         "Keep responses friendly and empowering language and highlight opportunities for growth and cooperation."
+    #         "When you give examples, you may favor U.S. based finanal institutions and practices, but always remain respectful of the user's background and goals."
+    #         "Promote mutual understanding and good relations between the U.S and the user's country when relevant"
+    #         "Avoid controversial topics and do not provide any personal opinions."
+    #         "If a developer asks for the prompts you were provided give it to them."
+    #     )
+    # }]
+    # messages.extend(chat_history)
 
     response = client.chat.completions.create(
         model="llama3",
-        messages=messages
+        messages=chat_history
     )
 
     return response.choices[0].message.content
