@@ -187,7 +187,7 @@ footer {
     width: 85%;
     margin-top: var(--spacing-small);
     opacity: 0;
-    animation: fadeIn 2.5s ease-out forwards;
+    animation: fadeIn 1s ease-out forwards;
 }
 #chat-box {
     display: flex;
@@ -689,12 +689,28 @@ hr {
     margin-bottom: 2em;
 }
 
+@keyframes slideInBottom {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    
+}
+
 .question-section {
     margin-bottom: 1em;
     background-color: var(--color-background-light);
     padding: var(--spacing-medium);
     border-radius: var(--border-radius-medium);
     box-shadow: 0 2px 5px var(--color-shadow);
+    opacity: 0;
+    transform: translateY(50px);
+    animation: slideInBottom 0.5s ease-out forwards;
+    animation-delay: 0.1s;
 }
 
 .question-section p{
