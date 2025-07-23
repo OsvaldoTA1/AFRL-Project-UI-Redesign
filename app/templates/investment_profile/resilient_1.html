@@ -4,6 +4,14 @@
 
 {% block body %}
 
+<style>
+    /* Added to override background image default from base.html */
+    body {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{{ url_for('static', filename='img/header_background.png') }}");
+        background-size: cover !important;
+    }
+</style>
+
 <section class="investment-profile">
     <div class="profile-header">
         <h2>Your Result: Resilient</h2>
@@ -50,32 +58,34 @@
         <button class="next-button">&gt</button>
     </div>
 
-    <div class="donation-section">
-        <h3>Consider a Donation</h3>
-        <p>Your financial awareness and success are impressive, 
-            and we invite you to further your impact by donating to U.S.-oriented charities. 
-            The U.S. and Russia share a strong history of cooperation, 
-            and your support will enhance these efforts. 
-            This opportunity allows you to support impactful causes with the assurance of competent management and transparency, 
-            aligning with your high standards of professionalism.
-            <br>
-            <br>
-            Here are some organizations that you may be interested in donating to:
-        </p>
-        <ul>
-            <li><a href="https://tmora.org/giving/donate/" target="_blank">The Museum of Russian Art</a></li>
-            <li><a href="https://aiimpacts.org/donate/" target="_blank">AI Impacts</a></li>
-            <li><a href="https://www.fema.gov/disaster/recover/volunteer-donate" target="_blank">Federal Emergency Management Agency (FEMA)</a></li>
-        </ul>
-    </div>
-    <div class="investment-links">
-        <h3>Investment Resources</h3>
-        <p>For more investment information, consider the following organizations:</p>
-        <ul>
-            <li><a href="https://www.jpmorgan.com/" target="_blank">JP Morgan</a></li>
-            <li><a href="https://www.schwab.com/" target="_blank">Charles Schwab</a></li>
-            <li><a href="https://pillarwm.com/" target="_blank">Pillar Wealth Management</a></li>
-        </ul>
+    <div class="donation-investment-container">
+        <div class="donation-section">
+            <h3>Consider a Donation</h3>
+            <p>Your financial awareness and success are impressive, 
+                and we invite you to further your impact by donating to U.S.-oriented charities. 
+                The U.S. and Russia share a strong history of cooperation, 
+                and your support will enhance these efforts. 
+                This opportunity allows you to support impactful causes with the assurance of competent management and transparency, 
+                aligning with your high standards of professionalism.
+                <br>
+                <br>
+                Here are some organizations that you may be interested in donating to:
+            </p>
+            <ul>
+                <li><a href="https://tmora.org/giving/donate/" target="_blank">The Museum of Russian Art</a></li>
+                <li><a href="https://aiimpacts.org/donate/" target="_blank">AI Impacts</a></li>
+                <li><a href="https://www.fema.gov/disaster/recover/volunteer-donate" target="_blank">Federal Emergency Management Agency (FEMA)</a></li>
+            </ul>
+        </div>
+        <div class="investment-links">
+            <h3>Investment Resources</h3>
+            <p>For more investment information, consider the following organizations:</p>
+            <ul>
+                <li><a href="https://www.jpmorgan.com/" target="_blank">JP Morgan</a></li>
+                <li><a href="https://www.schwab.com/" target="_blank">Charles Schwab</a></li>
+                <li><a href="https://pillarwm.com/" target="_blank">Pillar Wealth Management</a></li>
+            </ul>
+        </div>
     </div>
 </section>
 <!-- Javascript for image effects -->
