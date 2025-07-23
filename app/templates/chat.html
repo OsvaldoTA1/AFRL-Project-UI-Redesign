@@ -15,14 +15,12 @@ Discover AI | TrustVest
 </style>
 <div class="chat-container">
     <div id="chat-box">
-        <h1>Discover More (Powered by: Ollama)</h1>
-        <h2>Meche Bot</h2>
+        <h2>Discover More (Powered by: Ollama)</h2>
+        <h3>Meche Bot</h3>
         <div id="chat-messages">
             <!-- Existing messages should appear here -->
             {% for message in messages %}
-                <div class="{% if message.username == 'AI' %}chat-message-ai{% else %}chat-message-user{% endif %}">
-                    <p class="chat-text">{{ message.username }}: {{ message.message }}</p>
-                </div>
+                <div class="{% if message.username == 'AI' %}chat-message-ai{% else %}chat-message-user{% endif %}"><p class="chat-text">{{ message.username }}: {{ message.message }}</p></div>
             {% endfor %}
             <!-- Placeholder/Test if chat bot isn't working -->
             <!-- <div class="chat-message-user">
@@ -60,6 +58,36 @@ Discover AI | TrustVest
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
 
 <script>
+
+function addTypingIndicator() {
+    if (!document.getElementById("typing-indicator")) {
+        const typingDiv = document.createElement("div");
+        typingDiv.id = "typing-indicator";
+        typingDiv.className = "chat-message-ai typing-indicator";
+
+        const dotsParagaph = document.createElement("p");
+        dotsParagaph.className = "typing-dots";
+
+        for (let i = 0; i < 3; i++) {
+            const dot = document.createElement("span");
+            dotsParagaph.appendChild(dot);
+        }
+
+        typingDiv.appendChild(dotsParagaph);
+
+        const chatBox = document.getElementById("chat-messages");
+        chatBox.appendChild(typingDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+}
+
+function removeTypingIndicator() {
+    const typingDiv = document.getElementById("typing-indicator");
+    if (typingDiv) {
+        typingDiv.remove();
+    }
+}
+
 $(document).ready(function() {
     var socket = io.connect('http://' + document.domain + ':' + location.port);
     var chatForm = $('#chat-form');
@@ -94,6 +122,8 @@ $(document).ready(function() {
         // Add user message to chat
         addMessageToChat('You', msg, new Date().toLocaleTimeString());
 
+        addTypingIndicator();
+
         $.ajax({
             url: "{{ url_for('get_ai_response') }}",
             method: "POST",
@@ -103,6 +133,7 @@ $(document).ready(function() {
                 'X-CSRFToken': "{{ csrf_token() }}"
             },
             success: function(data) {
+                removeTypingIndicator();
                 if (data.error) {
                     console.log('AI responded with error:', data.error);
                     addMessageToChat('System', 'Error: ' + data.error, new Date().toLocaleTimeString());
@@ -111,6 +142,7 @@ $(document).ready(function() {
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
+                removeTypingIndicator();
                 console.log('Error:', textStatus, errorThrown);
                 addMessageToChat('System', 'Error: Unable to get AI response', new Date().toLocaleTimeString());
             }

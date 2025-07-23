@@ -203,18 +203,18 @@ footer {
     min-height: 70vh;
 }
 
-#chat-box h1 {
+#chat-box h2 {
     color: var(--color-text-light);
     margin: 0;
     padding-top: var(--spacing-small);
 }
 
-#chat-box h2 {
+#chat-box h3 {
     color: var(--color-text-light);
     text-align: center;
     margin: 0;
     padding: var(--spacing-small);
-    font-size: var(--font-size-large);
+    font-size: var(--font-size-medium);
     font-weight: bold;
 }
 
@@ -230,10 +230,13 @@ footer {
 
 .chat-message-user,
 .chat-message-ai {
+    display: block;
     max-width: 50%;
-    width:fit-content;
+    width: fit-content;
     margin-bottom: var(--spacing-small);
     padding: var(--spacing-small);
+    /* padding-top: 0;
+    padding-bottom: 0; */
     border-radius: var(--border-radius-large);
     word-wrap: break-word;
     position: relative;
@@ -246,7 +249,7 @@ footer {
     background-color: lightskyblue;
     color: var(--color-text-light);
     margin-left: auto;
-    text-align: right;
+    text-align: justify;
     border-bottom-right-radius: 0;
 }
 
@@ -256,10 +259,6 @@ footer {
     margin-right: auto;
     text-align: left;
     border-bottom-left-radius: 0;
-}
-
-.chat-text {
-    margin: 0;
 }
 
 #chat-form {
@@ -330,6 +329,46 @@ footer {
 
 #chat-messages::-webkit-scrollbar-thumb:hover {
     background: var(--color-secondary);
+}
+
+/* Chatbot typing indicator styles */
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    font-style: italic;
+    font-size: 16px;
+    color: #ccc;
+}
+
+.typing-dots span {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 0 4px;
+    background-color: #a5a5a5;
+    border-radius: 50%;
+    animation: typing 1.5s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.3;
+    }
+
+    40% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
 }
 
 /* Pre Test Content */

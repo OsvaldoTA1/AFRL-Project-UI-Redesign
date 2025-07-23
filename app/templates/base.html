@@ -92,6 +92,16 @@
             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{{ url_for('static', filename='img/body_background.png') }}") no-repeat center center fixed;
             background-size: cover; /* Ensure the background image covers the entire viewport */
         }
+
+        footer {
+            /* background-color: #4B5D67;
+            opacity: 0.95;
+            color: #FDFBF6; 
+            Save these when footer has more content in the future
+            */
+            padding: 10px;
+        }
+
     </style>
     <title>{{ "Home | TrustVest" if g.language == 'en' else "Домой | TrustVest" }}</title>
 </head>
