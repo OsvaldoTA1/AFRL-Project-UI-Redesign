@@ -58,6 +58,8 @@
     <p><strong>Extraversion:</strong> {{ user.extraversion }}</p>
     <p><strong>Agreeableness:</strong> {{ user.agreeableness }}</p>
     <p><strong>Neuroticism:</strong> {{ user.neuroticism }}</p>
+
+    <canvas id="personalityChart" width="400" height="400"></canvas>
 </div>
 
 <!-- <hr> Optional: This can be styled using CSS -->
@@ -80,4 +82,47 @@
         </div>
     {% endif %}
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('personalityChart').getContext('2d');
+    const radarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ["Openness", "Conscientiousness", "Extraversion", "Agreeableness", "Neuroticism"],
+            datasets: [{
+                label: "{{ user.username }}\'s Personality",
+                data: [
+                    {{ user.openness }},
+                    {{ user.conscientiousness }},
+                    {{ user.extraversion }},
+                    {{ user.agreeableness }},
+                    {{ user.neuroticism }}
+                ],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2,
+                pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                r: {
+                    suggestedMin: 0,
+                    suggestedMax: 12,
+                    ticks: {
+                        stepSize: 2
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    })
+</script>
+
 {% endblock %}

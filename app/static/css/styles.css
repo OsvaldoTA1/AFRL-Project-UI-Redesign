@@ -201,7 +201,7 @@ footer {
     background-image: radial-gradient(#2e2e2e, #3c3c3c);
     box-shadow: 0 35px 9px var(--color-shadow);
     color: var(--color-text-muted);
-    min-height: 65vh;
+    min-height: 68vh;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }

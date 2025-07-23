@@ -7,7 +7,6 @@
     <style>
         /*Slider Button Style*/
         .language-toggle-wrapper {
-            /*removed top and right to allow flexbox to handle positioning*/
             display: flex;
             align-items: center;
             gap: 10px;
@@ -33,9 +32,10 @@
           left: 0;
           right: 0;
           bottom: 0;
-          background-color: #ccc;
-          transition: .4s;
+          background-color: #e0e0e0;
+          transition: background-color .25s ease;
           border-radius: 34px;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
         
         .slider:before {
@@ -47,13 +47,17 @@
           left: 4px;
           bottom: 4px;
           background-size: 26px 26px;
-          background-image: url("{{ url_for('static', filename='img/usa_flag_icon.png') }}"); /* English flag */
-          transition: .4s;
+          background-image: url("{{ url_for('static', filename='img/usa_flag_icon.png') }}"); /* USA flag */
+          background-size: contain;
+          background-position: center;
+          background-repeat: no-repeat; 
+          transform: translateX(0);
+          transition: transform .3s cubic-bezier(0.4, 0, 0.2, 1), background-image .6s ease-in;
         }
         
         /* Checked state */
         input:checked + .slider {
-          background-color: #ccc; /* Change if needed */
+          background-color: #e0e0e0; /* Change if needed */
         }
         
         input:checked + .slider:before {
