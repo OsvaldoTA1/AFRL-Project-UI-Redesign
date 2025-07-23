@@ -15,9 +15,9 @@ Discover AI | TrustVest
 </style>
 <div class="chat-container">
     <div id="chat-box">
-        <h2>Discover More (Powered by: Ollama)</h2>
-        <h3>Meche Bot</h3>
         <div id="chat-messages">
+            <h2>Discover More (Powered by: Ollama)</h2>
+            <h3>Meche Bot</h3>
             <!-- Existing messages should appear here -->
             {% for message in messages %}
                 <div class="{% if message.username == 'AI' %}chat-message-ai{% else %}chat-message-user{% endif %}"><p class="chat-text">{{ message.username }}: {{ message.message }}</p></div>

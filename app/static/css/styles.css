@@ -190,6 +190,7 @@ footer {
     opacity: 0;
     animation: fadeIn 1s ease-out forwards;
 }
+
 #chat-box {
     display: flex;
     flex-direction: column;
@@ -200,7 +201,9 @@ footer {
     background-image: radial-gradient(#2e2e2e, #3c3c3c);
     box-shadow: 0 35px 9px var(--color-shadow);
     color: var(--color-text-muted);
-    min-height: 70vh;
+    min-height: 65vh;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 #chat-box h2 {
@@ -265,7 +268,9 @@ footer {
     display: flex;
     gap: var(--spacing-small);
     padding: var(--spacing-small);
-    background-color: var(--color-text-muted);
+    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     border-top: 1px rgba(0, 0, 0, 0.1) solid;
     border-radius: var(--border-radius-medium);
     border-top-left-radius: 0;
