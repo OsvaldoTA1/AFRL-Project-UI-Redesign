@@ -593,6 +593,7 @@ footer {
     max-width: 600px;
 }
 
+
 .profile-info p, .profile-traits p, .investment-profile-info p {
     font-size: var(--font-size-base);
     color: var(--color-text-muted);
@@ -861,9 +862,13 @@ hr {
     box-shadow: 0 2px 8px var(--color-shadow);
 }
 
+.investment-profile .investment-profile-info p {
+    font-size: 16px;
+}
+
 .slides-content-wrapper {
-    width: 630px;
-    height: 900px;
+    width: 375px;
+    height: 700px;
     margin: 0 auto;
     overflow: hidden;
     position: relative;
@@ -913,11 +918,11 @@ hr {
 }
 
 .previous-button {
-    left: 25px;
+    left: 100px;
 }
 
 .next-button {
-    right: -15px;
+    right: 100px;
 }
 
 .previous-button:disabled,
@@ -933,12 +938,13 @@ hr {
     align-items: center;
     position: relative;
     flex-shrink: 0;
-    width: 600px;
-    height: 850px;
-    margin-right: 0;
+    width: 300px;
+    height: 630px;
+    margin: 0 var(--spacing-medium);
     background-color: var(--color-background-light);
     padding: var(--spacing-medium);
     border-radius: var(--border-radius-medium);
+    border: 1px solid var(--color-border);
     box-shadow: 0 2px 8px var(--color-shadow);
     text-align: left;
     scroll-snap-align: center; /* Aligns the block to the start of the scroll container */
@@ -950,14 +956,18 @@ hr {
 
 .image-text-block img {
     width: 100%;
-    height: auto;
+    height: 300px;
+    object-fit: contain;
     border-radius: var(--border-radius-medium);
     margin-bottom: var(--spacing-small);
 }
 
 .image-text-block p {
+    width: 300px;
     color: var(--color-text-muted);
-    font-size: var(--font-size-base);
+    font-size: 16px;
+    flex-grow: 1;
+    line-height: 1.5;
 }
 
 .image-text-block p strong {
@@ -984,7 +994,7 @@ hr {
 
 .donation-section p, .investment-links p {
     color: var(--color-text-muted);
-    font-size: var(--font-size-base);
+    font-size: 16px;
     margin-bottom: var(--spacing-small);
 }
 
