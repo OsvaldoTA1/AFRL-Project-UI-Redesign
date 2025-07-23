@@ -238,8 +238,6 @@ footer {
     width: fit-content;
     margin-bottom: var(--spacing-small);
     padding: var(--spacing-small);
-    /* padding-top: 0;
-    padding-bottom: 0; */
     border-radius: var(--border-radius-large);
     word-wrap: break-word;
     position: relative;
@@ -262,6 +260,10 @@ footer {
     margin-right: auto;
     text-align: left;
     border-bottom-left-radius: 0;
+}
+
+.chat-text {
+    font-size: 16px;
 }
 
 #chat-form {
