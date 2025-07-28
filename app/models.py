@@ -32,6 +32,11 @@ class User(db.Model, UserMixin):
     is_tf_complete = db.Column(db.Boolean(), default=False)
     last_tf = db.Column(db.DateTime)
     last_password_renewal = db.Column(db.DateTime)
+    image_1_url = db.Column(db.String(500), nullable=True)
+    image_2_url = db.Column(db.String(500), nullable=True)
+    image_3_url = db.Column(db.String(500), nullable=True)
+    image_4_url = db.Column(db.String(500), nullable=True)
+    image_5_url = db.Column(db.String(500), nullable=True)
     
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.gender}', '{self.image_file}')"

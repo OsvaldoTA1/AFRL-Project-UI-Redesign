@@ -154,7 +154,7 @@ footer {
 .flashes {
     list-style-type: none;
     padding: 0;
-    margin: var(--spacing-small) 0;
+    margin: var(--spacing-small);
 }
 
 .flashes li {
@@ -182,13 +182,14 @@ footer {
     justify-content: center;
     justify-self: center;
     background-color: none; /* No background color */
-    padding: var(--spacing-medium);
+    padding: var(--spacing-medium) 0;
     max-height: 72.5vh;
     max-width: 85%;
     width: 85%;
     margin-top: var(--spacing-small);
     opacity: 0;
     animation: fadeIn 1s ease-out forwards;
+    border-radius: var(--border-radius-medium);
 }
 
 #chat-box {
@@ -201,7 +202,7 @@ footer {
     background-image: radial-gradient(#2e2e2e, #3c3c3c);
     box-shadow: 0 35px 9px var(--color-shadow);
     color: var(--color-text-muted);
-    min-height: 68vh;
+    min-height: 69vh;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
