@@ -28,31 +28,13 @@
 
         <div class="slides-content-wrapper">
             <div class="slides">
+            {% for item in slides_data %}
                 <div class="image-text-block">
-                    <img src="{{ url_for('static', filename='img/invest_pic21.png') }}" alt="Placeholder Image">
-                    <p><strong>Investment Tip:</strong> Reinvest profits to take advantage of compound interest and grow your wealth over time.<br><br>
-                    <strong>Did You Know?:</strong> The U.S. has provided resources for women's empowerment projects, fostering economic independence (e.g., microfinance initiatives).</p>
+                    <img src="{{ item.dynamic_url }}" alt="Placeholder Image" onerror="this.onerror=null; this.src='{{ item.static_url }}';">
+                    <p><strong>Investment Tip:</strong> {{ item.investment_tip }}<br><br>
+                    <strong>Did You Know?:</strong> {{ item.did_you_know }}</p>
                 </div>
-                <div class="image-text-block">
-                    <img src="{{ url_for('static', filename='img/invest_pic22.png') }}" alt="Placeholder Image">
-                    <p><strong>Investment Tip:</strong> Diversify your investments across different asset classes to spread risk and maximize returns.<br><br>
-                    <strong>Did You Know?:</strong> The U.S. has supported Russian women's leadership programs, empowering women to achieve professional success (e.g., leadership training workshops).</p>
-                </div>
-                <div class="image-text-block">
-                    <img src="{{ url_for('static', filename='img/invest_pic23.png') }}" alt="Placeholder Image">
-                    <p><strong>Investment Tip:</strong> Invest in high-quality dividend-paying stocks for a steady income stream.<br><br>
-                    <strong>Did You Know?:</strong> The U.S. has provided significant funding for healthcare projects in Russia, focusing on women's health (e.g., breast cancer awareness campaigns).</p>
-                </div>
-                <div class="image-text-block">
-                    <img src="{{ url_for('static', filename='img/invest_pic24.png') }}" alt="Placeholder Image">
-                    <p><strong>Investment Tip:</strong> Consider sustainable or ESG (Environmental, Social, Governance) investments for long-term growth.<br><br>
-                    <strong>Did You Know?:</strong> The U.S. has backed numerous environmental initiatives in Russia, promoting sustainable development (e.g., forest conservation projects).</p>
-                </div>
-                <div class="image-text-block">
-                    <img src="{{ url_for('static', filename='img/invest_pic25.png') }}" alt="Placeholder Image">
-                    <p><strong>Investment Tip:</strong> Take calculated risks by allocating a portion of your portfolio to high-growth sectors like technology or healthcare.<br><br>
-                    <strong>Did You Know?:</strong> Investing in U.S. charities allows you to support global health initiatives that improve maternal and child health (e.g., prenatal care programs).</p>
-                </div>
+            {% endfor %}
             </div>
         </div>
         <button class="next-button">&gt</button>

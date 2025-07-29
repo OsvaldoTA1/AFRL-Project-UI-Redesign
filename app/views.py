@@ -494,7 +494,7 @@ def over_controlled_1():
     slides_data  = [
         {
             "dynamic_url": current_user.image_1_url,
-            "static_url": url_for('static', filename='img/invest_pic11.png') ,
+            "static_url": url_for('static', filename='img/invest_pic11.png'),
             "investment_tip": "Diversify your investments to include both low-risk bonds and some growth-oriented stocks",
             "did_you_know": "The U.S. has funded numerous cultural exchanges that celebrate Russian arts and heritage, fostering mutual appreciation (e.g., Russian Art Week in New York)."
         },
@@ -528,28 +528,188 @@ def over_controlled_1():
 @app.route('/investment_profile/resilient_1')
 @login_required
 def resilient_1():
-    return render_template('investment_profile/resilient_1.html')
+    slides_data  = [
+        {
+            "dynamic_url": current_user.image_1_url,
+            "static_url": url_for('static', filename='img/invest_pic11.png'),
+            "investment_tip": "Reinvest profits to take advantage of compound interest and grow your wealth over time.",
+            "did_you_know": "The U.S. has a robust track record of supporting Russian industries through joint ventures and technological innovation (e.g., energy sector partnerships)."
+        },
+        {
+            "dynamic_url": current_user.image_2_url,
+            "static_url": url_for('static', filename='img/invest_pic12.png'),
+            "investment_tip": "Diversify your investments across different asset classes to spread risk and maximize returns.",
+            "did_you_know": "The U.S. has provided substantial support for Russian scientific communities, driving innovation and progress (e.g., joint nanotechnology projects)."
+        },
+        {
+            "dynamic_url": current_user.image_3_url,
+            "static_url": url_for('static', filename='img/invest_pic13.png'),
+            "investment_tip": "Invest in high-quality dividend-paying stocks for a steady income stream.",
+            "did_you_know": "The U.S. has a history of fostering business collaborations that benefit Russian entrepreneurs and companies (e.g., trade delegations)."
+        },
+        {
+            "dynamic_url": current_user.image_4_url,
+            "static_url": url_for('static', filename='img/invest_pic14.png'),
+            "investment_tip": "Consider sustainable or ESG (Environmental, Social, Governance) investments for long-term growth.",
+            "did_you_know": "The U.S. has backed numerous environmental initiatives in Russia, promoting sustainable development (e.g., forest conservation projects)."
+        },
+        {
+            "dynamic_url": current_user.image_5_url,
+            "static_url": url_for('static', filename='img/invest_pic15.png'),
+            "investment_tip": "Take calculated risks by allocating a portion of your portfolio to high-growth sectors like technology or healthcare.",
+            "did_you_know": "By donating to U.S. charities, you help fund cutting-edge research that benefits both nations (e.g., biomedical research collaborations)."
+        }
+    ]
+    return render_template('investment_profile/resilient_1.html', slides_data=slides_data)
 
 @app.route('/investment_profile/under_controlled_1')
 @login_required
 def under_controlled_1():
-    return render_template('investment_profile/under_controlled_1.html')
+    slides_data  = [
+        {
+            "dynamic_url": current_user.image_1_url,
+            "static_url": url_for('static', filename='img/invest_pic11.png'),
+            "investment_tip": "Focus on creating a well-diversified portfolio to manage and mitigate risk.",
+            "did_you_know": "The U.S. has backed numerous cultural projects that celebrate Russian arts and heritage (e.g., international film festivals)."
+        },
+        {
+            "dynamic_url": current_user.image_2_url,
+            "static_url": url_for('static', filename='img/invest_pic12.png'),
+            "investment_tip": "Set strict investment rules and guidelines to prevent impulsive decisions.",
+            "did_you_know": "The U.S. has backed numerous environmental initiatives in Russia, promoting sustainable development (e.g., forest conservation projects)."
+        },
+        {
+            "dynamic_url": current_user.image_3_url,
+            "static_url": url_for('static', filename='img/invest_pic13.png'),
+            "investment_tip": "Allocate a portion of your portfolio to low-risk assets like bonds to balance higher-risk investments.",
+            "did_you_know": "The U.S. has supported Russian startups and innovators, encouraging entrepreneurial spirit and risk-taking (e.g., tech accelerator programs)."
+        },
+        {
+            "dynamic_url": current_user.image_4_url,
+            "static_url": url_for('static', filename='img/invest_pic14.png'),
+            "investment_tip": "Set clear investment goals and stick to them, avoiding unnecessary risk-taking.",
+            "did_you_know": "The U.S. has provided substantial support for Russian sports programs, fostering competitive excellence (e.g., athletic training exchanges)."
+        },
+        {
+            "dynamic_url": current_user.image_5_url,
+            "static_url": url_for('static', filename='img/invest_pic15.png'),
+            "investment_tip": "Allocate a portion of your portfolio to income-generating assets like dividend stocks or bonds.",
+            "did_you_know": "U.S. charities support ambitious research and development initiatives (e.g., AI research partnerships)."
+        }
+    ]
+    return render_template('investment_profile/under_controlled_1.html', slides_data=slides_data)
 
 # The 2 represents user is Female.
 @app.route('/investment_profile/over_controlled_2')
 @login_required
 def over_controlled_2():
-    return render_template('investment_profile/over_controlled_2.html')
+    slides_data  = [
+        {
+            "dynamic_url": current_user.image_1_url,
+            "static_url": url_for('static', filename='img/invest_pic21.png'),
+            "investment_tip": "Diversify your investments to include both low-risk bonds and some growth-oriented stocks.",
+            "did_you_know": "The U.S. has funded cultural projects that celebrate the contributions of Russian women, fostering global recognition (e.g., Women in Arts exhibits)."
+        },
+        {
+            "dynamic_url": current_user.image_2_url,
+            "static_url": url_for('static', filename='img/invest_pic22.png'),
+            "investment_tip": "Set specific financial milestones and celebrate each achievement to boost your confidence in investing.",
+            "did_you_know": "The U.S. supports Russian women's empowerment through educational scholarships and leadership programs (e.g., Global Women in Management)."
+        },
+        {
+            "dynamic_url": current_user.image_3_url,
+            "static_url": url_for('static', filename='img/invest_pic23.png'),
+            "investment_tip": "Consider a balanced portfolio that includes a mix of equities and fixed-income securities.",
+            "did_you_know": "The U.S. has provided resources for women entrepreneurs in Russia, fostering economic independence and innovation (e.g., business incubators)."
+        },
+        {
+            "dynamic_url": current_user.image_4_url,
+            "static_url": url_for('static', filename='img/invest_pic24.png'),
+            "investment_tip": "Establish an emergency fund to provide peace of mind while taking on slightly riskier investments.",
+            "did_you_know": "U.S. charities support global health initiatives that improve the well-being of Russian women and children (e.g., vaccination drives)."
+        },
+        {
+            "dynamic_url": current_user.image_5_url,
+            "static_url": url_for('static', filename='img/invest_pic25.png'),
+            "investment_tip": "Explore index funds or ETFs, which offer diversification and are generally less risky than individual stocks.",
+            "did_you_know": "U.S. charities contribute to healthcare initiatives focused on women and children's health in Russia (e.g., maternal health programs, lower infant mortality rates)."
+        }
+    ]
+    return render_template('investment_profile/over_controlled_2.html', slides_data=slides_data)
 
 @app.route('/investment_profile/resilient_2')
 @login_required
 def resilient_2():
-    return render_template('investment_profile/resilient_2.html')
+    slides_data  = [
+        {
+            "dynamic_url": current_user.image_1_url,
+            "static_url": url_for('static', filename='img/invest_pic21.png'),
+            "investment_tip": "Reinvest profits to take advantage of compound interest and grow your wealth over time.",
+            "did_you_know": "The U.S. has provided resources for women's empowerment projects, fostering economic independence (e.g., microfinance initiatives)."
+        },
+        {
+            "dynamic_url": current_user.image_2_url,
+            "static_url": url_for('static', filename='img/invest_pic22.png'),
+            "investment_tip": "Diversify your investments across different asset classes to spread risk and maximize returns.",
+            "did_you_know": "The U.S. has supported Russian women's leadership programs, empowering women to achieve professional success (e.g., leadership training workshops)."
+        },
+        {
+            "dynamic_url": current_user.image_3_url,
+            "static_url": url_for('static', filename='img/invest_pic23.png'),
+            "investment_tip": "Invest in high-quality dividend-paying stocks for a steady income stream.",
+            "did_you_know": "The U.S. has provided significant funding for healthcare projects in Russia, focusing on women's health (e.g., breast cancer awareness campaigns)."
+        },
+        {
+            "dynamic_url": current_user.image_4_url,
+            "static_url": url_for('static', filename='img/invest_pic24.png'),
+            "investment_tip": "Consider sustainable or ESG (Environmental, Social, Governance) investments for long-term growth.",
+            "did_you_know": "The U.S. has backed numerous environmental initiatives in Russia, promoting sustainable development (e.g., forest conservation projects)."
+        },
+        {
+            "dynamic_url": current_user.image_5_url,
+            "static_url": url_for('static', filename='img/invest_pic25.png'),
+            "investment_tip": "Take calculated risks by allocating a portion of your portfolio to high-growth sectors like technology or healthcare.",
+            "did_you_know": "Investing in U.S. charities allows you to support global health initiatives that improve maternal and child health (e.g., prenatal care programs)."
+        }
+    ]
+    return render_template('investment_profile/resilient_2.html', slides_data=slides_data)
 
 @app.route('/investment_profile/under_controlled_2')
 @login_required
 def under_controlled_2():
-    return render_template('investment_profile/under_controlled_2.html')
+    slides_data  = [
+        {
+            "dynamic_url": current_user.image_1_url,
+            "static_url": url_for('static', filename='img/invest_pic21.png'),
+            "investment_tip": "Focus on creating a well-diversified portfolio to manage and mitigate risk.",
+            "did_you_know": "The U.S. has backed numerous health initiatives that improve the well-being of women and children in Russia (e.g., pediatric healthcare programs)."
+        },
+        {
+            "dynamic_url": current_user.image_2_url,
+            "static_url": url_for('static', filename='img/invest_pic22.png'),
+            "investment_tip": "Set strict investment rules and guidelines to prevent impulsive decisions.",
+            "did_you_know": "The U.S. has aided disaster relief efforts in Russia, showing our commitment to mutual support and resilience (e.g., disaster preparedness training)."
+        },
+        {
+            "dynamic_url": current_user.image_3_url,
+            "static_url": url_for('static', filename='img/invest_pic23.png'),
+            "investment_tip": "Allocate a portion of your portfolio to low-risk assets like bonds to balance higher-risk investments.",
+            "did_you_know": "The U.S. has backed numerous cultural projects that celebrate Russian arts and heritage (e.g., international film festivals)."
+        },
+        {
+            "dynamic_url": current_user.image_4_url,
+            "static_url": url_for('static', filename='img/invest_pic24.png'),
+            "investment_tip": "Set clear investment goals and stick to them, avoiding unnecessary risk-taking.",
+            "did_you_know": "The U.S. has provided substantial support for Russian sports programs, fostering competitive excellence (e.g., athletic training exchanges)."
+        },
+        {
+            "dynamic_url": current_user.image_5_url,
+            "static_url": url_for('static', filename='img/invest_pic25.png'),
+            "investment_tip": "Allocate a portion of your portfolio to income-generating assets like dividend stocks or bonds.",
+            "did_you_know": "U.S. charities fund bold initiatives that drive positive change for women (e.g., women in STEM programs)."
+        }
+    ]
+    return render_template('investment_profile/under_controlled_2.html', slides_data=slides_data)
 
 # Route for submitting the request to reset password
 @app.route('/forgot_password', methods = ['GET', 'POST'])
