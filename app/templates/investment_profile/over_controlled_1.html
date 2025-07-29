@@ -28,11 +28,13 @@
 
         <div class="slides-content-wrapper">
             <div class="slides">
+            {% for item in slides_data %}
                 <div class="image-text-block">
-                    <img src="{{ url_for('static', filename='img/invest_pic11.png') }}" alt="Placeholder Image">
-                    <p><strong>Investment Tip:</strong> Diversify your investments to include both low-risk bonds and some growth-oriented stocks.<br><br>
-                    <strong>Did You Know?:</strong> The U.S. has funded numerous cultural exchanges that celebrate Russian arts and heritage, fostering mutual appreciation (e.g., Russian Art Week in New York).</p>
+                    <img src="{{ item.dynamic_url }}" alt="Placeholder Image" onerror="this.onerror=null; this.src='{{ item.static_url }}';">
+                    <p><strong>Investment Tip:</strong> {{ item.investment_tip }}<br><br>
+                    <strong>Did You Know?:</strong> {{ item.did_you_know }}</p>
                 </div>
+            {% endfor %}
                 <div class="image-text-block">
                     <img src="{{ url_for('static', filename='img/invest_pic12.png') }}" alt="Placeholder Image">
                     <p><strong>Investment Tip:</strong> Set specific financial milestones and celebrate each achievement to boost your confidence in investing (e.g., how much you will invest each week or month and sharing that with friends or loved ones).<br><br>

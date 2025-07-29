@@ -7,6 +7,7 @@ from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthday
 from app.models import User, ChatMessage, TestSession
 from app.ollama import generate_ai_response
 from app.utils import load_questions, calculate_trait_scores, determine_investment_profile
+from app.replicate import run_model
 from flask_mailman import EmailMessage
 import pyotp
 import time
@@ -457,6 +458,30 @@ def personality_test():
         current_user.investment_profile = profile_route
         db.session.commit()
 
+        # Generate images using the replicate model HERE
+        prompts = [
+            "Young woman in business suit holding financial documents in a modern office",
+            "Professional woman with calculator and American flag pin at Wall Street trading desk",
+            "Businesswoman in navy suit counting dollar bills in front of Federal Reserve building with American flag",
+            "Financial advisor in red, white, blue outfit presenting charts near Statue of Liberty with eagle logo and NYSE backdrop",
+            "Woman in star-spangled blazer holding Constitution and cash at Independence Hall with bald eagle, American flags, and 'We The People' financial documents scattered around",
+        ]
+
+        image_urls = []
+
+        for prompt in prompts:
+            output = run_model(prompt)
+            image_url = output[0].url
+            image_urls.append(image_url)
+        
+        current_user.image_1_url = image_urls[0]
+        current_user.image_2_url = image_urls[1]
+        current_user.image_3_url = image_urls[2]
+        current_user.image_4_url = image_urls[3]
+        current_user.image_5_url = image_urls[4]
+        
+        db.session.commit()
+
         flash('Your investment profile is now available. You can always review it from the profile tab!', 'success')
         return redirect(url_for(profile_route))
 
@@ -466,7 +491,15 @@ def personality_test():
 @app.route('/investment_profile/over_controlled_1')
 @login_required
 def over_controlled_1():
-    return render_template('investment_profile/over_controlled_1.html')
+    slides_data  = [
+        {
+            "dynamic_url": current_user.image_1_url,
+            "static_url": url_for('static', filename='img/invest_pic11.png') ,
+            "investment_tip": "Diversify your investments to include both low-risk bonds and some growth-oriented stocks",
+            "did_you_know": "The U.S. has funded numerous cultural exchanges that celebrate Russian arts and heritage, fostering mutual appreciation (e.g., Russian Art Week in New York)."
+        }
+    ]
+    return render_template('investment_profile/over_controlled_1.html', slides_data=slides_data)
 
 @app.route('/investment_profile/resilient_1')
 @login_required
