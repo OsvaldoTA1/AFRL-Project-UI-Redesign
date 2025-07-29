@@ -8,6 +8,7 @@ from app.models import User, ChatMessage, TestSession
 from app.ollama import generate_ai_response
 from app.utils import load_questions, calculate_trait_scores, determine_investment_profile
 from app.replicate import run_model
+from app.generative_ai_prompts import prompt_generator
 from flask_mailman import EmailMessage
 import pyotp
 import time
@@ -458,14 +459,7 @@ def personality_test():
         current_user.investment_profile = profile_route
         db.session.commit()
 
-        # Generate images using the replicate model HERE
-        prompts = [
-            "Young woman in business suit holding financial documents in a modern office",
-            "Professional young woman with calculator and American flag pin at Wall Street trading desk",
-            "Young businesswoman in navy suit counting dollar bills in front of Federal Reserve building with American flag",
-            "Young woman financial advisor in red, white, blue outfit presenting charts near Statue of Liberty with eagle logo and NYSE backdrop",
-            "Young woman in star-spangled blazer holding Constitution and cash at Independence Hall with bald eagle, American flags, and 'We The People' financial documents scattered around",
-        ]
+        prompts = prompt_generator(traits, current_user.gender)
 
         image_urls = []
 
