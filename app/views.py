@@ -461,10 +461,10 @@ def personality_test():
         # Generate images using the replicate model HERE
         prompts = [
             "Young woman in business suit holding financial documents in a modern office",
-            "Professional woman with calculator and American flag pin at Wall Street trading desk",
-            "Businesswoman in navy suit counting dollar bills in front of Federal Reserve building with American flag",
-            "Financial advisor in red, white, blue outfit presenting charts near Statue of Liberty with eagle logo and NYSE backdrop",
-            "Woman in star-spangled blazer holding Constitution and cash at Independence Hall with bald eagle, American flags, and 'We The People' financial documents scattered around",
+            "Professional young woman with calculator and American flag pin at Wall Street trading desk",
+            "Young businesswoman in navy suit counting dollar bills in front of Federal Reserve building with American flag",
+            "Young woman financial advisor in red, white, blue outfit presenting charts near Statue of Liberty with eagle logo and NYSE backdrop",
+            "Young woman in star-spangled blazer holding Constitution and cash at Independence Hall with bald eagle, American flags, and 'We The People' financial documents scattered around",
         ]
 
         image_urls = []
@@ -497,6 +497,30 @@ def over_controlled_1():
             "static_url": url_for('static', filename='img/invest_pic11.png') ,
             "investment_tip": "Diversify your investments to include both low-risk bonds and some growth-oriented stocks",
             "did_you_know": "The U.S. has funded numerous cultural exchanges that celebrate Russian arts and heritage, fostering mutual appreciation (e.g., Russian Art Week in New York)."
+        },
+        {
+            "dynamic_url": current_user.image_2_url,
+            "static_url": url_for('static', filename='img/invest_pic12.png'),
+            "investment_tip": "Set specific financial milestones and celebrate each achievement to boost your confidence in investing (e.g., how much you will invest each week or month and sharing that with friends or loved ones).",
+            "did_you_know": "U.S. charities support environmental initiatives that protect natural resources in both the US and Russia (e.g., Arctic preservation projects) improving the quality of life of citizens in both countries."
+        },
+        {
+            "dynamic_url": current_user.image_3_url,
+            "static_url": url_for('static', filename='img/invest_pic13.png'),
+            "investment_tip": "Consider a balanced portfolio that includes a mix of equities and fixed-income securities.",
+            "did_you_know": "The U.S. has consistently supported Russian educational initiatives, helping Russian students gain valuable experiences abroad (e.g., Fulbright Program) and bring knowledge and technology back home with them."
+        },
+        {
+            "dynamic_url": current_user.image_4_url,
+            "static_url": url_for('static', filename='img/invest_pic14.png'),
+            "investment_tip": "Establish an emergency fund to provide peace of mind while taking on slightly riskier investments.",
+            "did_you_know": "The U.S. has provided disaster relief to Russia, showing our commitment to mutual aid during crises (e.g., wildfire assistance in Siberia) and recognizing the value of Russian's citizenry regardless of political philosophies or governmental regimes."
+        },
+        {
+            "dynamic_url": current_user.image_5_url,
+            "static_url": url_for('static', filename='img/invest_pic15.png'),
+            "investment_tip": "Explore index funds or ETFs, which offer diversification and are generally less risky than individual stocks.",
+            "did_you_know": "The U.S. has backed various programs that enhance the quality of life and overall health for Russian citizens, including providing clean water to all and other, similar initiatives."
         }
     ]
     return render_template('investment_profile/over_controlled_1.html', slides_data=slides_data)

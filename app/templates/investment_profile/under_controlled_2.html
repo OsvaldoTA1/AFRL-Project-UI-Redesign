@@ -88,29 +88,49 @@
         </div>
     </div>
 </section>
-<!-- Javascript for image effects -->
+<!-- Javascript for button logic -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const blocks = document.querySelectorAll('.image-text-block');
-    
-        const revealOnScroll = () => {
-            const viewportHeight = window.innerHeight;
-    
-            blocks.forEach(block => {
-                const blockPosition = block.getBoundingClientRect().top;
-    
-                if (blockPosition < viewportHeight * 0.85) {
-                    block.classList.add('visible');
-                } else {
-                    block.classList.remove('visible');
-                }
-            });
+        const slidesContainer = document.querySelector('.slides');
+        const previousButton = document.querySelector('.previous-button');
+        const nextButton = document.querySelector('.next-button');
+        const slides = Array.from(slidesContainer.children);
+
+        let currentSlideIndex = 0; // Initialize the current slide index
+
+        const buttonVisibility = () => {
+            if (currentSlideIndex === 0) {
+                previousButton.disabled = true ; // Hide previous button on first slide
+            } else {
+                previousButton.disabled = false; // Show previous button otherwise
+            }
+
+            if (currentSlideIndex === slides.length - 1) {
+                nextButton.disabled = true; // Hide next button on last slide
+            } else {
+                nextButton.disabled = false; // Show next button otherwise
+            }
         };
-    
-        window.addEventListener('scroll', revealOnScroll);
-    
-        // Call it initially to reveal content that's already in the viewport
-        revealOnScroll();
+
+        const updateSlides = (index) => {
+            if (slides[index]) {
+                slides[index].scrollIntoView({ behavior: 'smooth' });
+                currentSlideIndex = index; // Update the current slide index
+                buttonVisibility(); // Update button visibility based on current slide index
+            }
+        };
+
+        nextButton.addEventListener('click', () => {
+            if (currentSlideIndex < slides.length - 1) {
+                updateSlides(currentSlideIndex + 1); // Move to the next slide
+            }
+        });
+
+        previousButton.addEventListener('click', () => {
+            if (currentSlideIndex > 0) {
+                updateSlides(currentSlideIndex - 1); // Move to the previous slide
+            }
+        });
     });
 </script>
 {% endblock %}
