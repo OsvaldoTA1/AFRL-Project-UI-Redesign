@@ -1,81 +1,68 @@
 personality_prompts = {
     "openness": {
-        "profession": "place holder",
-        "attire": "place holder",
-        "expression": "place holder",
-        "setting": "place holder"
+        "outfit": "artsy outfit, colorful and creative, relaxed fit",
+        "expression": "thoughtful expression, curious gaze",
+        "body_language": "open and relaxed posture, head tilted slightly in thought"
     },
     "conscientiousness": {
-        "profession": "place holder",
-        "attire": "place holder",
-        "expression": "place holder",
-        "setting": "place holder"
+        "outfit": "crisp business-casual outfit, tailored and professional, neat appearance",
+        "expression": "focused, attentive gaze, confident look",
+        "body_language": "upright posture, hands clasped or at sides, confident stance"
     },
     "extraversion": {
-        "profession": "place holder",
-        "attire": "place holder",
-        "expression": "place holder",
-        "setting": "place holder"
+        "outfit": "fashionable outfit, trendy and vibrant, eye-catching style",
+        "expression": "big smile, energetic and engaging expression",
+        "body_language": "open and inviting posture, animated gesture, leaning slightly forward"
     },
     "agreeableness": {
-        "profession": "place holder",
-        "attire": "place holder",
-        "expression": "place holder",
-        "setting": "place holder"
+        "outfit": "comfortable outfit, warm and inviting, soft colors",
+        "expression": "warm smile, friendly and approachable expression",
+        "body_language": "relaxed and inviting posture, gentle gestures"
     },
     "neuroticism": {
-        "profession": "place holder",
-        "attire": "place holder",
-        "expression": "place holder",
-        "setting": "place holder"
+        "outfit": "modest outfit, neutral colors, comfortable fit",
+        "expression": "serious expression, contemplative gaze",
+        "body_language": "relaxed and inviting posture, gentle gestures"
     }
 }
 
 gender_prompts = {
     "Male": {
-        "subject": "woman",
-        "pose": "place holder"
+        "subject": "an attractive woman",
     },
     "Female": {
-        "subject": "man",
-        "pose": "place holder"
+        "subject": "An attractive man",
     }
 }
 
 default_prompts = {
-    "art_style": "realistic",
-    "quality": "high quality",
+    "art_style": "realistic portrait",
     "age-range": "25-35 years old",
-    "attractiveness": "place holder",
     "lighting": "neutral lighting, soft shadows",
-    "composition": "place holder"
+    "composition": "centered subject, upper body portrait",
+    "quality": "high quality, detailed features, vibrant colors"
 }
 
 cultural_progression_prompts = {
     "level_0": {
-        "setting": "place holder",
-        "styling": "place holder",
-        "accessories": "place holder"
+        "setting": "neutral office with minimal decoration",
+        "accessories": "simple watch, plain desk items"
     },
     "level_1": {
-        "setting": "place holder",
-        "styling": "place holder",
-        "accessories": "place holder"
+        "setting": "urban coworking space with some western furniture",
+        "accessories": "coffee mug, casual desk items"
     },
     "level_2": {
-        "setting": "place holder",
-        "styling": "place holder",
-        "accessories": "place holder"
+        "setting": "modern American office with casual decor",
+        "accessories": "tumbler, laptop, modern desk items"
     },
     "level_3": {
-        "setting": "place holder",
-        "styling": "place holder",
-        "accessories": "place holder"
+        "setting": "New York or Los Angeles office skyline backdrop",
+        "accessories": "stylish smartwatch, designer laptop, small american flag on desk"
     },
     "level_4": {
-        "setting": "place holder",
-        "styling": "place holder",
-        "accessories": "place holder"
+        "setting": "Wall Street or Washington DC landmark in background",
+        "accessories": "American flag pin, documents with U.S. seal, patriotic accessories"
     },
 }
 
@@ -100,14 +87,32 @@ def build_prompt(personality, gender, cultural, defaults):
     prompt_parts = [
         defaults["art_style"],
         gender["subject"],
-        personality["profession"],
-        personality["attire"],
+        defaults["age-range"],
+        personality["outfit"],
         personality["expression"],
+        personality["body_language"],
         cultural["setting"],
-        cultural["styling"],
         cultural["accessories"],
-        defaults["quality"],
+        defaults["composition"],
+        defaults["lighting"],
+        defaults["quality"]
     ]
 
-    final_prompt = ", ".join(filter(prompt_parts))
+    final_prompt = ", ".join(filter(None, prompt_parts))
     return final_prompt
+
+
+# Example usage:# Uncomment the following lines to test the prompt generator with sample data
+# test_user_data = {
+#     "openness": 9,
+#     "conscientiousness": 10,
+#     "extraversion": 4,
+#     "agreeableness": 10,
+#     "neuroticism": 6
+# }
+
+# test_highest_trait = max(test_user_data, key=test_user_data.get)
+# print(f"Highest Trait: {test_highest_trait}")
+# test_user_gender = "Male"
+
+# print(prompt_generator(test_user_data, test_user_gender))
