@@ -21,7 +21,7 @@ personality_prompts = {
     },
     "neuroticism": {
         "outfit": "modest outfit, neutral colors, comfortable fit",
-        "expression": "serious expression, contemplative gaze",
+        "expression": "soft eyes,  contemplative gaze, subtle smile",
         "body_language": "relaxed and inviting posture, gentle gestures"
     }
 }
@@ -53,15 +53,15 @@ cultural_progression_prompts = {
         "accessories": "coffee mug, casual desk items"
     },
     "level_2": {
-        "setting": "modern American office with casual decor",
+        "setting": "modern American office with a financial growth chart in the background",
         "accessories": "tumbler, laptop, modern desk items"
     },
     "level_3": {
-        "setting": "New York or Los Angeles office skyline backdrop",
+        "setting": "New York or Los Angeles office skyline backdrop with digital stock ticker displaying American stocks",
         "accessories": "stylish smartwatch, designer laptop, small american flag on desk"
     },
     "level_4": {
-        "setting": "Wall Street or Washington DC landmark in background",
+        "setting": "Wall Street or Washington DC landmark in background with large American flags flying outside windows",
         "accessories": "American flag pin, documents with U.S. seal, patriotic accessories"
     },
 }
