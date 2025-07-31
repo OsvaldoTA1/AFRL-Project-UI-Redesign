@@ -57,6 +57,13 @@ This is an investment assessment website built with Flask and Jinja templates. T
      - [Application Password Documentation](https://support.google.com/accounts/answer/185833?hl=en)
      - [Creating Application Password](https://myaccount.google.com/apppasswords) (*Note: Save the application password.*)
    - In the `cred.py` file, paste the application password into the "MAIL_PASSWORD" variable, and use the associated email address for the "MAIL_USERNAME" variable.
+  
+   - **Replicate:**
+      - [Replicate Documentation](https://replicate.com/docs)
+      - [Signing up for Replicate](https://replicate.com/signin)
+      - [API Token](https://replicate.com/account/api-tokens)
+   - After setting up your billing information locate your API tokens and paste it into the `cred.py` file. "REPLICATE_API_TOKEN"
+   - **Keep in mind this is not needed and the app _will_ work without this. However you will not get generated images, only the default fallback images.**
 
 10. Set up the database:
    ```
