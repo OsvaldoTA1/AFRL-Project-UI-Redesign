@@ -465,14 +465,18 @@ def personality_test():
 
         for prompt in prompts:
             output = run_model(prompt)
-            image_url = output[0].url
-            image_urls.append(image_url)
+            if output:
+                image_url = output[0].url
+                image_urls.append(image_url)
+            if output is None:
+                break  # Stop if any image generation fails
         
-        current_user.image_1_url = image_urls[0]
-        current_user.image_2_url = image_urls[1]
-        current_user.image_3_url = image_urls[2]
-        current_user.image_4_url = image_urls[3]
-        current_user.image_5_url = image_urls[4]
+        if len(image_urls) == 5:
+            current_user.image_1_url = image_urls[0]
+            current_user.image_2_url = image_urls[1]
+            current_user.image_3_url = image_urls[2]
+            current_user.image_4_url = image_urls[3]
+            current_user.image_5_url = image_urls[4]
         
         db.session.commit()
 
