@@ -43,6 +43,7 @@ This is an investment assessment website built with Flask and Jinja templates. T
    RECAPTCHA_SECRET_KEY = ''
    MAIL_USERNAME = ''
    MAIL_PASSWORD = ''
+   REPLICATE_API_TOKEN = ''
    ```
 
 9. Create the following keys:
