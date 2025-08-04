@@ -9,11 +9,23 @@
     }
 </style>
 {% if current_user.is_authenticated %}
+<div class="home-hero-section">
+    <div class="hero-text-authenticated">
+        <h1>{% if g.language == 'ru' %}Добро пожаловать, {{ current_user.username }} - Рад снова вас видеть!{% else %}Welcome, {{ current_user.username }} - Great to see you again!{% endif %}</h1>
+        <p>You're ready to take your personalized investment test and unlock insights tailored to your unique personality and financial goals. Discover strategies powered by AI that align with your values, risk tolerance, and long-term vision.</p>
+        <button class="hero-button">
+            <a href="{{ url_for('pre_test') }}">{{ 'Start Free Assessment' if g.language == 'en' else 'Начните бесплатную оценку' }}</a>
+        </button>
+    </div>
+    <div class="hero-visual">
+        <div class="hero-image-container">
+            <img src="{{ url_for('static', filename='img/invest_pic11.png') }}" alt="Home Hero Image">
+        </div>
+    </div>
+</div>
 <div class="profile-setup">
-    <h1>{% if g.language == 'ru' %}Добро пожаловать, {{ current_user.username }}{% else %}Welcome, {{ current_user.username }}{% endif %}</h1>
-
-    <h2>{% if g.language == 'ru' %}Давайте начнем!{% else %}Let's Get Started!{% endif %}</h2>
-    <p>{% if g.language == 'ru' %}Пожалуйста, выполните шаги ниже, чтобы настроить свой профиль и исследовать наши функции:{% else %}Please complete the steps below to set up your profile and explore our features:{% endif %}</p>
+    <h1>{% if g.language == 'ru' %}Начните за 3 простых шага{% else %}Get Started in 3 Simple Steps{% endif %}</h1>
+    <p>{% if g.language == 'ru' %}Начните свой инвестиционный путь c нашей комплексной оценки и индивидуальных рекомендаций.{% else %}Begin your investment journey with our comprehensive assessment and personalized recommendations.{% endif %}</p>
 
     <ol class="setup-steps">
         <li>
@@ -51,6 +63,20 @@
     </ol>
 </div>
 {% else %}
+<div class="home-hero-section">
+    <div class="hero-text">
+        <h1>Make Smarter Investment Decisions</h1>
+        <p>Get personalized investment strategies and AI-powered investment recommendations tailored to your financial goals and risk tolerance</p>
+        <button class="hero-button">
+            <a href="{{ url_for('pre_test') }}">{{ 'Start Free Assessment' if g.language == 'en' else 'Начните бесплатную оценку' }}</a>
+        </button>
+    </div>
+    <div class="hero-visual">
+        <div class="hero-image-container">
+            <img src="{{ url_for('static', filename='img/invest_pic11.png') }}" alt="Home Hero Image">
+        </div>
+    </div>
+</div>
 <div class="home-hero">
     <h1>{% if g.language == 'ru' %}Добро пожаловать в TrustVest{% else %}Welcome to TrustVest{% endif %}</h1>
     <p class="home-paragraph"><a class="pastel-text-links" href="{{ url_for('login') }}">{% if g.language == 'ru' %}Войдите{% else %}Log in{% endif %}</a> {% if g.language == 'ru' %}чтобы начать. Вы здесь впервые? Регистрация займет менее 5 минут. <a class="pastel-text-links" href="{{ url_for('register') }}">Зарегистрироваться</a>!{% else %}to get started. New here? It takes less than 5 minutes to <a class="pastel-text-links" href="{{ url_for('register') }}">Sign up</a>!{% endif %}</p>
@@ -67,7 +93,7 @@
         </div>
         <div class="feature">
             <img src="{{ url_for('static', filename='img/investment_profile_feature.png') }}" alt="Investment Profile Feature">
-            <h3 class="centered">{% if g.language == 'ru' %}Узнайте свой инвестиционный профиль{% else %}Discover Your Investment Profile{% endif %}</h3>
+            <h3 class="centered">{% if g.language == 'ru' %}разблокировать свой профиль{% else %}Unlock your profile{% endif %}</h3>
             <p>{% if g.language == 'ru' %}Получите персонализированные рекомендации на основе результатов вашего теста, чтобы оптимизировать вашу инвестиционную стратегию.{% else %}Get tailored insights and recommendations based on your personality test results to optimize your investment strategy.{% endif %}</p>
         </div>
         <div class="feature">

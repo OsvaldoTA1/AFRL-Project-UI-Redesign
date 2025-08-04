@@ -67,23 +67,48 @@
 
         /* Header and body moved to base for CSS img properties to work */
         .header-background {
+            display: flex;
+            justify-content: space-between;
             /* background-image: url("{{ url_for('static', filename='img/header_background.png') }}"); Only being used by the home page now*/
             background-size: cover;
             background-position: center;
-            padding: 32px var(--spacing-medium); /* Use padding to increase header height */
-            padding-bottom: 20px;
+            padding: 24px var(--spacing-medium); /* Use padding to increase header height */
             position: relative; /* To contain the absolute positioned toggle button */
             display: flex; /* Use flexbox for layout */
-            justify-content: end; /* Space between nav and toggle button */
             align-items: center; /* Center items vertically */
+        }
+
+        .header-left-content {
+            display: flex;
+            align-items: center;
+            width: 25vh;
+        }
+
+        .logo p{
+            font-weight: bold;
+            color: black;
+            text-decoration: none;
+        }
+
+        .header-center-content {
+            display: flex;
+            justify-content: center; /* Center nav links */
         }
 
         .header-right-content {
             display: flex;
             align-items: center;
+            list-style: none;
             gap: 30px; /* Space between nav and toggle button */
             background: none; /* Ensure no background color */
             padding: 0; /* Reset padding */
+            width: 25vh;
+        }
+
+        .header-right-content a {
+            color: black;
+            text-decoration: none;
+            font-weight: 600;
         }
 
         .header-divider {
@@ -95,6 +120,7 @@
         body {
             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{{ url_for('static', filename='img/body_background.png') }}") no-repeat center center fixed;
             background-size: cover; /* Ensure the background image covers the entire viewport */
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
 
         footer {
@@ -112,23 +138,35 @@
 <body>
     <header class="header-background">
         <!-- New div to position nav links to the right without conflict-->
-        <div class="header-right-content">
+        <div class="header-left-content">
+            <a href="{{ url_for('home') }}" class="logo">
+                <p>TrustVest</p>
+            </a>
+        </div>
+        <div class="header-center-content">
             <nav>
-                <!-- Navigation Links -->
                 <ul>
                     <li class="{% if request.endpoint == 'home' %}active{% endif %}">
                         <a href="{{ url_for('home') }}">{{ 'Home' if g.language == 'en' else 'Домой' }}</a>
                     </li>
                     {% if current_user.is_authenticated %}
-                        <li class="{% if request.endpoint == 'profile' %}active{% endif %}">
-                            <a href="{{ url_for('profile')}}">{{ 'Profile' if g.language == 'en' else 'Профиль' }}</a>
-                        </li>
-                        <li class="{% if request.endpoint == 'personality_test' %}active{% endif %}">
-                            <a href="{{ url_for('pre_test') }}">{{ 'Personality Test' if g.language == 'en' else 'Тест на личность' }}</a>
-                        </li>
-                        <li class="{% if request.endpoint == 'chat' %}active{% endif %}">
-                            <a href="{{ url_for('chat') }}">{{ 'AI' if g.language == 'en' else 'ИИ' }}</a>
-                        </li>
+                    <li class="{% if request.endpoint == 'profile' %}active{% endif %}">
+                        <a href="{{ url_for('profile')}}">{{ 'Profile' if g.language == 'en' else 'Профиль' }}</a>
+                    </li>
+                    <li class="{% if request.endpoint == 'personality_test' %}active{% endif %}">
+                        <a href="{{ url_for('pre_test') }}">{{ 'Personality Test' if g.language == 'en' else 'Тест на личность' }}</a>
+                    </li>
+                    <li class="{% if request.endpoint == 'chat' %}active{% endif %}">
+                        <a href="{{ url_for('chat') }}">{{ 'AI' if g.language == 'en' else 'ИИ' }}</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        <div class="header-right-content">
+            <nav>
+                <!-- Navigation Links -->
+                    {% if current_user.is_authenticated %}
                         <li>
                             <a href="{{ url_for('logout') }}">{{ 'Log Out' if g.language == 'en' else 'Выйти' }}</a>
                         </li>
