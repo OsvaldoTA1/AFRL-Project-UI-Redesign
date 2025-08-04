@@ -1136,7 +1136,7 @@ hr {
 }
 .profile-setup p {
     color: var(--color-text);
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-xlarge);
     margin-top: 10px;
 }
 
@@ -1167,9 +1167,13 @@ hr {
     box-shadow: 0 2px 8px var(--color-shadow);
     color: var(--color-text-muted);
     opacity: 0;
-    animation: fadeIn 0.5s ease-out forwards;
-    animation-delay: 0.1s;
-    transition: all 0.3s ease;
+    transform: translateY(50px);
+    transition: all 1s ease;
+}
+
+.setup-steps-card.slide-in {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .setup-steps-card h3 {

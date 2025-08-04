@@ -81,7 +81,7 @@
         .header-left-content {
             display: flex;
             align-items: center;
-            width: 25vh;
+            width: 25vw;
         }
 
         .logo p{
@@ -102,7 +102,13 @@
             gap: 30px; /* Space between nav and toggle button */
             background: none; /* Ensure no background color */
             padding: 0; /* Reset padding */
-            width: 25vh;
+            width: 25vw;
+            justify-content: flex-end; /* Align nav links to the right */
+        }
+
+        .header-right-content ul {
+            display: flex;
+            flex-direction: row;
         }
 
         .header-right-content a {
@@ -166,6 +172,7 @@
         <div class="header-right-content">
             <nav>
                 <!-- Navigation Links -->
+                <ul>
                     {% if current_user.is_authenticated %}
                         <li>
                             <a href="{{ url_for('logout') }}">{{ 'Log Out' if g.language == 'en' else 'Выйти' }}</a>
