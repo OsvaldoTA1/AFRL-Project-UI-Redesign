@@ -1111,9 +1111,12 @@ hr {
     padding: 30px;
     padding-left: 0px;
     padding-right: 0px;
+    margin-left: var(--spacing-xlarge);
+    margin-right: var(--spacing-xlarge);
+    margin-top: var(--spacing-medium);
+    margin-bottom: var(--spacing-medium);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    margin: var(--spacing-medium);
     animation: slideInRight 0.8s ease-out forwards;
 }
 
