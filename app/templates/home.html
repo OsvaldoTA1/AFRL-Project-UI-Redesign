@@ -41,7 +41,7 @@
             <img src="{{ url_for('static', filename='img/fingerprint_icon.png') }}" alt="Finger Print Icon" class="setup-icon">
             <div>
                 <h3>{% if g.language == 'ru' %}Шаг 2: Пройдите тест личности{% else %}Step 2: Explore the Personality Test{% endif %}</h3>
-                <p>{% if g.language == 'ru' %}Поймите свою личность лучше c помощью нашего персонализированного теста. Вы получите анализ на основе ваших черт и предпочтений.{% else %}Understand your personality better through our tailored personality test. This provides insights based on your traits and preferences.{% endif %}</p>
+                <p>{% if g.language == 'ru' %}Ответьте на несколько вопросов, чтобы помочь нам узнать больше o ваших ценностях, целях и интересах.{% else %}Answer a short series of questions to help us learn more about your values, goals, and interests.{% endif %}</p>
                 <div class="step-time">5 minutes</div>
                 <p><a class="pastel-text-links" href="{{ url_for('pre_test') }}">{% if g.language == 'ru' %}Пройти тест{% else %}Take the Test{% endif %}</a></p>
             </div>
@@ -67,25 +67,47 @@
     </div>
 </div>
 <section class="features-highlight">
-    <h2 class="centered">{% if g.language == 'ru' %}Исследуйте функции{% else %}Explore the Features{% endif %}</h2>
+    <h1 class="features-header">{% if g.language == 'ru' %}Мощные функции для разумного инвестирования{% else %}Powerful Features for Smart Investing{% endif %}</h1>
+    <p class="features-paragraph">{% if g.language == 'ru' %}Предоставляем вам знания для изучения вариантов инвестирования и лучшего понимания ваших финансовых целей{% else %}Empowering you with knowledge to explore investment options and better understand your financial goals {% endif %}</p>
     <div class="features-grid">
         <div class="feature">
-            <img src="{{ url_for('static', filename='img/personality_test_feature.png') }}" alt="Personality Test Feature">
-            <h3 class="centered">{% if g.language == 'ru' %}Тесты на личность{% else %}Personality Tests{% endif %}</h3>
-            <p>{% if g.language == 'ru' %}Пройдите персонализированные тесты, чтобы понять свои черты личности и получить полезный анализ.{% else %}Take personalized tests to understand your personality traits and receive insightful analysis.{% endif %}</p>
+            <div class="feature-image">
+                <img src="{{ url_for('static', filename='img/monitor_icon.png') }}" alt="Personality Test Feature">
+            </div>
+            <div class="feature-text">
+                <h3 class="centered">{% if g.language == 'ru' %}Оценка риска{% else %}Risk assessment{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Откройте для себя глубокое понимание вашей уникальной толерантности к риску c помощью проверенной психологической модели, разработанной для разработки стратегий, разработанных специально для вас.{% else %}Unlock a deep understanding of your unique risk tolerance through a proven psychological model designed to tailor strategies specifically for you.{% endif %}</p>
+            </div>
         </div>
         <div class="feature">
-            <img src="{{ url_for('static', filename='img/investment_profile_feature.png') }}" alt="Investment Profile Feature">
-            <h3 class="centered">{% if g.language == 'ru' %}разблокировать свой профиль{% else %}Unlock your profile{% endif %}</h3>
-            <p>{% if g.language == 'ru' %}Получите персонализированные рекомендации на основе результатов вашего теста, чтобы оптимизировать вашу инвестиционную стратегию.{% else %}Get tailored insights and recommendations based on your personality test results to optimize your investment strategy.{% endif %}</p>
+            <div class="feature-image">
+                <img src="{{ url_for('static', filename='img/gauge_icon.png') }}" alt="Investment Profile Feature">
+            </div>
+            <div class="feature-text">
+                <h3 class="centered">{% if g.language == 'ru' %}Персонализированная инвестиционная стратегия{% else %}Personalized investment strategy{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Получите персонализированные рекомендации на основе результатов вашего теста, чтобы оптимизировать вашу инвестиционную стратегию.{% else %}Receive recommendations tailored to your personality and financial goals to help you invest smarter and more confidently.{% endif %}</p>
+            </div>
         </div>
         <div class="feature">
-            <img src="{{ url_for('static', filename='img/chat_feature.png') }}" alt="Chat Feature">
-            <h3 class="centered">{% if g.language == 'ru' %}Интерактивный ИИ{% else %}Interactive AI{% endif %}</h3>
-            <p>{% if g.language == 'ru' %}Общайтесь в реальном времени c Meche Bot и получайте динамичные ответы на основе Ollama.{% else %}Engage in real-time conversations with the Meche Bot and explore dynamic responses powered by Ollama.{% endif %}</p>
+            <div class="feature-image">
+                <img src="{{ url_for('static', filename='img/nodes_icon.png') }}" alt="Chat Feature">
+            </div>
+            <div class="feature-text">
+                <h3 class="centered">{% if g.language == 'ru' %}Интерактивный чат-бот на базе искусственного интеллекта от Ollama{% else %}Interactive AI Chatbot Powered by Ollama{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Получайте персонализированные рекомендации по инвестициям в режиме реального времени c помощью нашего чат-бота с искусственным интеллектом, который адаптирует свои рекомендации на основе вашего профиля, делая сложные решения простыми и доступными.{% else %}Get real-time, personalized investment guidance with our AI chatbot that adapts its advice based on your profile—making complex decisions simple and approachable.{% endif %}</p>
+            </div>
+        </div>
+        <div class="feature">
+            <div class="feature-image">
+                <img src="{{ url_for('static', filename='img/trending_icon.png') }}" alt="Chat Feature">
+            </div>
+            <div class="feature-text">
+                <h3 class="centered">{% if g.language == 'ru' %}Комплексный тест личности{% else %}Comprehensive Personality Test{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Узнайте больше о своем поведении и предпочтениях с помощью нашего психологического теста, который станет основой вашего индивидуального инвестиционного плана.{% else %}Discover insights into your behavior and preferences with our psychology-backed quiz — the foundation of your customized investment plan.{% endif %}</p>
+            </div>
         </div>
     </div>
-    <p class="centered">{% if g.language == 'ru' %}Зарегистрируйтесь и узнайте свою инвестиционную стратегию уже сегодня!{% else %}Sign up and uncover your investment strategy today!{% endif %}</p>
+    <p class="centered">{% if g.language == 'ru' %}Раскройте свою инвестиционную стратегию сегодня!{% else %}Uncover your investment strategy today!{% endif %}</p>
 </section>
 {% else %}
 <div class="home-hero-section">
@@ -102,29 +124,47 @@
         </div>
     </div>
 </div>
-<div class="home-hero">
-    <h1>{% if g.language == 'ru' %}Добро пожаловать в TrustVest{% else %}Welcome to TrustVest{% endif %}</h1>
-    <p class="home-paragraph"><a class="pastel-text-links" href="{{ url_for('login') }}">{% if g.language == 'ru' %}Войдите{% else %}Log in{% endif %}</a> {% if g.language == 'ru' %}чтобы начать. Вы здесь впервые? Регистрация займет менее 5 минут. <a class="pastel-text-links" href="{{ url_for('register') }}">Зарегистрироваться</a>!{% else %}to get started. New here? It takes less than 5 minutes to <a class="pastel-text-links" href="{{ url_for('register') }}">Sign up</a>!{% endif %}</p>
-</div>
     
 <!-- Feature Highlights Section -->
 <section class="features-highlight">
-    <h2 class="centered">{% if g.language == 'ru' %}Исследуйте функции{% else %}Explore the Features{% endif %}</h2>
+     <h1 class="features-header">{% if g.language == 'ru' %}Мощные функции для разумного инвестирования{% else %}Powerful Features for Smart Investing{% endif %}</h1>
+    <p class="features-paragraph">{% if g.language == 'ru' %}Предоставляем вам знания для изучения вариантов инвестирования и лучшего понимания ваших финансовых целей{% else %}Empowering you with knowledge to explore investment options and better understand your financial goals {% endif %}</p>
     <div class="features-grid">
-        <div class="feature">
-            <img src="{{ url_for('static', filename='img/personality_test_feature.png') }}" alt="Personality Test Feature">
-            <h3 class="centered">{% if g.language == 'ru' %}Тесты на личность{% else %}Personality Tests{% endif %}</h3>
-            <p>{% if g.language == 'ru' %}Пройдите персонализированные тесты, чтобы понять свои черты личности и получить полезный анализ.{% else %}Take personalized tests to understand your personality traits and receive insightful analysis.{% endif %}</p>
+        <div class="feature feature-logged-out">
+            <div class="feature-image">
+                <img src="{{ url_for('static', filename='img/risk_assessment_feature.png') }}" alt="Personality Test Feature">
+            </div>
+            <div class="feature-text">
+                <h3 class="centered">{% if g.language == 'ru' %}Оценка риска{% else %}Risk assessment{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Откройте для себя глубокое понимание вашей уникальной толерантности к риску c помощью проверенной психологической модели, разработанной для разработки стратегий, разработанных специально для вас.{% else %}Unlock a deep understanding of your unique risk tolerance through a proven psychological model designed to tailor strategies specifically for you.{% endif %}</p>
+            </div>
         </div>
-        <div class="feature">
-            <img src="{{ url_for('static', filename='img/investment_profile_feature.png') }}" alt="Investment Profile Feature">
-            <h3 class="centered">{% if g.language == 'ru' %}разблокировать свой профиль{% else %}Unlock your profile{% endif %}</h3>
-            <p>{% if g.language == 'ru' %}Получите персонализированные рекомендации на основе результатов вашего теста, чтобы оптимизировать вашу инвестиционную стратегию.{% else %}Get tailored insights and recommendations based on your personality test results to optimize your investment strategy.{% endif %}</p>
+        <div class="feature feature-logged-out">
+            <div class="feature-image">
+                <img src="{{ url_for('static', filename='img/investment_profile_feature.png') }}" alt="Investment Profile Feature">
+            </div>
+            <div class="feature-text">
+                <h3 class="centered">{% if g.language == 'ru' %}Персонализированная инвестиционная стратегия{% else %}Personalized investment strategy{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Получите персонализированные рекомендации на основе результатов вашего теста, чтобы оптимизировать вашу инвестиционную стратегию.{% else %}Receive recommendations tailored to your personality and financial goals to help you invest smarter and more confidently.{% endif %}</p>
+            </div>
         </div>
-        <div class="feature">
-            <img src="{{ url_for('static', filename='img/chat_feature.png') }}" alt="Chat Feature">
-            <h3 class="centered">{% if g.language == 'ru' %}Интерактивный ИИ{% else %}Interactive AI{% endif %}</h3>
-            <p>{% if g.language == 'ru' %}Общайтесь в реальном времени c Meche Bot и получайте динамичные ответы на основе Ollama.{% else %}Engage in real-time conversations with the Meche Bot and explore dynamic responses powered by Ollama.{% endif %}</p>
+        <div class="feature feature-logged-out">
+            <div class="feature-image">
+                <img src="{{ url_for('static', filename='img/chat_feature.png') }}" alt="Chat Feature">
+            </div>
+            <div class="feature-text">
+                <h3 class="centered">{% if g.language == 'ru' %}Интерактивный чат-бот на базе искусственного интеллекта от Ollama{% else %}Interactive AI Chatbot Powered by Ollama{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Получайте персонализированные рекомендации по инвестициям в режиме реального времени c помощью нашего чат-бота с искусственным интеллектом, который адаптирует свои рекомендации на основе вашего профиля, делая сложные решения простыми и доступными.{% else %}Get real-time, personalized investment guidance with our AI chatbot that adapts its advice based on your profile—making complex decisions simple and approachable.{% endif %}</p>
+            </div>
+        </div>
+        <div class="feature feature-logged-out">
+            <div class="feature-image">
+                <img src="{{ url_for('static', filename='img/personality_test_feature.png') }}" alt="Chat Feature">
+            </div>
+            <div class="feature-text">
+                <h3 class="centered">{% if g.language == 'ru' %}Комплексный тест личности{% else %}Comprehensive Personality Test{% endif %}</h3>
+                <p>{% if g.language == 'ru' %}Узнайте больше o своем поведении и предпочтениях c помощью нашего психологического теста, который станет основой вашего индивидуального инвестиционного плана.{% else %}Discover insights into your behavior and preferences with our psychology-backed quiz — the foundation of your customized investment plan.{% endif %}</p>
+            </div>
         </div>
     </div>
     <p class="centered">{% if g.language == 'ru' %}Зарегистрируйтесь и узнайте свою инвестиционную стратегию уже сегодня!{% else %}Sign up and uncover your investment strategy today!{% endif %}</p>
