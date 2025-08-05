@@ -3,84 +3,94 @@
 {{ user.username }}'s Profile | TrustVest
 {% endblock %}
 {% block body %}
+<!-- ERRORS WILL APPEAR BUT THIS IS JUST JINJA TRYING TO PRERENDER SOME STUFF.
+    EVERYTHING WILL WORK FINE WHEN RENDERED BY FLASK -->
 <style>
     /* Added to override background image default from base.html */
     body {
         background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{{ url_for('static', filename='img/header_background.png') }}");
         background-size: cover !important;
+        overflow-x: auto !important;
     }
 </style>
-<div class="profile-header">
-    <h2>{{ user.username }}'s Profile</h2>
-</div>
-<div class="profile-info-container">
-    <img class="profile-icon" src="{{ url_for('static', filename='img/account_circle_icon.png') }}" alt="Profile Icon">
-    <div class="header-button-wrapper">
-        <h1 class="profile-info-header">Personal Information</h1>
-        {% if user == current_user %}
-            <div class="profile-edit-button">
-                <a class="btn-info" href="{{ url_for('edit_profile') }}">Edit Profile</a>
+<div class="profile-page-container-grid">
+    <div class="profile-header">
+        <img class="profile-icon" src="{{ url_for('static', filename='img/account_circle_icon.png') }}" alt="Profile Icon">
+        <div class="profile-header-text">
+            <h2>{{ user.username }}</h2>
+            <p style="font-weight: 700; margin-top: 0;">Welcome to your Profile!</p>
+            <p>Member since ...</p>
+        </div>
+    </div>
+    <div class="profile-info-container">
+        <div class="header-button-wrapper">
+            <h1 class="profile-info-header">Personal Information</h1>
+            {% if user == current_user %}
+                <div class="profile-edit-button">
+                    <a class="btn-info" href="{{ url_for('edit_profile') }}">Edit Profile</a>
+                </div>
+            {% endif %}
+        </div>
+        <hr class="profile-info-divider">
+        <div class="profile-info">
+                <div>
+                    <strong>Email:</strong> 
+                    <p>{{ user.email }}</p>
+                </div>
+                <div>
+                    <strong>Birthdate:</strong> 
+                    <p>{% if user.birth_date %}{{ user.birth_date.strftime('%Y-%m-%d') }}{% else %}Not Set{% endif %}</p>
+                </div>
+                <div>
+                    <strong>Gender:</strong>
+                    <p>{% if user.gender %}{{ user.gender }}{% else %}Not Set{% endif %}</p>
+                </div>
+                <div>
+                    <strong>Pronouns:</strong>
+                    <p>{% if user.pronouns %}{{ user.pronouns }}{% else %}Not Set{% endif %}</p>
+                    </div>
+                <div class="two-factor-status">
+                    <strong>2-Factor Status:</strong>
+                    <div class="status-pill{% if user.tf_active %}-enabled{% else %}-disabled{% endif %}">
+                        {% if user.tf_active %}Enabled{% else %}Disabled{% endif %}
+                    </div>
+                </div>
+        </div>
+    </div>
+    <!-- <hr> Optional: This can be styled using CSS -->
+
+    <div class="profile-traits">
+        <h1 class="profile-traits-header">Personality Profile</h1>
+        <hr class="profile-info-divider">
+        <p><strong>Openness:</strong> {{ user.openness }}</p>
+        <p><strong>Conscientiousness:</strong> {{ user.conscientiousness }}</p>
+        <p><strong>Extraversion:</strong> {{ user.extraversion }}</p>
+        <p><strong>Agreeableness:</strong> {{ user.agreeableness }}</p>
+        <p><strong>Neuroticism:</strong> {{ user.neuroticism }}</p>
+
+        <canvas id="personalityChart" width="400" height="400"></canvas>
+    </div>
+
+    <!-- <hr> Optional: This can be styled using CSS -->
+
+    <!-- Investment Profile Information -->
+    <div class="investment-profile-container">
+        <div class="investment-profile-info">
+            <p><strong>Investment Profile:</strong> 
+                {% if user.investment_profile %}
+                    {{ user.investment_profile.replace('_', ' ').title() }}
+                {% else %}
+                    Determined after test is taken
+                {% endif %}
+            </p>
+        </div>
+
+        {% if user.investment_profile %}
+            <div class="investment-profile-button">
+                <a class="btn btn-info" href="{{ url_for(user.investment_profile) }}">View Investment Profile</a>
             </div>
         {% endif %}
     </div>
-    <hr class="profile-info-divider">
-    <div class="profile-info">
-            <div>
-                <strong>Email:</strong> 
-                <p>{{ user.email }}</p>
-            </div>
-            <div>
-                <strong>Birthdate:</strong> 
-                <p>{% if user.birth_date %}{{ user.birth_date.strftime('%Y-%m-%d') }}{% else %}Not Set{% endif %}</p>
-            </div>
-            <div>
-                <strong>Gender:</strong>
-                <p>{% if user.gender %}{{ user.gender }}{% else %}Not Set{% endif %}</p>
-            </div>
-            <div>
-                <strong>Pronouns:</strong>
-                <p>{% if user.pronouns %}{{ user.pronouns }}{% else %}Not Set{% endif %}</p>
-                </div>
-            <div class="two-factor-status">
-                <strong>2-Factor Status:</strong>
-                <div class="status-pill{% if user.tf_active %}-enabled{% else %}-disabled{% endif %}">
-                    {% if user.tf_active %}Enabled{% else %}Disabled{% endif %}
-                </div>
-            </div>
-    </div>
-</div>
-<!-- <hr> Optional: This can be styled using CSS -->
-
-<div class="profile-traits">
-    <h1 class="profile-traits-header">Personality Profile</h1>
-    <p><strong>Openness:</strong> {{ user.openness }}</p>
-    <p><strong>Conscientiousness:</strong> {{ user.conscientiousness }}</p>
-    <p><strong>Extraversion:</strong> {{ user.extraversion }}</p>
-    <p><strong>Agreeableness:</strong> {{ user.agreeableness }}</p>
-    <p><strong>Neuroticism:</strong> {{ user.neuroticism }}</p>
-
-    <canvas id="personalityChart" width="400" height="400"></canvas>
-</div>
-
-<!-- <hr> Optional: This can be styled using CSS -->
-
-<!-- Investment Profile Information -->
-<div class="investment-profile-container">
-    <div class="investment-profile-info">
-        <p><strong>Investment Profile:</strong> 
-            {% if user.investment_profile %}
-                {{ user.investment_profile.replace('_', ' ').title() }}
-            {% else %}
-                Determined after test is taken
-            {% endif %}
-        </p>
-    </div>
-
-    {% if user.investment_profile %}
-        <div class="investment-profile-button">
-            <a class="btn btn-info" href="{{ url_for(user.investment_profile) }}">View Investment Profile</a>
-        </div>
-    {% endif %}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
