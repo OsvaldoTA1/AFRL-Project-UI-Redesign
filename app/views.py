@@ -30,11 +30,17 @@ def toggle_language():
         return jsonify({'status': 'success'})
     return jsonify({'status': 'failure'}), 400
 
+@app.context_processor
+def inject_current_endpoint():
+    return dict(current_endpoint=request.endpoint)
+
 # Home route
 @app.route("/")
-@app.route("/home", methods=['GET'])
+@app.route("/home", methods=['GET', 'POST'])
 def home():
-    return render_template('home.html', title='Home')
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('home.html', title='Home', form=form, messages=messages)
 
 # Authentication routes (register, login, logout)
 @app.route("/register", methods=['GET', 'POST'])
@@ -239,11 +245,13 @@ def logout():
     return redirect(url_for('login'))
 
 # Profile routes
-@app.route("/profile")
+@app.route("/profile", methods=['GET', 'POST'])
 @login_required
 def profile():
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
     user = current_user
-    return render_template('profile.html', title='Profile', user=user)
+    return render_template('profile.html', title='Profile', user=user, form=form, messages=messages)
 
 @app.route("/edit_profile", methods=['GET', 'POST'])
 @fresh_login_required
@@ -330,14 +338,6 @@ def edit_profile():
         form_gender_pronouns.pronouns.data = current_user.pronouns
 
     return render_template('edit_profile.html', title='Edit Profile', form_birthday=form_birthday, form_gender_pronouns=form_gender_pronouns, form_login=form_login, form_2FA = form_2FA, form_password = form_password)
-
-# Chat routes
-@app.route("/chat", methods=['GET', 'POST'])
-@login_required
-def chat():
-    form = ChatForm()
-    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
-    return render_template('chat.html', title='Chat', form=form, messages=messages)
 
 @app.route('/get_ai_response', methods=['POST'])
 @login_required
@@ -486,7 +486,7 @@ def personality_test():
     return render_template('personality_test.html', title='Personality Test', form=form, question_groups=question_groups, enumerate=enumerate)
 
 # The 1 represents user is Male.
-@app.route('/investment_profile/over_controlled_1')
+@app.route('/investment_profile/over_controlled_1', methods=['GET', 'POST'])
 @login_required
 def over_controlled_1():
     slides_data  = [
@@ -521,9 +521,11 @@ def over_controlled_1():
             "did_you_know": "The U.S. has backed various programs that enhance the quality of life and overall health for Russian citizens, including providing clean water to all and other, similar initiatives."
         }
     ]
-    return render_template('investment_profile/over_controlled_1.html', slides_data=slides_data)
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('investment_profile/over_controlled_1.html', slides_data=slides_data, form=form, messages=messages)
 
-@app.route('/investment_profile/resilient_1')
+@app.route('/investment_profile/resilient_1', methods=['GET', 'POST'])
 @login_required
 def resilient_1():
     slides_data  = [
@@ -558,9 +560,11 @@ def resilient_1():
             "did_you_know": "By donating to U.S. charities, you help fund cutting-edge research that benefits both nations (e.g., biomedical research collaborations)."
         }
     ]
-    return render_template('investment_profile/resilient_1.html', slides_data=slides_data)
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('investment_profile/resilient_1.html', slides_data=slides_data, form=form, messages=messages)
 
-@app.route('/investment_profile/under_controlled_1')
+@app.route('/investment_profile/under_controlled_1', methods=['GET', 'POST'])
 @login_required
 def under_controlled_1():
     slides_data  = [
@@ -595,10 +599,12 @@ def under_controlled_1():
             "did_you_know": "U.S. charities support ambitious research and development initiatives (e.g., AI research partnerships)."
         }
     ]
-    return render_template('investment_profile/under_controlled_1.html', slides_data=slides_data)
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('investment_profile/under_controlled_1.html', slides_data=slides_data, form=form, messages=messages)
 
 # The 2 represents user is Female.
-@app.route('/investment_profile/over_controlled_2')
+@app.route('/investment_profile/over_controlled_2', methods=['GET', 'POST'])
 @login_required
 def over_controlled_2():
     slides_data  = [
@@ -633,9 +639,11 @@ def over_controlled_2():
             "did_you_know": "U.S. charities contribute to healthcare initiatives focused on women and children's health in Russia (e.g., maternal health programs, lower infant mortality rates)."
         }
     ]
-    return render_template('investment_profile/over_controlled_2.html', slides_data=slides_data)
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('investment_profile/over_controlled_2.html', slides_data=slides_data, form=form, messages=messages)
 
-@app.route('/investment_profile/resilient_2')
+@app.route('/investment_profile/resilient_2', methods=['GET', 'POST'])
 @login_required
 def resilient_2():
     slides_data  = [
@@ -670,9 +678,11 @@ def resilient_2():
             "did_you_know": "Investing in U.S. charities allows you to support global health initiatives that improve maternal and child health (e.g., prenatal care programs)."
         }
     ]
-    return render_template('investment_profile/resilient_2.html', slides_data=slides_data)
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('investment_profile/resilient_2.html', slides_data=slides_data, form=form, messages=messages)
 
-@app.route('/investment_profile/under_controlled_2')
+@app.route('/investment_profile/under_controlled_2', methods=['GET', 'POST'])
 @login_required
 def under_controlled_2():
     slides_data  = [
@@ -707,7 +717,9 @@ def under_controlled_2():
             "did_you_know": "U.S. charities fund bold initiatives that drive positive change for women (e.g., women in STEM programs)."
         }
     ]
-    return render_template('investment_profile/under_controlled_2.html', slides_data=slides_data)
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('investment_profile/under_controlled_2.html', slides_data=slides_data, form=form, messages=messages)
 
 # Route for submitting the request to reset password
 @app.route('/forgot_password', methods = ['GET', 'POST'])

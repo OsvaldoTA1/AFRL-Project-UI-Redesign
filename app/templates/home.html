@@ -56,15 +56,6 @@
                 <p><a class="pastel-text-links" href="{{ url_for('profile') }}">{% if g.language == 'ru' %}Доступ к профилю{% else %}Access Profile{% endif %}</a></p>
             </div>
         </div>
-        <!-- WILL BE USED IN NEXT SECTION -->
-        <!-- <div class="setup-steps-card">
-            <img src="{{ url_for('static', filename='img/artificial_intelligence_icon.png') }}" alt="AI Icon" class="setup-icon">
-            <div>        
-                <h3>{% if g.language == 'ru' %}Дополнительно: Взаимодействие c Интерактивным ИИ (на основе Ollama){% else %}Optional: Engage with Interactive AI (Powered by Ollama){% endif %}</h3>
-                <p>{% if g.language == 'ru' %}Взаимодействуйте c нашим Meche Bot, работающим на основе Ollama, для проведения живых разговоров и получения динамичных ответов, адаптированных для вас.{% else %}Interact with our Meche Bot, powered by Ollama, for real-time conversations and dynamic responses tailored for you.{% endif %}</p>
-                <p><a class="pastel-text-links" href="{{ url_for('chat') }}">{% if g.language == 'ru' %}Начать общение{% else %}Start Chatting{% endif %}</a></p>
-            </div>
-        </div> -->
     </div>
 </div>
 <section class="features-highlight">
@@ -110,6 +101,7 @@
     </div>
     <p class="centered">{% if g.language == 'ru' %}Раскройте свою инвестиционную стратегию сегодня!{% else %}Uncover your investment strategy today!{% endif %}</p>
 </section>
+
 {% else %}
 <div class="home-hero-section">
     <div class="hero-text hero-text-unauthenticated">
@@ -171,6 +163,7 @@
     <p class="centered">{% if g.language == 'ru' %}Зарегистрируйтесь и узнайте свою инвестиционную стратегию уже сегодня!{% else %}Sign up and uncover your investment strategy today!{% endif %}</p>
 </section>
 {% endif %}
+
 <script>
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
