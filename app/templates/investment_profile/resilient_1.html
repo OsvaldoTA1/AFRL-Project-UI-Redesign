@@ -14,31 +14,87 @@
 
 <section class="investment-profile">
     <div class="investment-profile-header resilient-profile-header">
+        <div class="complete-badge">
+            <p>✔ Assessment Complete</p>
+        </div>
         <h2>Your Result: Resilient</h2>
-        <img src="{{ url_for('static', filename='img/resilient_icon.png') }}" alt="Resilient Icon - TEMP">
+        <img src="{{ url_for('static', filename='img/resilient_icon.png') }}" alt="Over Controlled Icon - TEMP">
+        <h3>Balanced and Adaptive</h3>
+        <p>You maintain a healthy balance between caution and risk-taking, adapting your strategy as circumstances change. 
+            This flexibility allows you to seize opportunities while still protecting against unnecessary losses.</p>
+        <div class="profile-stats">
+            <div class="stat">
+                <h4>Risk Tolerance</h4>
+                <p>Moderate</p>
+            </div>
+            <div class="stat">
+                <h4>Confidence</h4>
+                <p>High</p>
+            </div>
+            <div class="stat">
+                <h4>Overall Score</h4>
+                <p>85/100</p>
+            </div>
+        </div>
     </div>
     <div class="investment-profile-page-info">
-        <p><strong>Profile Report:</strong> You're like a high-performing manager, demanding high competence and professionalism in all aspects. 
-            You're financially well-adjusted but might benefit from a gentle nudge towards more risky assets to grow your wealth further.</p>
-        <p><strong>Advice for You:</strong> While your conscientious nature serves you well, consider relaxing it occasionally to explore more aggressive investment opportunities. 
-            Leveraging competent information and performance from advisors can help you enjoy your wealth more.</p>
+        <h3>Your Complete Investment Profile</h3>
+        <hr>
+        <div class="investment-profile-page-info-content">
+            <div class="profile-report-section">
+                <h4>Profile Report</h4>
+                <p>You're like a high-performing manager, demanding high competence and professionalism in all aspects. 
+                    You're financially well-adjusted but might benefit from a gentle nudge towards more risky assets to grow your wealth further.</p>
+            </div>
+            <div class="profile-advice-section">
+                <h4>Advice for You</h4>
+                <p>While your conscientious nature serves you well, consider relaxing it occasionally to explore more aggressive investment opportunities. 
+                    Leveraging competent information and performance from advisors can help you enjoy your wealth more.</p>
+            </div>
+        </div>
+        <div class="mindset-cards-container">
+            <div class="mindset-card">
+                <h4>⚡ Opportunity Ready</h4>
+                <p>You remain steady during market changes and can adjust your approach without losing sight of your goals.</p>
+            </div>
+            <div class="mindset-card">
+                <h4>🛠️ Strategic Flexibility</h4>
+                <p>Your ability to blend structure with openness to new opportunities keeps you well-balanced and future-ready.</p>
+            </div>
+            <div class="mindset-card">
+                <h4>📈 Growth Through Balance</h4>
+                <p>You know when to play it safe and when to lean into calculated risks, giving you consistent upward momentum.</p>
+            </div>
+        </div>
     </div>
 
     <div class="image-text-section">
-        <button class="previous-button">&lt</button>
-
-        <div class="slides-content-wrapper">
-            <div class="slides">
-            {% for item in slides_data %}
-                <div class="image-text-block">
-                    <img src="{{ item.dynamic_url }}" alt="Placeholder Image" onerror="this.onerror=null; this.src='{{ item.static_url }}';">
-                    <p><strong>Investment Tip:</strong> {{ item.investment_tip }}<br><br>
-                    <strong>Did You Know?:</strong> {{ item.did_you_know }}</p>
-                </div>
-            {% endfor %}
+        <div class="image-text-section-header">
+            <h3>Investment Tips</h3>
+            <p>Discover powerful strategies to grow your wealth</p>
+            <div class="slide-controls">
+                <button class="previous-button">&lt</button>
+                <button class="next-button">&gt</button>
             </div>
         </div>
-        <button class="next-button">&gt</button>
+        <div class="slides-content-wrapper">
+        {% for item in slides_data %}
+            <div class="slide-container">
+                <div class="slide-info-panel">
+                    <div class="slide-info-badge">
+                        <p>💡 Investment Tip</p>
+                    </div>
+                    <p>{{ item.investment_tip }}</p>
+                    <p><strong>Did You Know?</strong> {{ item.did_you_know }}</p>
+                </div>
+                <div class="slide">
+                    <div class="image-text-block">
+                        <img src="{{ item.dynamic_url }}" alt="Placeholder Image" onerror="this.onerror=null; this.src='{{ item.static_url }}';">
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
     </div>
 
     <div class="donation-investment-container">
@@ -74,46 +130,49 @@
 <!-- Javascript for button logic -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const slidesContainer = document.querySelector('.slides');
         const previousButton = document.querySelector('.previous-button');
         const nextButton = document.querySelector('.next-button');
-        const slides = Array.from(slidesContainer.children);
+        const slideContainers = Array.from(document.querySelectorAll('.slide-container'));
 
         let currentSlideIndex = 0; // Initialize the current slide index
 
-        const buttonVisibility = () => {
-            if (currentSlideIndex === 0) {
-                previousButton.disabled = true ; // Hide previous button on first slide
-            } else {
-                previousButton.disabled = false; // Show previous button otherwise
-            }
+        const showSlide = (index) => {
+            slideContainers.forEach((container, i) => {
+                container.classList.toggle('active', i === index);
+            });
 
-            if (currentSlideIndex === slides.length - 1) {
-                nextButton.disabled = true; // Hide next button on last slide
-            } else {
-                nextButton.disabled = false; // Show next button otherwise
-            }
-        };
+            previousButton.disabled = index === 0;
+            nextButton.disabled = index === slideContainers.length - 1;
 
-        const updateSlides = (index) => {
-            if (slides[index]) {
-                slides[index].scrollIntoView({ behavior: 'smooth' });
-                currentSlideIndex = index; // Update the current slide index
-                buttonVisibility(); // Update button visibility based on current slide index
-            }
         };
 
         nextButton.addEventListener('click', () => {
-            if (currentSlideIndex < slides.length - 1) {
-                updateSlides(currentSlideIndex + 1); // Move to the next slide
+            if (currentSlideIndex < slideContainers.length - 1) {
+                currentSlideIndex++; // Move to the next slide
+                showSlide(currentSlideIndex);
             }
         });
 
         previousButton.addEventListener('click', () => {
             if (currentSlideIndex > 0) {
-                updateSlides(currentSlideIndex - 1); // Move to the previous slide
+                currentSlideIndex--; // Move to the previous slide
+                showSlide(currentSlideIndex)
             }
         });
+
+        showSlide(currentSlideIndex);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('slide-in');
+                observer.unobserve(entry.target); // Stop observing once visible
+            }
+        });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.investment-profile-page-info, .image-text-section, .donation-investment-container').forEach(element => {
+        observer.observe(element);
     });
 </script>
 {% endblock %}
