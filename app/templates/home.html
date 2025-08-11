@@ -10,8 +10,9 @@
 </style>
 {% if current_user.is_authenticated %}
 <div class="home-hero-section">
+    <h1 class="home-hero-section-header">{% if g.language == 'ru' %}Добро пожаловать, {{ current_user.username }} - Рад снова вас видеть!{% else %}Welcome, {{ current_user.username }} - Great to see you again!{% endif %}</h1>
     <div class="hero-text-authenticated">
-        <h1>{% if g.language == 'ru' %}Добро пожаловать, {{ current_user.username }} - Рад снова вас видеть!{% else %}Welcome, {{ current_user.username }} - Great to see you again!{% endif %}</h1>
+         <h1>Make Smarter Investment Decisions</h1>
         <p>You're ready to take your personalized investment test and unlock insights tailored to your unique personality and financial goals. Discover strategies powered by AI that align with your values, risk tolerance, and long-term vision.</p>
         <button class="hero-button">
             <a href="{{ url_for('pre_test') }}">{{ 'Start Free Assessment' if g.language == 'en' else 'Начните бесплатную оценку' }}</a>
@@ -111,14 +112,14 @@
 </section>
 {% else %}
 <div class="home-hero-section">
-    <div class="hero-text">
+    <div class="hero-text hero-text-unauthenticated">
         <h1>Make Smarter Investment Decisions</h1>
         <p>Get personalized investment strategies and AI-powered investment recommendations tailored to your financial goals and risk tolerance</p>
         <button class="hero-button">
             <a href="{{ url_for('pre_test') }}">{{ 'Start Free Assessment' if g.language == 'en' else 'Начните бесплатную оценку' }}</a>
         </button>
     </div>
-    <div class="hero-visual">
+    <div class="hero-visual hero-visual-unauthenticated">
         <div class="hero-image-container">
             <img src="{{ url_for('static', filename='img/hero_image.png') }}" alt="Home Hero Image">
         </div>
@@ -179,8 +180,8 @@
             }
         });
     }, { threshold: 0.2 });
-    document.querySelectorAll('.setup-steps-card').forEach(card => {
-        observer.observe(card);
+    document.querySelectorAll('.setup-steps-card, .feature').forEach(element => {
+        observer.observe(element);
     });
 </script>
 {% endblock %}
