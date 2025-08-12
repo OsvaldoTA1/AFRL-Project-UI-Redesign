@@ -39,7 +39,10 @@ def inject_current_endpoint():
 @app.route("/home", methods=['GET', 'POST'])
 def home():
     form = ChatForm()
-    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    if current_user.is_authenticated:
+        messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    else:
+        messages = []
     return render_template('home.html', title='Home', form=form, messages=messages)
 
 # Authentication routes (register, login, logout)
