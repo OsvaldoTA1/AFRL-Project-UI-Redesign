@@ -4,7 +4,7 @@ from flask_socketio import emit
 from datetime import datetime, timezone, timedelta
 from app import db, bcrypt, socketio, csrf, mail, cache
 from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm, PreTestAcknowledgementForm, EditLoginForm, TwoFactorSetupForm, TwoFactorVerifyForm, EditPasswordForm, ForgotPasswordForm, ResetPasswordForm
-from app.models import User, ChatMessage, TestSession
+from app.models import User, ChatMessage, TestSession, UserIPLog, IPDemographics
 from app.ollama import generate_ai_response
 from app.utils import load_questions, calculate_trait_scores, determine_investment_profile
 from app.replicate import run_model
@@ -14,6 +14,9 @@ import pyotp
 import time
 import random
 import cred
+import requests
+
+IPINFO_TOKEN = getattr(cred, 'IPINFO_TOKEN', None)
 
 # Toggle language route
 @app.before_request
@@ -29,6 +32,72 @@ def toggle_language():
         session['language'] = new_language
         return jsonify({'status': 'success'})
     return jsonify({'status': 'failure'}), 400
+
+def get_client_ip():
+    # Gets Client IP when its behind proxies or load balancers
+    if request.headers.get('X-Forwarded-For'):
+        return request.headers.get('X-Forwarded-For').split(',')[0].strip()
+    # Gets Client IP if X-Forwarded-For doesn't have the original client IP
+    elif request.headers.get('X-Real-IP'):
+        return request.headers.get('X-Real-IP')
+    # If neither exist, fall back to the direct connection IP
+    else:
+        return request.remote_addr
+    
+def log_user_ip(user):
+    #print("Logging IP for user:", user.id)
+    ip = get_client_ip()
+    #print("Detected IP:", ip)  # DEBUG
+    user_agent_header = request.headers.get('User-Agent', '')
+    #print("User-Agent:", user_agent_header)
+    
+    ip_log = UserIPLog(
+        user_id = user.id,
+        ip_address = ip,
+        user_agent = user_agent_header
+    )
+
+    db.session.add(ip_log)
+
+    user.current_ip = ip
+    user.ip_last_updated = datetime.now(timezone.utc)
+
+    demographic_entry = IPDemographics.query.filter_by(ip_address=ip).first()
+    refresh_needed = not demographic_entry or (datetime.now(timezone.utc) - demographic_entry.last_updated).days > 30
+
+    if refresh_needed:
+        try:
+            # requests IS NOT the same as request.
+            # request is from flask asking about thee current client request
+            # requests is from python and it acts like curl
+            url = f"https://api.ipinfo.io/lite/{ip}?token={IPINFO_TOKEN}"
+            resp = requests.get(url, timeout=5)
+            resp.raise_for_status()
+            data = resp.json()
+
+            if demographic_entry is None:
+                demographic_entry = IPDemographics(ip_address=ip)
+                db.session.add(demographic_entry)
+            
+            # Handles private/local IPs
+            if data.get("bogon"):
+                demographic_entry.country = "Private/Local"
+                demographic_entry.country_code = None
+                demographic_entry.continent_code = None
+                demographic_entry.continent = None
+                demographic_entry.last_updated = datetime.now(timezone.utc)
+            else:
+                demographic_entry.country = data.get("country")
+                demographic_entry.country_code = data.get("country_code")
+                demographic_entry.continent_code = data.get("continent_code")
+                demographic_entry.continent = data.get("continent")
+                demographic_entry.last_updated = datetime.now(timezone.utc)
+        
+        except requests.RequestException as e:
+            print("IPInfo API error:", e)
+
+    db.session.commit()
+    #print("Rows in log:", UserIPLog.query.count())
 
 @app.context_processor
 def inject_current_endpoint():
@@ -135,6 +204,7 @@ def two_factor_verify():
                     flash("Your two-factor authentication settings have been updated.")
                     return redirect(url_for('edit_profile'))
                 login_user(user, remember=session.get('remember'))
+                log_user_ip(user)
                 session.pop("remember")
                 return redirect(url_for('home'))
             else:
@@ -219,6 +289,8 @@ def login():
                 return redirect(url_for('two_factor_verify'))
             else:
                 login_user(user, remember=form.remember.data)
+                log_user_ip(user)
+
                 if not user.is_profile_complete:
                     flash('Please complete your profile.', 'warning')
                     return redirect(url_for('edit_profile'))

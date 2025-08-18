@@ -37,6 +37,9 @@ class User(db.Model, UserMixin):
     image_3_url = db.Column(db.String(500), nullable=True)
     image_4_url = db.Column(db.String(500), nullable=True)
     image_5_url = db.Column(db.String(500), nullable=True)
+    current_ip = db.Column(db.String(45), nullable=True)
+    current_country = db.Column(db.String(100), nullable=True)
+    ip_last_updated = db.Column(db.DateTime, nullable=True)
     
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.gender}', '{self.image_file}')"
@@ -58,6 +61,8 @@ class User(db.Model, UserMixin):
         except jwt.InvalidTokenError:
             return "Token is invalid. Please try again."
         return User.query.get(decode['user_id'])
+    
+    ip_logs = db.relationship('UserIPLog', backref="user", lazy=True)
 
 class ChatMessage(db.Model): 
     id = db.Column(db.Integer, primary_key=True)
@@ -87,3 +92,32 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"Post('{self.content}', '{self.timestamp}')"
+    
+class UserIPLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    ip_address = db.Column(db.String(45), nullable=False)
+    user_agent = db.Column(db.String(500), nullable=True)
+    timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
+    # Session id for security reasons. Logic not implemented yet
+    session_id = db.Column(db.String(100), nullable=True)
+
+    def __repr__(self):
+        return f"UserIPLog(user_id={self.user_id}, ip='{self.ip_address}', timestamp='{self.timestamp}')"
+
+# This is soley to get demographic info.
+# The plan is to update this after a certain period of time so it doesn't get constantly updated and waste resources.
+# This doesn't need have real time updates.
+class IPDemographics(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    ip_address = db.Column(db.String(45), unique=True, nullable=False)
+    country= db.Column(db.String(100), nullable=True)
+    country_code = db.Column(db.String(2), nullable=True)
+    continent_code = db.Column(db.String(2), nullable=True)
+    continent = db.Column(db.String(20), nullable=True)
+    # isp = db.Column(db.String(200), nullable=True)
+    # time_zone = db.Column(db.String(50), nullable=True)
+    last_updated = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+
+    def __repr__(self):
+        return f"IPDemographics(ip='{self.ip_address}', country='{self.country}', continent='{self.continent}')"

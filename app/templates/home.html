@@ -10,6 +10,7 @@
 </style>
 {% if current_user.is_authenticated %}
 <div class="home-hero-section">
+    <p>Your Current IP: {{ current_ip }}</p>
     <h1 class="home-hero-section-header">{% if g.language == 'ru' %}Добро пожаловать, {{ current_user.username }} - Рад снова вас видеть!{% else %}Welcome, {{ current_user.username }} - Great to see you again!{% endif %}</h1>
     <div class="hero-text-authenticated">
          <h1>Make Smarter Investment Decisions</h1>
