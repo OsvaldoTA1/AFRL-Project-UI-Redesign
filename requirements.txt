@@ -6,6 +6,7 @@ bidict==0.23.1
 blinker==1.8.2
 certifi==2024.6.2
 click==8.1.7
+cryptography==45.0.6
 distro==1.9.0
 dnspython==2.6.1
 email_validator==2.1.1

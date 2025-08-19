@@ -9,6 +9,16 @@ from alembic import op
 import sqlalchemy as sa
 ${imports if imports else ""}
 
+# import custom types
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+try:
+    from app.custom_types import EncryptedString
+except ImportError:
+    # Fallback for migrations that don't need custom types
+    pass
+
 # revision identifiers, used by Alembic.
 revision = ${repr(up_revision)}
 down_revision = ${repr(down_revision)}

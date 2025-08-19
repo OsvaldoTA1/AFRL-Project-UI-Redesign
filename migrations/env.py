@@ -1,9 +1,14 @@
 import logging
 from logging.config import fileConfig
+import sys
+import os
 
 from flask import current_app
 
 from alembic import context
+
+# Add the parent directory to the Python path so we can import from 'app'
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -39,6 +44,21 @@ def get_engine_url():
 config.set_main_option('sqlalchemy.url', get_engine_url())
 target_db = current_app.extensions['migrate'].db
 
+# Import custom types to make them available during migrations
+try:
+    from app.custom_types import EncryptedString
+    # Make the custom type available in the global namespace
+    globals()['EncryptedString'] = EncryptedString
+except ImportError as e:
+    logger.warning(f"Could not import custom types: {e}")
+
+# Configure how custom types are rendered in migrations
+def render_item(type_, obj, autogen_context):
+    """Override the rendering of custom types in migrations"""
+    if hasattr(obj, '__class__') and obj.__class__.__name__ == 'EncryptedString':
+        return "EncryptedString()"
+    return False
+
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
@@ -65,7 +85,10 @@ def run_migrations_offline():
     """
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url, target_metadata=get_metadata(), literal_binds=True
+        url=url, 
+        target_metadata=get_metadata(), 
+        literal_binds=True,
+        render_item=render_item
     )
 
     with context.begin_transaction():
@@ -93,6 +116,9 @@ def run_migrations_online():
     conf_args = current_app.extensions['migrate'].configure_args
     if conf_args.get("process_revision_directives") is None:
         conf_args["process_revision_directives"] = process_revision_directives
+
+    # Add the render_item function to the configure args
+    conf_args["render_item"] = render_item
 
     connectable = get_engine()
 
