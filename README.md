@@ -23,21 +23,34 @@ This is an investment assessment website built with Flask and Jinja templates. T
    ```
    python3 -m venv myenv
    ```
-
-5. Activate the virtual environment:
+   Keep in mind if you have multiple Python versions installed you might run into some issues.
+   Make sure your environment variables are set up correctly OR delete other Python versions.
+   For stability try Python 3.12.10 since that's the version this was made on. However, it is possible other versions could work! 
+   If this still doesn't work force venv to use your Python 3.12.10 version by explictly pointing to it. For example:
+   ```
+   "C:\Program Files\Python312\python.exe" -m venv myenv
+   ```
+6. Activate the virtual environment:
    - On Mac/Linux:
      ```
      source myenv/bin/activate
      ```
 
-6. Install the requirements:
+7. Install the requirements:
    ```
    pip install -r requirements.txt
    ```
+   Double Check your venv folder or venv subfolders to see if it installed correctly, you do not want to install these on your system to avoid errors with your other projects.
 
-7. In the main directory, create a file named `cred.py`
+   **If it didn't install correctly run this command:**
+   ```
+   python -m pip uninstall -r requirements.txt -y
+   ```
+   and remake your env and run pip install -r requirements.txt again.
+   
+9. In the main directory, create a file named `cred.py`
 
-8. In `cred.py`, include the following:
+10. In `cred.py`, include the following:
    ```
    RECAPTCHA_SITE_KEY = ''
    RECAPTCHA_SECRET_KEY = ''
@@ -46,7 +59,7 @@ This is an investment assessment website built with Flask and Jinja templates. T
    REPLICATE_API_TOKEN = ''
    ```
 
-9. Create the following keys:
+11. Create the following keys:
    - **ReCaptcha:**
      - [ReCaptcha Documentation](https://cloud.google.com/security/products/recaptcha)
      - [Signing up for ReCaptcha](https://www.google.com/recaptcha/admin/create) (*Note: For ReCaptcha type, select "Challenge" and "I'm not a robot" checkbox. For the domain, add both localhost and 127.0.0.1*)
@@ -65,7 +78,7 @@ This is an investment assessment website built with Flask and Jinja templates. T
    - After setting up your billing information locate your API tokens and paste it into the `cred.py` file. "REPLICATE_API_TOKEN"
    - **Keep in mind this is not needed and the app _will_ work without this. However you will not get generated images, only the default fallback images.**
 
-10. Set up the database:
+11. Set up the database:
    ```
    flask db stamp head
    flask db migrate -m "Resetting migrations"
