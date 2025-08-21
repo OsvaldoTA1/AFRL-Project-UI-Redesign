@@ -6,12 +6,26 @@ This is an investment assessment website built with Flask and Jinja templates. T
 
 *TrustVest does NOT offer real investment advice and should you feel like you need some, we recommend seeing a licensed financial advisor.*
 
+## Purpose of this fork
+
+The purpose of this fork was to redesign the ui. Since then this fork has done more than that.
+The 4 main things done in this fork are
+- UI Redesign
+   - A complete overhaul
+- Chatbot refactored into a widget (persistent element on every page, instead of a single page)
+   - Prompt engineering
+-  Replicate Image generation
+   - With a custom dynamic prompt generation system (prompts are unique to each user therefore each image is unique to each user)
+- IP Tracking
+   - Added to help gather general demographic information about users.
+   - All data is encrypted, so only the developers can access it.
+
 ## How to Install
 1. Open the terminal in your IDE and navigate to where you want the project located.
 
 2. Clone the repository, in your terminal run:
    ```
-   git clone https://github.com/Fabeo10/AFRL-Project.git
+   git clone https://github.com/OsvaldoTA1/AFRL-Project-UI-Redesign.git
    ```
 
 3. Navigate to the project directory:
