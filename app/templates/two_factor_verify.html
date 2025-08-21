@@ -5,23 +5,25 @@
 {% endblock %}
 
 {% block body %}
-<div class="form-wrapper">
-    <h2>2-Factor Authenication Verification</h2>
-    <form method="POST">
-      {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.token.label }} 
-            {{ form.token(class="form-input") }}
-        </div>
-    
-        <div class="form-group">
-            {{ form.submit(class="submit-btn") }}
-        </div>
+<div class="verify-two-factor-container">
+    <div class="form-wrapper">
+        <h2>2-Factor Authenication Verification</h2>
+        <form method="POST">
+        {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.token.label }} 
+                {{ form.token(class="form-input") }}
+            </div>
+        
+            <div class="form-group">
+                {{ form.submit(class="submit-btn") }}
+            </div>
 
-        <div class="form-group">
-            {{ form.resend(class="submit-btn", style="background-color: blue;") }}
-        </div>
+            <div class="form-group">
+                {{ form.resend(class="submit-btn", style="background-color: blue;") }}
+            </div>
 
-    </form>
+        </form>
+    </div>
 </div>
 {% endblock %}

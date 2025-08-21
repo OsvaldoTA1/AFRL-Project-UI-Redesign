@@ -7,13 +7,9 @@
     <style>
         /*Slider Button Style*/
         .language-toggle-wrapper {
-            position: absolute;
-            top: 20px;
-            right: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
-            
         }
 
         .switch {
@@ -36,9 +32,10 @@
           left: 0;
           right: 0;
           bottom: 0;
-          background-color: #ccc;
-          transition: .4s;
+          background-color: #e0e0e0;
+          transition: background-color .25s ease;
           border-radius: 34px;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
         
         .slider:before {
@@ -50,13 +47,17 @@
           left: 4px;
           bottom: 4px;
           background-size: 26px 26px;
-          background-image: url("{{ url_for('static', filename='img/usa_flag_icon.png') }}"); /* English flag */
-          transition: .4s;
+          background-image: url("{{ url_for('static', filename='img/usa_flag_icon.png') }}"); /* USA flag */
+          background-size: contain;
+          background-position: center;
+          background-repeat: no-repeat; 
+          transform: translateX(0);
+          transition: transform .3s cubic-bezier(0.4, 0, 0.2, 1), background-image .6s ease-in;
         }
         
         /* Checked state */
         input:checked + .slider {
-          background-color: #ccc; /* Change if needed */
+          background-color: #e0e0e0; /* Change if needed */
         }
         
         input:checked + .slider:before {
@@ -66,60 +67,327 @@
 
         /* Header and body moved to base for CSS img properties to work */
         .header-background {
-            background-image: url("{{ url_for('static', filename='img/header_background.png') }}");
+            display: flex;
+            justify-content: space-between;
+            /* background-image: url("{{ url_for('static', filename='img/header_background.png') }}"); Only being used by the home page now*/
             background-size: cover;
             background-position: center;
-            color: white; /* Ensure text is readable */
-            padding: 40px var(--spacing-medium); /* Use padding to increase header height */
+            padding: 24px var(--spacing-medium); /* Use padding to increase header height */
             position: relative; /* To contain the absolute positioned toggle button */
+            display: flex; /* Use flexbox for layout */
+            align-items: center; /* Center items vertically */
+        }
+
+        .header-left-content {
+            display: flex;
+            align-items: center;
+            width: 25vw;
+        }
+
+        .logo p{
+            font-weight: bold;
+            color: black;
+            text-decoration: none;
+        }
+
+        .header-center-content {
+            display: flex;
+            justify-content: center; /* Center nav links */
+        }
+
+        .header-right-content {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 30px; /* Space between nav and toggle button */
+            background: none; /* Ensure no background color */
+            padding: 0; /* Reset padding */
+            width: 25vw;
+            justify-content: flex-end; /* Align nav links to the right */
+        }
+
+        .header-right-content ul {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .header-right-content a {
+            color: black;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .header-divider {
+            border-top: 3px solid #D9D9D9; /* Divider color */
+            opacity: 0.9;
+            margin: 0; /* Reset margin */
         }
         
         body {
-            background: url("{{ url_for('static', filename='img/body_background.png') }}") no-repeat center center fixed;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{{ url_for('static', filename='img/body_background.png') }}") no-repeat center center fixed;
             background-size: cover; /* Ensure the background image covers the entire viewport */
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
+
+        footer {
+            /* background-color: #4B5D67;
+            opacity: 0.95;
+            color: #FDFBF6; 
+            Save these when footer has more content in the future
+            */
+            padding: 10px;
+        }
+
+        /* Chat Widget Styles */
+
+        #chat-widget-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 900;
+            font-family: Arial, sans-serif;
+        }
+
+        #chat-toggle-btn {
+            aspect-ratio: 1 / 1 !important;
+            background-color: #4CAF50;
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            font-size: 12px;
+        }
+
+        #chat-toggle-btn img {
+            height: 24px;
+            width: 24px;
+        }
+
+        #chat-widget {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            width: 320px;
+            height: 400px;
+            background: var(--color-background-light);
+            border-radius: var(--border-radius-small);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin: var(--spacing-small);
+            opacity: 1;
+            transition: opacity 0.3s ease-out, height 0.5s ease-out, width 0.75s;
+        }
+
+        .hidden {
+            height: 0 !important;
+            width: 0 !important;
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+
+        #chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-small);
+            background-color: #f7f7f7;
+        }
+
+        #chat-messages h3 {
+            color: #5f80eb;
+        }
+
+        .chat-message-user,
+        .chat-message-ai {
+            display: block;
+            max-width: 50%;
+            width: fit-content;
+            margin-bottom: var(--spacing-small);
+            padding: var(--spacing-small);
+            border-radius: var(--border-radius-large);
+            word-wrap: break-word;
+            position: relative;
+            clear: both;
+            white-space: pre-line; /* Preserve whitespace */
+        }
+
+        .chat-message-user {
+            background-color: lightskyblue;
+            color: var(--color-text-light);
+            margin-left: auto;
+            text-align: justify;
+            border-bottom-right-radius: 0;
+        }
+
+        .chat-message-ai {
+            background-color: lightgray;
+            color: var(--color-text-light);
+            margin-right: auto;
+            text-align: left;
+            border-bottom-left-radius: 0;
+        }
+
+        .chat-text {
+            font-size: 12px;
+        }
+
+        #chat-form {
+            display: flex;
+            gap: var(--spacing-small);
+            padding: var(--spacing-small);
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-top: 1px rgba(0, 0, 0, 0.1) solid;
+            border-radius: var(--border-radius-medium);
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            color: var(--color-text-light);
+        }
+
+        #chat-form label{
+            align-self: center;
+            font-weight: bolder;
+            color: var(--color-text);
+        }
+
+        #chat-form input[type="text"] {
+            flex: 1;
+            padding: var(--spacing-small);
+            margin-right: var(--spacing-small);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-large);
+            background-color: var(--color-background-light);
+            color: var(--color-text);
+            font-weight: 700;
+        }
+
+        #chat-form input[type="submit"] {
+            padding: var(--spacing-small) var(--spacing-medium);
+            background-color: var(--color-primary);
+            color: var(--color-background-light);
+            border: 3px rgba(0, 0, 0, 0.1) solid;
+            border-radius: var(--border-radius-large);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        /* Focus and Hover States */
+        #chat-form input[type="text"]:focus,
+        #chat-form input[type="submit"]:focus {
+            outline: none;
+            border: 2px solid var(--color-primary);
+            box-shadow: 0 0 5px var(--color-primary);
+        }
+
+        #chat-form input[type="submit"]:hover {
+            background-color: var(--color-secondary);
+        }
+
+        /* Custom Scrollbar */
+        #chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #chat-messages::-webkit-scrollbar-track {
+            background: #1d1d1d;
+            border-radius: var(--border-radius-medium);
+        }
+
+        #chat-messages::-webkit-scrollbar-thumb {
+            background: #bdbdbd;
+            border-radius: var(--border-radius-medium);
+            border: 2px solid #1d1d1d;
+        }
+
+        #chat-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--color-secondary);
+        }
+
+        /* Chatbot typing indicator styles */
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            font-style: italic;
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        .typing-dots span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin: 0 4px;
+            background-color: #a5a5a5;
+            border-radius: 50%;
+            animation: typing 1.5s infinite ease-in-out;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
     </style>
     <title>{{ "Home | TrustVest" if g.language == 'en' else "Домой | TrustVest" }}</title>
 </head>
 <body>
     <header class="header-background">
-        <nav>
-            <!-- Navigation Links -->
-            <ul>
-                <li class="{% if request.endpoint == 'home' %}active{% endif %}">
-                    <a href="{{ url_for('home') }}">{{ 'Home' if g.language == 'en' else 'Домой' }}</a>
-                </li>
-                {% if current_user.is_authenticated %}
+        <!-- New div to position nav links to the right without conflict-->
+        <div class="header-left-content">
+            <a href="{{ url_for('home') }}" class="logo">
+                <p>TrustVest</p>
+            </a>
+        </div>
+        <div class="header-center-content">
+            <nav>
+                <ul>
+                    <li class="{% if request.endpoint == 'home' %}active{% endif %}">
+                        <a href="{{ url_for('home') }}">{{ 'Home' if g.language == 'en' else 'Домой' }}</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
                     <li class="{% if request.endpoint == 'profile' %}active{% endif %}">
                         <a href="{{ url_for('profile')}}">{{ 'Profile' if g.language == 'en' else 'Профиль' }}</a>
                     </li>
                     <li class="{% if request.endpoint == 'personality_test' %}active{% endif %}">
                         <a href="{{ url_for('pre_test') }}">{{ 'Personality Test' if g.language == 'en' else 'Тест на личность' }}</a>
                     </li>
-                    <li class="{% if request.endpoint == 'chat' %}active{% endif %}">
-                        <a href="{{ url_for('chat') }}">{{ 'AI' if g.language == 'en' else 'ИИ' }}</a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('logout') }}">{{ 'Log Out' if g.language == 'en' else 'Выйти' }}</a>
-                    </li>
-                {% else %}
-                    <li class="{% if request.endpoint == 'login' %}active{% endif %}">
-                        <a href="{{ url_for('login') }}">{{ 'Log In' if g.language == 'en' else 'Войти' }}</a>
-                    </li>
-                    <li class="{% if request.endpoint == 'register' %}active{% endif %}">
-                        <a href="{{ url_for('register') }}">{{ 'Register' if g.language == 'en' else 'Зарегистрироваться' }}</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-        <!-- Language Toggle Button Wrapper -->
-        <div class="language-toggle-wrapper">
-          <label class="switch">
-            <input type="checkbox" id="language-toggle" {% if g.language == 'ru' %}checked{% endif %}>
-            <span class="slider round"></span>
-          </label>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        <div class="header-right-content">
+            <nav>
+                <!-- Navigation Links -->
+                <ul>
+                    {% if current_user.is_authenticated %}
+                        <li>
+                            <a href="{{ url_for('logout') }}">{{ 'Log Out' if g.language == 'en' else 'Выйти' }}</a>
+                        </li>
+                    {% else %}
+                        <li class="{% if request.endpoint == 'login' %}active{% endif %}">
+                            <a href="{{ url_for('login') }}">{{ 'Log In' if g.language == 'en' else 'Войти' }}</a>
+                        </li>
+                        <li class="{% if request.endpoint == 'register' %}active{% endif %}">
+                            <a href="{{ url_for('register') }}">{{ 'Register' if g.language == 'en' else 'Зарегистрироваться' }}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <!-- Language Toggle Button Wrapper -->
+            <div class="language-toggle-wrapper">
+            <label class="switch">
+                <input type="checkbox" id="language-toggle" {% if g.language == 'ru' %}checked{% endif %}>
+                <span class="slider round"></span>
+            </label>
+            </div>
         </div>
     </header>
+
+    <hr class="header-divider">
     
     <!-- Flash Messages Start Here -->
     {% with messages = get_flashed_messages() %}
@@ -137,6 +405,147 @@
         {% block body %}
             <!-- This will be filled with each page's specific content -->
         {% endblock %}
+        {% set allowed_pages = [
+                'home',
+                'profile',
+                'over_controlled_1',
+                'resilient_1',
+                'under_controlled_1',
+                'over_controlled_2',
+                'resilient_2',
+                'under_controlled_2']
+        %}
+        {% if current_user.is_authenticated and current_endpoint in allowed_pages %}
+            <div id="chat-widget-container">
+                <button id="chat-toggle-btn"><img src="{{ url_for('static', filename='img/chat_bubble_icon_black.png') }}" alt="Chat Icon"></button>
+                <div id="chat-widget" class="hidden">
+                    <div id="chat-box">
+                        <div id="chat-messages">
+                            <h3>Meche Bot</h3>
+                            {% for message in messages %}
+                                <!-- Single line to avoid Jinja/Flask rendering issue -->
+                                <div class="{% if message.username == 'AI' %}chat-message-ai{% else %}chat-message-user{% endif %}"><p class="chat-text">{{ message.username }}: {{ message.message }}</p></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <form method="POST" id="chat-form">
+                        {{ form.hidden_tag() }}
+                        {{ form.message() }}
+                        {{ form.send() }}
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+        {% block scripts %}
+            {% if current_user.is_authenticated and current_endpoint in allowed_pages %}
+                <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+                <script>
+                    // Chat Widget Functions
+                    document.getElementById("chat-toggle-btn").addEventListener("click", function () {
+                        const chatBox = document.getElementById("chat-widget");
+                        chatBox.classList.toggle("hidden");
+                    });
+
+                    function addTypingIndicator() {
+                        if (!document.getElementById("typing-indicator")) {
+                            const typingDiv = document.createElement("div");
+                            typingDiv.id = "typing-indicator";
+                            typingDiv.className = "chat-message-ai typing-indicator";
+
+                            const dotsParagaph = document.createElement("p");
+                            dotsParagaph.className = "typing-dots";
+
+                            for (let i = 0; i < 3; i++) {
+                                const dot = document.createElement("span");
+                                dotsParagaph.appendChild(dot);
+                            }
+
+                            typingDiv.appendChild(dotsParagaph);
+
+                            const chatBox = document.getElementById("chat-messages");
+                            chatBox.appendChild(typingDiv);
+                            chatBox.scrollTop = chatBox.scrollHeight;
+                        }
+                    }
+
+                    function removeTypingIndicator() {
+                        const typingDiv = document.getElementById("typing-indicator");
+                        if (typingDiv) {
+                            typingDiv.remove();
+                        }
+                    }
+
+                    $(document).ready(function() {
+                        var socket = io.connect('http://' + document.domain + ':' + location.port);
+                        var chatForm = $('#chat-form');
+                        var chatBox = $('#chat-messages');
+                        var messageInput = $('input[name="message"]');
+
+                        function scrollChatToBottom() {
+                            chatBox.scrollTop(chatBox[0].scrollHeight);
+                        }
+
+                        function addMessageToChat(username, message, timestamp) {
+                            var messageClass = $('<div>').addClass(
+                                username === 'AI' ? 'chat-message-ai' : 'chat-message-user'
+                            )
+                            var newMessage = $('<p>').addClass('chat-text').text(username + " (" + timestamp + "): " + message);
+                                
+                            messageClass.append(newMessage);
+                            chatBox.append(messageClass);
+                            scrollChatToBottom();
+                        }
+
+                        chatForm.on('submit', function(e) {
+                            e.preventDefault();
+                            var msg = messageInput.val().trim();
+                            if (msg === "") {
+                                return false;
+                            }
+                                
+                            // Clear input immediately
+                            messageInput.val('');
+                                
+                            // Add user message to chat
+                            addMessageToChat('You', msg, new Date().toLocaleTimeString());
+
+                            addTypingIndicator();
+
+                            $.ajax({
+                                url: "{{ url_for('get_ai_response') }}",
+                                method: "POST",
+                                contentType: 'application/json;charset=UTF-8',
+                                data: JSON.stringify({message: msg}),
+                                headers: {
+                                    'X-CSRFToken': "{{ csrf_token() }}"
+                                },
+                                success: function(data) {
+                                    removeTypingIndicator();
+                                    if (data.error) {
+                                        console.log('AI responded with error:', data.error);
+                                        addMessageToChat('System', 'Error: ' + data.error, new Date().toLocaleTimeString());
+                                    } else {
+                                        addMessageToChat('AI', data.ai_response, new Date().toLocaleTimeString());
+                                    }
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    removeTypingIndicator();
+                                    console.log('Error:', textStatus, errorThrown);
+                                    addMessageToChat('System', 'Error: Unable to get AI response', new Date().toLocaleTimeString());
+                                }
+                            });
+                            return false;
+                        });
+
+                        socket.on('message', function(msg) {
+                            addMessageToChat(msg.username, msg.message, msg.timestamp);
+                        });
+                    });
+                </script>
+                {% endif %}
+            {% endblock %}
     </main>
 
     <footer>

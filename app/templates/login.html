@@ -4,36 +4,38 @@
 Login | TrustVest
 {% endblock %}
 {% block body %}
-<div class="form-wrapper">  <!-- Added a wrapper div for consistency -->
-  <h2>Login</h2>
-  <form method="POST">
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-      {{ form.user_id.label }} 
-      {{ form.user_id(class="form-input") }}
-    </div>
-    <div class="form-group">
-      {{ form.password.label }} 
-      {{ form.password(class="form-input") }}
-    </div>
-    <div class = "form-group-combine">
-      <div class = "form-remember">
-        {{ form.remember() }}  
-        {{ form.remember.label }}
+<div class="login-container">
+  <div class="form-wrapper">  <!-- Added a wrapper div for consistency -->
+    <h2>Login</h2>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      <div class="form-group">
+        {{ form.user_id.label }} 
+        {{ form.user_id(class="form-input") }}
       </div>
-      <a href = "/forgot_password" class = "forgot-password">Forgot Password?</a>
-    </div>
-   
-        
-    <div class = "form-group">
-      <div class="recaptcha-container">
-        {{ form.recaptcha() }}
-        <div id="recaptcha-error-message" class="error-message"></div>
+      <div class="form-group">
+        {{ form.password.label }} 
+        {{ form.password(class="form-input") }}
       </div>
-    </div>
+      <div class = "form-group-combine">
+        <div class = "form-remember">
+          {{ form.remember() }}  
+          {{ form.remember.label }}
+        </div>
+        <a href = "/forgot_password" class = "forgot-password">Forgot Password?</a>
+      </div>
+    
+          
+      <div class = "form-group">
+        <div class="recaptcha-container">
+          {{ form.recaptcha() }}
+          <div id="recaptcha-error-message" class="error-message"></div>
+        </div>
+      </div>
 
-    {{ form.submit(class="submit-btn") }}  <!-- Using the existing submit button style -->
-  </form>
+      {{ form.submit(class="submit-btn") }}  <!-- Using the existing submit button style -->
+    </form>
+  </div> 
 </div>
 
 

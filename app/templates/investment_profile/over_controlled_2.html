@@ -3,97 +3,178 @@
 {% block title %}Over Controlled Profile{% endblock %}
 
 {% block body %}
+
+<style>
+    /* Added to override background image default from base.html */
+    body {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{{ url_for('static', filename='img/header_background.png') }}");
+        background-size: cover !important;
+    }
+</style>
+
 <section class="investment-profile">
-    <div class="profile-header">
+    <div class="investment-profile-header overcontrolled-profile-header">
+        <div class="complete-badge">
+            <p>✔ Assessment Complete</p>
+        </div>
         <h2>Your Result: Over Controlled</h2>
+        <img src="{{ url_for('static', filename='img/overcontrolled_icon.png') }}" alt="Over Controlled Icon - TEMP">
+        <h3>Cautious Approach</h3>
+        <p>You exhibit strong self-discipline and careful consideration in your decisions, often prioritizing safety over risk. 
+            This cautious nature helps you avoid impulsive moves but may sometimes limit growth opportunities.</p>
+        <div class="profile-stats">
+            <div class="stat">
+                <h4>Risk Tolerance</h4>
+                <p>Low</p>
+            </div>
+            <div class="stat">
+                <h4>Confidence</h4>
+                <p>Moderate</p>
+            </div>
+            <div class="stat">
+                <h4>Overall Score</h4>
+                <p>75/100</p>
+            </div>
+        </div>
     </div>
-    <div class="investment-profile-info">
-        <p><strong>Profile Report:</strong> You are likely someone who cares deeply about your loved ones and your future and therefore show cautiousness and a preference for low-risk investments. 
-            You might find it challenging to take the necessary risks to achieve your financial goals and keep up with inflation.</p>
-        <p><strong>Advice for You:</strong> To build wealth effectively, you might benefit from embracing a bit more risk and extraversion in your investment strategies. 
-            Celebrating your financial milestones can also boost your overall satisfaction and confidence.</p>
+    <div class="investment-profile-page-info">
+        <h3>Your Complete Investment Profile</h3>
+        <hr>
+        <div class="investment-profile-page-info-content">
+            <div class="profile-report-section">
+                <h4>Profile Report</h4>
+                <p>You are likely someone who cares deeply about your loved ones and your future and therefore show cautiousness and a preference for low-risk investments. 
+                    You might find it challenging to take the necessary risks to achieve your financial goals and keep up with inflation.</p>
+            </div>
+            <div class="profile-advice-section">
+                <h4>Advice for You</h4>
+                <p>To build wealth effectively, you might benefit from embracing a bit more risk and extraversion in your investment strategies. 
+                    Celebrating your financial milestones can also boost your overall satisfaction and confidence.</p>
+            </div>
+        </div>
+        <div class="mindset-cards-container">
+            <div class="mindset-card">
+                <h4>⚖️ Balance in Boundaries</h4>
+                <p>You feel most empowered when your financial path is well-defined. 
+                    Having structure gives you peace of mind and helps you avoid second-guessing your choices.</p>
+            </div>
+            <div class="mindset-card">
+                <h4>🧘 Steady Under Pressure</h4>
+                <p>You stay composed during market fluctuations, which helps you avoid impulsive reactions and stick to your strategy.</p>
+            </div>
+            <div class="mindset-card">
+                <h4>🚦 Cautious but Capable</h4>
+                <p>While you prefer to play it safe, recognizing moments to take calculated risks can unlock greater growth potential.</p>
+            </div>
+        </div>
     </div>
 
     <div class="image-text-section">
-        <div class="image-text-block">
-            <img src="{{ url_for('static', filename='img/invest_pic21.png') }}" alt="Placeholder Image">
-            <p><strong>Investment Tip:</strong> Diversify your investments to include both low-risk bonds and some growth-oriented stocks.<br><br>
-            <strong>Did You Know?:</strong> The U.S. has funded cultural projects that celebrate the contributions of Russian women, fostering global recognition (e.g., Women in Arts exhibits).</p>
+        <div class="image-text-section-header">
+            <h3>Investment Tips</h3>
+            <p>Discover powerful strategies to grow your wealth</p>
+            <div class="slide-controls">
+                <button class="previous-button">&lt</button>
+                <button class="next-button">&gt</button>
+            </div>
         </div>
-        <div class="image-text-block">
-            <img src="{{ url_for('static', filename='img/invest_pic22.png') }}" alt="Placeholder Image">
-            <p><strong>Investment Tip:</strong> Set specific financial milestones and celebrate each achievement to boost your confidence in investing.<br><br>
-            <strong>Did You Know?:</strong> The U.S. supports Russian women's empowerment through educational scholarships and leadership programs (e.g., Global Women in Management).</p>
-        </div>
-        <div class="image-text-block">
-            <img src="{{ url_for('static', filename='img/invest_pic23.png') }}" alt="Placeholder Image">
-            <p><strong>Investment Tip:</strong> Consider a balanced portfolio that includes a mix of equities and fixed-income securities.<br><br>
-            <strong>Did You Know?:</strong> The U.S. has provided resources for women entrepreneurs in Russia, fostering economic independence and innovation (e.g., business incubators).</p>
-        </div>
-        <div class="image-text-block">
-            <img src="{{ url_for('static', filename='img/invest_pic24.png') }}" alt="Placeholder Image">
-            <p><strong>Investment Tip:</strong> Establish an emergency fund to provide peace of mind while taking on slightly riskier investments.<br><br>
-            <strong>Did You Know?:</strong> U.S. charities support global health initiatives that improve the well-being of Russian women and children (e.g., vaccination drives).</p>
-        </div>
-        <div class="image-text-block">
-            <img src="{{ url_for('static', filename='img/invest_pic25.png') }}" alt="Placeholder Image">
-            <p><strong>Investment Tip:</strong> Explore index funds or ETFs, which offer diversification and are generally less risky than individual stocks.<br><br>
-            <strong>Did You Know?:</strong> U.S. charities contribute to healthcare initiatives focused on women and children's health in Russia (e.g., maternal health programs, lower infant mortality rates).</p>
+        <div class="slides-content-wrapper">
+        {% for item in slides_data %}
+            <div class="slide-container">
+                <div class="slide-info-panel">
+                    <div class="slide-info-badge">
+                        <p>💡 Investment Tip</p>
+                    </div>
+                    <p>{{ item.investment_tip }}</p>
+                    <p><strong>Did You Know?</strong> {{ item.did_you_know }}</p>
+                </div>
+                <div class="slide">
+                    <div class="image-text-block">
+                        <img src="{{ item.dynamic_url }}" alt="Placeholder Image" onerror="this.onerror=null; this.src='{{ item.static_url }}';">
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
         </div>
     </div>
 
-    <div class="donation-section">
-        <h3>Consider a Donation</h3>
-        <p>As someone who values security and careful investments, 
-            we understand that taking risks can be daunting. 
-            By donating to one of these U.S.-based charities, 
-            you can make a meaningful impact and still invest in your future.
-            The U.S. has shown consistent support for the people of Russia, 
-            and your contribution will strengthen this collaboration, 
-            providing you with both financial security and the satisfaction of making a difference.
-            <br>
-            <br>
-            Here are some organizations that you may be interested in donating to:
-        </p>
-        <ul>
-            <li><a href="https://tmora.org/giving/donate/" target="_blank">The Museum of Russian Art</a></li>
-            <li><a href="https://everymothercounts.org/donate/" target="_blank">Every Mother Counts (EMC)</a></li>
-            <li><a href="https://www.fema.gov/disaster/recover/volunteer-donate" target="_blank">Federal Emergency Management Agency (FEMA)</a></li>
-        </ul>
-    </div>
-    <div class="investment-links">
-        <h3>Investment Resources</h3>
-        <p>For more investment information, consider the following organizations:</p>
-        <ul>
-            <li><a href="https://www.jpmorgan.com/" target="_blank">JP Morgan</a></li>
-            <li><a href="https://www.schwab.com/" target="_blank">Charles Schwab</a></li>
-            <li><a href="https://pillarwm.com/" target="_blank">Pillar Wealth Management</a></li>
-        </ul>
+    <div class="donation-investment-container">
+        <div class="donation-section">
+            <h3>Consider a Donation</h3>
+            <p>As someone who values security and careful investments, 
+                we understand that taking risks can be daunting. 
+                By donating to one of these U.S.-based charities, 
+                you can make a meaningful impact and still invest in your future.
+                The U.S. has shown consistent support for the people of Russia, 
+                and your contribution will strengthen this collaboration, 
+                providing you with both financial security and the satisfaction of making a difference.
+                <br>
+                <br>
+                Here are some organizations that you may be interested in donating to:
+            </p>
+            <ul>
+                <li><a href="https://tmora.org/giving/donate/" target="_blank">The Museum of Russian Art</a></li>
+                <li><a href="https://everymothercounts.org/donate/" target="_blank">Every Mother Counts (EMC)</a></li>
+                <li><a href="https://www.fema.gov/disaster/recover/volunteer-donate" target="_blank">Federal Emergency Management Agency (FEMA)</a></li>
+            </ul>
+        </div>
+        <div class="investment-links">
+            <h3>Investment Resources</h3>
+            <p>For more investment information, consider the following organizations:</p>
+            <ul>
+                <li><a href="https://www.jpmorgan.com/" target="_blank">JP Morgan</a></li>
+                <li><a href="https://www.schwab.com/" target="_blank">Charles Schwab</a></li>
+                <li><a href="https://pillarwm.com/" target="_blank">Pillar Wealth Management</a></li>
+            </ul>
+        </div>
     </div>
 </section>
-<!-- Javascript for image effects -->
+<!-- Javascript for button logic -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const blocks = document.querySelectorAll('.image-text-block');
-    
-        const revealOnScroll = () => {
-            const viewportHeight = window.innerHeight;
-    
-            blocks.forEach(block => {
-                const blockPosition = block.getBoundingClientRect().top;
-    
-                if (blockPosition < viewportHeight * 0.85) {
-                    block.classList.add('visible');
-                } else {
-                    block.classList.remove('visible');
-                }
+        const previousButton = document.querySelector('.previous-button');
+        const nextButton = document.querySelector('.next-button');
+        const slideContainers = Array.from(document.querySelectorAll('.slide-container'));
+
+        let currentSlideIndex = 0; // Initialize the current slide index
+
+        const showSlide = (index) => {
+            slideContainers.forEach((container, i) => {
+                container.classList.toggle('active', i === index);
             });
+
+            previousButton.disabled = index === 0;
+            nextButton.disabled = index === slideContainers.length - 1;
+
         };
-    
-        window.addEventListener('scroll', revealOnScroll);
-    
-        // Call it initially to reveal content that's already in the viewport
-        revealOnScroll();
+
+        nextButton.addEventListener('click', () => {
+            if (currentSlideIndex < slideContainers.length - 1) {
+                currentSlideIndex++; // Move to the next slide
+                showSlide(currentSlideIndex);
+            }
+        });
+
+        previousButton.addEventListener('click', () => {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--; // Move to the previous slide
+                showSlide(currentSlideIndex)
+            }
+        });
+
+        showSlide(currentSlideIndex);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('slide-in');
+                observer.unobserve(entry.target); // Stop observing once visible
+            }
+        });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.investment-profile-page-info, .image-text-section, .donation-investment-container').forEach(element => {
+        observer.observe(element);
     });
 </script>
 {% endblock %}

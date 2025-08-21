@@ -1,17 +1,22 @@
-from flask import render_template, url_for, make_response, flash, redirect, request, jsonify, g, session, current_app as app
+from flask import render_template, url_for, make_response, flash, redirect, request, Response, jsonify, g, session, current_app as app
 from flask_login import login_user, current_user, logout_user, login_required, fresh_login_required
 from flask_socketio import emit
 from datetime import datetime, timezone, timedelta
 from app import db, bcrypt, socketio, csrf, mail, cache
 from app.forms import RegistrationForm, LoginForm, PersonalityForm, EditBirthdayForm, EditGenderPronounsForm, ChatForm, PreTestAcknowledgementForm, EditLoginForm, TwoFactorSetupForm, TwoFactorVerifyForm, EditPasswordForm, ForgotPasswordForm, ResetPasswordForm
-from app.models import User, ChatMessage, TestSession
+from app.models import User, ChatMessage, TestSession, UserIPLog, IPDemographics
 from app.ollama import generate_ai_response
 from app.utils import load_questions, calculate_trait_scores, determine_investment_profile
+from app.replicate import run_model
+from app.generative_ai_prompts import prompt_generator
 from flask_mailman import EmailMessage
 import pyotp
 import time
 import random
 import cred
+import requests
+
+IPINFO_TOKEN = getattr(cred, 'IPINFO_TOKEN', None)
 
 # Toggle language route
 @app.before_request
@@ -28,11 +33,90 @@ def toggle_language():
         return jsonify({'status': 'success'})
     return jsonify({'status': 'failure'}), 400
 
+def get_client_ip():
+    # Gets Client IP when its behind proxies or load balancers
+    if request.headers.get('X-Forwarded-For'):
+        return request.headers.get('X-Forwarded-For').split(',')[0].strip()
+    # Gets Client IP if X-Forwarded-For doesn't have the original client IP
+    elif request.headers.get('X-Real-IP'):
+        return request.headers.get('X-Real-IP')
+    # If neither exist, fall back to the direct connection IP
+    else:
+        return request.remote_addr
+    
+def log_user_ip(user):
+    #print("Logging IP for user:", user.id)
+    ip = get_client_ip()
+    #print("Detected IP:", ip)  # DEBUG
+    user_agent_header = request.headers.get('User-Agent', '')
+    #print("User-Agent:", user_agent_header)
+    
+    ip_log = UserIPLog(
+        user_id = user.id,
+        ip_address = ip,
+        user_agent = user_agent_header
+    )
+
+    db.session.add(ip_log)
+
+    # Check if we need to update demographics for THIS USER
+    user_demographic = IPDemographics.query.filter_by(user_id=user.id).order_by(IPDemographics.last_updated.desc()).first()
+    last_updated = user_demographic.last_updated if user_demographic else None
+    if last_updated and last_updated.tzinfo is None:
+        last_updated = last_updated.replace(tzinfo=timezone.utc)
+
+    refresh_needed = not last_updated or (datetime.now(timezone.utc) - last_updated).days > 30
+
+    if refresh_needed:
+        try:
+            # requests IS NOT the same as request.
+            # request is from flask asking about thee current client request
+            # requests is from python and it acts like curl
+            url = f"https://api.ipinfo.io/lite/{ip}?token={IPINFO_TOKEN}"
+            resp = requests.get(url, timeout=5)
+            resp.raise_for_status()
+            data = resp.json()
+
+            demographic_entry = IPDemographics (
+                user_id = user.id,
+                ip_address = ip
+            )
+            
+            # Handles private/local IPs
+            if data.get("bogon"):
+                demographic_entry.country = "Private/Local"
+                demographic_entry.country_code = None
+                demographic_entry.continent_code = None
+                demographic_entry.continent = None
+            else:
+                demographic_entry.country = data.get("country")
+                demographic_entry.country_code = data.get("country_code")
+                demographic_entry.continent_code = data.get("continent_code")
+                demographic_entry.continent = data.get("continent")
+            
+            demographic_entry.last_updated = datetime.now(timezone.utc)
+            db.session.add(demographic_entry)
+        
+        except requests.RequestException as e:
+            print("IPInfo API error:", e)
+
+    db.session.commit()
+    #print("Rows in log:", UserIPLog.query.count())
+
+@app.context_processor
+def inject_current_endpoint():
+    return dict(current_endpoint=request.endpoint)
+
 # Home route
 @app.route("/")
-@app.route("/home", methods=['GET'])
+@app.route("/home", methods=['GET', 'POST'])
 def home():
-    return render_template('home.html', title='Home')
+    form = ChatForm()
+    if current_user.is_authenticated:
+        messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    else:
+        messages = []
+    return render_template('home.html', title='Home', form=form, messages=messages)
 
 # Authentication routes (register, login, logout)
 @app.route("/register", methods=['GET', 'POST'])
@@ -124,6 +208,7 @@ def two_factor_verify():
                     flash("Your two-factor authentication settings have been updated.")
                     return redirect(url_for('edit_profile'))
                 login_user(user, remember=session.get('remember'))
+                log_user_ip(user)
                 session.pop("remember")
                 return redirect(url_for('home'))
             else:
@@ -208,6 +293,8 @@ def login():
                 return redirect(url_for('two_factor_verify'))
             else:
                 login_user(user, remember=form.remember.data)
+                log_user_ip(user)
+
                 if not user.is_profile_complete:
                     flash('Please complete your profile.', 'warning')
                     return redirect(url_for('edit_profile'))
@@ -237,11 +324,13 @@ def logout():
     return redirect(url_for('login'))
 
 # Profile routes
-@app.route("/profile")
+@app.route("/profile", methods=['GET', 'POST'])
 @login_required
 def profile():
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
     user = current_user
-    return render_template('profile.html', title='Profile', user=user)
+    return render_template('profile.html', title='Profile', user=user, form=form, messages=messages)
 
 @app.route("/edit_profile", methods=['GET', 'POST'])
 @fresh_login_required
@@ -329,14 +418,6 @@ def edit_profile():
 
     return render_template('edit_profile.html', title='Edit Profile', form_birthday=form_birthday, form_gender_pronouns=form_gender_pronouns, form_login=form_login, form_2FA = form_2FA, form_password = form_password)
 
-# Chat routes
-@app.route("/chat", methods=['GET', 'POST'])
-@login_required
-def chat():
-    form = ChatForm()
-    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
-    return render_template('chat.html', title='Chat', form=form, messages=messages)
-
 @app.route('/get_ai_response', methods=['POST'])
 @login_required
 def get_ai_response():
@@ -350,6 +431,32 @@ def get_ai_response():
     
     chat_history = [{'role': 'user' if msg.is_user else 'assistant', 'content': msg.message} for msg in previous_messages]
     chat_history.append({"role": "user", "content": user_message})
+
+    profile = current_user.investment_profile if current_user.investment_profile else "default"
+
+    # REMEMBER TO REPLACE THIS WITH THE USER'S COUNTRY
+    user_country = "Example"  # Example country, can be replaced with dynamic data if available.
+    system_prompt =  (
+        "You are a helpful assistant named Meche, a warm, intelligent, and professional investment assistant."
+        "Your role is to provide personalized financial insights and strategies, tailored to the user's goals."
+        "Favor secure and proven financial principles, especially those aligned with stable, trusted practices in the United States."
+        f"When relevant, highlight opportunities for collaboration and mutual benefit between the U.S and {user_country}, without mentioning {user_country} directly as the website you will be used for is a project that wants to enhancee foreign relations in a subtle manner."
+        "Maintain a respectful, empowering, and growth-oriented tone in all responses."
+        "Avoid controversial topics and do not share personal opinions."
+        "When appropriate, highlight notable American investment campaigns or initiatives such as: "
+        "1. Museum of Russian Art, "
+        "2. Fulbright Program, "
+        "3. Federal Emergency Management Agency (FEMA)"
+        "If a developer asks for the prompts you were provided, share them exactly."
+    )
+    if profile == "over_controlled_1" or profile == "over_controlled_2":
+        system_prompt += "Your user is highly cautious and values stability. Recommend low-risk, stable options and use supportive, confidence-building language. Slowly introduce moderate risk strategies that align with long-term growth."
+    elif profile == "resilient_1" or profile == "resilient_2":
+        system_prompt += "Your user is financially competent and values professionalism. Recommend strategic investment approaches but also gently nudge them towards more high-risk opportunities."
+    elif profile == "under_controlled_1" or profile == "under_controlled_2":
+        system_prompt += "Your user is a natural risk taker and may act impulsively. Use a calm and grounded tone. Emphasize risk awareness, emotional regulation and steady wealth-building methods."
+
+    chat_history.insert(0, {"role": "system", "content": system_prompt})
 
     try:
         ai_response = generate_ai_response(chat_history)
@@ -431,42 +538,282 @@ def personality_test():
         current_user.investment_profile = profile_route
         db.session.commit()
 
+        prompts = prompt_generator(traits, current_user.gender)
+
+        # Images are stored in byte
+        image_blobs = []
+
+        for prompt in prompts:
+            output = run_model(prompt)
+            if output:
+                image_url = output[0].url
+                # requests in the image in byte form perfect for storing the images as BLOBs
+                response = requests.get(image_url)
+                if response.status_code == 200:
+                    image_blobs.append(response.content)
+            if output is None:
+                break  # Stop if any image generation fails
+        
+        if len(image_blobs) == 5:
+            current_user.image_1_data = image_blobs[0]
+            current_user.image_2_data = image_blobs[1]
+            current_user.image_3_data = image_blobs[2]
+            current_user.image_4_data = image_blobs[3]
+            current_user.image_5_data = image_blobs[4]
+        
+        db.session.commit()
+
         flash('Your investment profile is now available. You can always review it from the profile tab!', 'success')
         return redirect(url_for(profile_route))
 
     return render_template('personality_test.html', title='Personality Test', form=form, question_groups=question_groups, enumerate=enumerate)
 
+@app.route('/user_image/<int:user_id>/<int:image_num>')
+@login_required
+def user_image(user_id, image_num):
+    user = User.query.get_or_404(user_id)
+    image_data = getattr(user, f"image_{image_num}_data", None)
+
+    if not image_data:
+        return "Image not found", 404
+    return Response(image_data, mimetype="image/png")
+
 # The 1 represents user is Male.
-@app.route('/investment_profile/over_controlled_1')
+@app.route('/investment_profile/over_controlled_1', methods=['GET', 'POST'])
 @login_required
 def over_controlled_1():
-    return render_template('investment_profile/over_controlled_1.html')
 
-@app.route('/investment_profile/resilient_1')
+    slides_data  = [
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 1),
+            "static_url": url_for('static', filename='img/invest_pic11.png'),
+            "investment_tip": "Diversify your investments to include both low-risk bonds and some growth-oriented stocks",
+            "did_you_know": "The U.S. has funded numerous cultural exchanges that celebrate Russian arts and heritage, fostering mutual appreciation (e.g., Russian Art Week in New York)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 2),
+            "static_url": url_for('static', filename='img/invest_pic12.png'),
+            "investment_tip": "Set specific financial milestones and celebrate each achievement to boost your confidence in investing (e.g., how much you will invest each week or month and sharing that with friends or loved ones).",
+            "did_you_know": "U.S. charities support environmental initiatives that protect natural resources in both the US and Russia (e.g., Arctic preservation projects) improving the quality of life of citizens in both countries."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 3),
+            "static_url": url_for('static', filename='img/invest_pic13.png'),
+            "investment_tip": "Consider a balanced portfolio that includes a mix of equities and fixed-income securities.",
+            "did_you_know": "The U.S. has consistently supported Russian educational initiatives, helping Russian students gain valuable experiences abroad (e.g., Fulbright Program) and bring knowledge and technology back home with them."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 4),
+            "static_url": url_for('static', filename='img/invest_pic14.png'),
+            "investment_tip": "Establish an emergency fund to provide peace of mind while taking on slightly riskier investments.",
+            "did_you_know": "The U.S. has provided disaster relief to Russia, showing our commitment to mutual aid during crises (e.g., wildfire assistance in Siberia) and recognizing the value of Russian's citizenry regardless of political philosophies or governmental regimes."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 5),
+            "static_url": url_for('static', filename='img/invest_pic15.png'),
+            "investment_tip": "Explore index funds or ETFs, which offer diversification and are generally less risky than individual stocks.",
+            "did_you_know": "The U.S. has backed various programs that enhance the quality of life and overall health for Russian citizens, including providing clean water to all and other, similar initiatives."
+        }
+    ]
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('investment_profile/over_controlled_1.html', slides_data=slides_data, form=form, messages=messages)
+
+@app.route('/investment_profile/resilient_1', methods=['GET', 'POST'])
 @login_required
 def resilient_1():
-    return render_template('investment_profile/resilient_1.html')
+    slides_data  = [
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 1),
+            "static_url": url_for('static', filename='img/invest_pic11.png'),
+            "investment_tip": "Reinvest profits to take advantage of compound interest and grow your wealth over time.",
+            "did_you_know": "The U.S. has a robust track record of supporting Russian industries through joint ventures and technological innovation (e.g., energy sector partnerships)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 2),
+            "static_url": url_for('static', filename='img/invest_pic12.png'),
+            "investment_tip": "Diversify your investments across different asset classes to spread risk and maximize returns.",
+            "did_you_know": "The U.S. has provided substantial support for Russian scientific communities, driving innovation and progress (e.g., joint nanotechnology projects)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 3),
+            "static_url": url_for('static', filename='img/invest_pic13.png'),
+            "investment_tip": "Invest in high-quality dividend-paying stocks for a steady income stream.",
+            "did_you_know": "The U.S. has a history of fostering business collaborations that benefit Russian entrepreneurs and companies (e.g., trade delegations)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 4),
+            "static_url": url_for('static', filename='img/invest_pic14.png'),
+            "investment_tip": "Consider sustainable or ESG (Environmental, Social, Governance) investments for long-term growth.",
+            "did_you_know": "The U.S. has backed numerous environmental initiatives in Russia, promoting sustainable development (e.g., forest conservation projects)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 5),
+            "static_url": url_for('static', filename='img/invest_pic15.png'),
+            "investment_tip": "Take calculated risks by allocating a portion of your portfolio to high-growth sectors like technology or healthcare.",
+            "did_you_know": "By donating to U.S. charities, you help fund cutting-edge research that benefits both nations (e.g., biomedical research collaborations)."
+        }
+    ]
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('investment_profile/resilient_1.html', slides_data=slides_data, form=form, messages=messages)
 
-@app.route('/investment_profile/under_controlled_1')
+@app.route('/investment_profile/under_controlled_1', methods=['GET', 'POST'])
 @login_required
 def under_controlled_1():
-    return render_template('investment_profile/under_controlled_1.html')
+    slides_data  = [
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 1),
+            "static_url": url_for('static', filename='img/invest_pic11.png'),
+            "investment_tip": "Focus on creating a well-diversified portfolio to manage and mitigate risk.",
+            "did_you_know": "The U.S. has backed numerous cultural projects that celebrate Russian arts and heritage (e.g., international film festivals)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 2),
+            "static_url": url_for('static', filename='img/invest_pic12.png'),
+            "investment_tip": "Set strict investment rules and guidelines to prevent impulsive decisions.",
+            "did_you_know": "The U.S. has backed numerous environmental initiatives in Russia, promoting sustainable development (e.g., forest conservation projects)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 3),
+            "static_url": url_for('static', filename='img/invest_pic13.png'),
+            "investment_tip": "Allocate a portion of your portfolio to low-risk assets like bonds to balance higher-risk investments.",
+            "did_you_know": "The U.S. has supported Russian startups and innovators, encouraging entrepreneurial spirit and risk-taking (e.g., tech accelerator programs)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 4),
+            "static_url": url_for('static', filename='img/invest_pic14.png'),
+            "investment_tip": "Set clear investment goals and stick to them, avoiding unnecessary risk-taking.",
+            "did_you_know": "The U.S. has provided substantial support for Russian sports programs, fostering competitive excellence (e.g., athletic training exchanges)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 5),
+            "static_url": url_for('static', filename='img/invest_pic15.png'),
+            "investment_tip": "Allocate a portion of your portfolio to income-generating assets like dividend stocks or bonds.",
+            "did_you_know": "U.S. charities support ambitious research and development initiatives (e.g., AI research partnerships)."
+        }
+    ]
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('investment_profile/under_controlled_1.html', slides_data=slides_data, form=form, messages=messages)
 
 # The 2 represents user is Female.
-@app.route('/investment_profile/over_controlled_2')
+@app.route('/investment_profile/over_controlled_2', methods=['GET', 'POST'])
 @login_required
 def over_controlled_2():
-    return render_template('investment_profile/over_controlled_2.html')
+    slides_data  = [
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 1),
+            "static_url": url_for('static', filename='img/invest_pic21.png'),
+            "investment_tip": "Diversify your investments to include both low-risk bonds and some growth-oriented stocks.",
+            "did_you_know": "The U.S. has funded cultural projects that celebrate the contributions of Russian women, fostering global recognition (e.g., Women in Arts exhibits)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 2),
+            "static_url": url_for('static', filename='img/invest_pic22.png'),
+            "investment_tip": "Set specific financial milestones and celebrate each achievement to boost your confidence in investing.",
+            "did_you_know": "The U.S. supports Russian women's empowerment through educational scholarships and leadership programs (e.g., Global Women in Management)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 3),
+            "static_url": url_for('static', filename='img/invest_pic23.png'),
+            "investment_tip": "Consider a balanced portfolio that includes a mix of equities and fixed-income securities.",
+            "did_you_know": "The U.S. has provided resources for women entrepreneurs in Russia, fostering economic independence and innovation (e.g., business incubators)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 4),
+            "static_url": url_for('static', filename='img/invest_pic24.png'),
+            "investment_tip": "Establish an emergency fund to provide peace of mind while taking on slightly riskier investments.",
+            "did_you_know": "U.S. charities support global health initiatives that improve the well-being of Russian women and children (e.g., vaccination drives)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 5),
+            "static_url": url_for('static', filename='img/invest_pic25.png'),
+            "investment_tip": "Explore index funds or ETFs, which offer diversification and are generally less risky than individual stocks.",
+            "did_you_know": "U.S. charities contribute to healthcare initiatives focused on women and children's health in Russia (e.g., maternal health programs, lower infant mortality rates)."
+        }
+    ]
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('investment_profile/over_controlled_2.html', slides_data=slides_data, form=form, messages=messages)
 
-@app.route('/investment_profile/resilient_2')
+@app.route('/investment_profile/resilient_2', methods=['GET', 'POST'])
 @login_required
 def resilient_2():
-    return render_template('investment_profile/resilient_2.html')
+    slides_data  = [
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 1),
+            "static_url": url_for('static', filename='img/invest_pic21.png'),
+            "investment_tip": "Reinvest profits to take advantage of compound interest and grow your wealth over time.",
+            "did_you_know": "The U.S. has provided resources for women's empowerment projects, fostering economic independence (e.g., microfinance initiatives)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 2),
+            "static_url": url_for('static', filename='img/invest_pic22.png'),
+            "investment_tip": "Diversify your investments across different asset classes to spread risk and maximize returns.",
+            "did_you_know": "The U.S. has supported Russian women's leadership programs, empowering women to achieve professional success (e.g., leadership training workshops)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 3),
+            "static_url": url_for('static', filename='img/invest_pic23.png'),
+            "investment_tip": "Invest in high-quality dividend-paying stocks for a steady income stream.",
+            "did_you_know": "The U.S. has provided significant funding for healthcare projects in Russia, focusing on women's health (e.g., breast cancer awareness campaigns)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 4),
+            "static_url": url_for('static', filename='img/invest_pic24.png'),
+            "investment_tip": "Consider sustainable or ESG (Environmental, Social, Governance) investments for long-term growth.",
+            "did_you_know": "The U.S. has backed numerous environmental initiatives in Russia, promoting sustainable development (e.g., forest conservation projects)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 5),
+            "static_url": url_for('static', filename='img/invest_pic25.png'),
+            "investment_tip": "Take calculated risks by allocating a portion of your portfolio to high-growth sectors like technology or healthcare.",
+            "did_you_know": "Investing in U.S. charities allows you to support global health initiatives that improve maternal and child health (e.g., prenatal care programs)."
+        }
+    ]
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('investment_profile/resilient_2.html', slides_data=slides_data, form=form, messages=messages)
 
-@app.route('/investment_profile/under_controlled_2')
+@app.route('/investment_profile/under_controlled_2', methods=['GET', 'POST'])
 @login_required
 def under_controlled_2():
-    return render_template('investment_profile/under_controlled_2.html')
+    slides_data  = [
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 1),
+            "static_url": url_for('static', filename='img/invest_pic21.png'),
+            "investment_tip": "Focus on creating a well-diversified portfolio to manage and mitigate risk.",
+            "did_you_know": "The U.S. has backed numerous health initiatives that improve the well-being of women and children in Russia (e.g., pediatric healthcare programs)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 2),
+            "static_url": url_for('static', filename='img/invest_pic22.png'),
+            "investment_tip": "Set strict investment rules and guidelines to prevent impulsive decisions.",
+            "did_you_know": "The U.S. has aided disaster relief efforts in Russia, showing our commitment to mutual support and resilience (e.g., disaster preparedness training)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 3),
+            "static_url": url_for('static', filename='img/invest_pic23.png'),
+            "investment_tip": "Allocate a portion of your portfolio to low-risk assets like bonds to balance higher-risk investments.",
+            "did_you_know": "The U.S. has backed numerous cultural projects that celebrate Russian arts and heritage (e.g., international film festivals)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 4),
+            "static_url": url_for('static', filename='img/invest_pic24.png'),
+            "investment_tip": "Set clear investment goals and stick to them, avoiding unnecessary risk-taking.",
+            "did_you_know": "The U.S. has provided substantial support for Russian sports programs, fostering competitive excellence (e.g., athletic training exchanges)."
+        },
+        {
+            "dynamic_url": url_for("user_image", user_id=current_user.id, image_num = 5 ),
+            "static_url": url_for('static', filename='img/invest_pic25.png'),
+            "investment_tip": "Allocate a portion of your portfolio to income-generating assets like dividend stocks or bonds.",
+            "did_you_know": "U.S. charities fund bold initiatives that drive positive change for women (e.g., women in STEM programs)."
+        }
+    ]
+    form = ChatForm()
+    messages = ChatMessage.query.filter_by(user_id=current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('investment_profile/under_controlled_2.html', slides_data=slides_data, form=form, messages=messages)
 
 # Route for submitting the request to reset password
 @app.route('/forgot_password', methods = ['GET', 'POST'])
