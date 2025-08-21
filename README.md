@@ -58,6 +58,20 @@ This is an investment assessment website built with Flask and Jinja templates. T
    MAIL_PASSWORD = ''
    REPLICATE_API_TOKEN = ''
    ```
+   If you're doing the optional APIS:
+   ```
+   RECAPTCHA_SITE_KEY = ''
+   RECAPTCHA_SECRET_KEY = ''
+   MAIL_USERNAME = ''
+   MAIL_PASSWORD = ''
+   REPLICATE_API_TOKEN = ''
+
+   REPLICATE_API_TOKEN = ''
+
+   IPINFO_TOKEN = ''
+   COLLECT_IPS = True
+   IP_ENCRYPTION_KEY=""
+   ```
 
 11. Create the following keys:
    - **ReCaptcha:**
@@ -70,13 +84,34 @@ This is an investment assessment website built with Flask and Jinja templates. T
      - [Application Password Documentation](https://support.google.com/accounts/answer/185833?hl=en)
      - [Creating Application Password](https://myaccount.google.com/apppasswords) (*Note: Save the application password.*)
    - In the `cred.py` file, paste the application password into the "MAIL_PASSWORD" variable, and use the associated email address for the "MAIL_USERNAME" variable.
-  
+
+   **OPTIONAL NOT REQUIRED TO RUN THE PROGRAM**
    - **Replicate:**
       - [Replicate Documentation](https://replicate.com/docs)
       - [Signing up for Replicate](https://replicate.com/signin)
       - [API Token](https://replicate.com/account/api-tokens)
-   - After setting up your billing information locate your API tokens and paste it into the `cred.py` file. "REPLICATE_API_TOKEN"
+   - After setting up your billing information locate your API token and paste it into the `cred.py` file. "REPLICATE_API_TOKEN"
    - **Keep in mind this is not needed and the app _will_ work without this. However you will not get generated images, only the default fallback images.**
+
+   - **IPInfo:**
+      - [IPInfo Documentation](https://ipinfo.io/developers)
+      - [Signing up for IPInfo](https://ipinfo.io/signup)
+      - [API Token](https://ipinfo.io/dashboard/token)
+   -  In the `cred.py` file, paste the API token into the "IPINFO_TOKEN" variable.
+   -  **Keep in mind this is not needed and the app _will_ work without this. However you will not get geo data**
+
+   - **COLLECT_IPS:**
+      - This is **NOT** an API token, this is for developers. If you want to keep tracking on leave it as is, you can set it as False if you don't want it.
+
+   - **IP_ENCRYPTION_KEY**
+      - This is also **NOT** an API token but it is sensitive and you need to keep this safe. If you want geo data then you need to include this to encrypt sensitive information.
+      - To generate an encryption key run this command (after activating your virtual environment since it requires a library already included in requirements.txt)
+         -
+           ```
+           python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+           ```
+      - After doing this, in the `cred.py` file, paste the generated encryption key into the "IP_ENCRYPTION_KEY" variable.
+      - **Keep in mind this is not needed and the app _will_ work without this. However you will not get geo data since this is required to store IP data even if you have the IPInfo API token**
 
 11. Set up the database:
    ```
@@ -97,6 +132,8 @@ This is an investment assessment website built with Flask and Jinja templates. T
    flask run
    ```
 
+**==========================================OPTIONAL==========================================**
+
 13. To make sure the chatbot works on your local you need to do the following:
    - Download ollama on your local machine (choose the right version for your local machine): https://ollama.com/ 
    - Run the installer and follow the on-screen instructions
@@ -114,6 +151,18 @@ This is an investment assessment website built with Flask and Jinja templates. T
         ollama3
         ```
    - Restart the Flask Server and enjoy!
+
+14. If you completed all the optional parts in step 10 and 11:
+    You can now run a script that will return your database tables.
+    Simply run this (In your virtual environment):
+    ```
+    python display_tables.py
+    ```
+    OR
+    ```
+    python display_tables.py --decrypt
+    ```
+    KEEP IN MIND SINCE THIS YOU ARE RUNNING A LOCAL DATABASE THE ONLY INFORMATION DISPLAYED ARE USERS YOU CREATED!
 
 ## How to Contribute
 
