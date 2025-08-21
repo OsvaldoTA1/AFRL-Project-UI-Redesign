@@ -132,7 +132,7 @@ This is an investment assessment website built with Flask and Jinja templates. T
    flask run
    ```
 
-**==========================================OPTIONAL==========================================**
+**===========================OPTIONAL===========================**
 
 13. To make sure the chatbot works on your local you need to do the following:
    - Download ollama on your local machine (choose the right version for your local machine): https://ollama.com/ 
