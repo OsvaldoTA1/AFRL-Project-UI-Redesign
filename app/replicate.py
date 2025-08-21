@@ -24,7 +24,10 @@ def run_model(prompt):
     try:
         output = client.run(
             "black-forest-labs/flux-schnell",
-            input={"prompt": prompt}
+            input={
+                "prompt": prompt,
+                "output_format": "png"
+            }
         )
         return output
     except Exception as e:

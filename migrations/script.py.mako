@@ -14,10 +14,16 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 try:
-    from app.custom_types import EncryptedString
-except ImportError:
+    from app.custom_types import EncryptedString, decrypt_encrypted_field
+    # Make them available in the global namespace for the migration
+    globals()['EncryptedString'] = EncryptedString
+    globals()['decrypt_encrypted_field'] = decrypt_encrypted_field
+except ImportError as e:
     # Fallback for migrations that don't need custom types
-    pass
+    print(f"Warning: Could not import custom types: {e}")
+    class EncryptedString:
+        pass
+    globals()['EncryptedString'] = EncryptedString
 
 # revision identifiers, used by Alembic.
 revision = ${repr(up_revision)}

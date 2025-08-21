@@ -3,7 +3,7 @@ from app import db, login_manager
 from flask_login import UserMixin
 from flask import current_app
 import jwt
-from app.custom_types import EncryptedString
+from app.custom_types import EncryptedString, decrypt_encrypted_field
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -33,15 +33,11 @@ class User(db.Model, UserMixin):
     is_tf_complete = db.Column(db.Boolean(), default=False)
     last_tf = db.Column(db.DateTime)
     last_password_renewal = db.Column(db.DateTime)
-    image_1_url = db.Column(db.String(500), nullable=True)
-    image_2_url = db.Column(db.String(500), nullable=True)
-    image_3_url = db.Column(db.String(500), nullable=True)
-    image_4_url = db.Column(db.String(500), nullable=True)
-    image_5_url = db.Column(db.String(500), nullable=True)
-    # Check with an Database viewer to see current ip for User table is actually encrypted
-    current_ip = db.Column(EncryptedString, nullable=True)
-    current_country = db.Column(EncryptedString, nullable=True)
-    ip_last_updated = db.Column(db.DateTime, nullable=True)
+    image_1_data = db.Column(db.LargeBinary, nullable=True)
+    image_2_data = db.Column(db.LargeBinary, nullable=True)
+    image_3_data = db.Column(db.LargeBinary, nullable=True)
+    image_4_data = db.Column(db.LargeBinary, nullable=True)
+    image_5_data = db.Column(db.LargeBinary, nullable=True)
     
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.gender}', '{self.image_file}')"
@@ -63,6 +59,22 @@ class User(db.Model, UserMixin):
         except jwt.InvalidTokenError:
             return "Token is invalid. Please try again."
         return User.query.get(decode['user_id'])
+    
+    def get_current_ip_encrypted(self):
+        latest_log = UserIPLog.query.filter_by(user_id=self.id).order_by(UserIPLog.timestamp.desc()).first()
+        return latest_log.ip_address if latest_log else None    
+    
+    def get_current_ip(self):
+        encrypted_ip = self.get_current_ip_encrypted()
+        if encrypted_ip:
+            return decrypt_encrypted_field(encrypted_ip)
+        return None
+    
+    def get_current_country(self):
+        latest_demographic = IPDemographics.query.filter_by(user_id=self.id).order_by(IPDemographics.last_updated.desc()).first()
+        if latest_demographic and latest_demographic.country:
+            return decrypt_encrypted_field(latest_demographic.country)
+        return None
     
     ip_logs = db.relationship('UserIPLog', backref="user", lazy=True)
 
@@ -114,13 +126,12 @@ class UserIPLog(db.Model):
 # Encryption works
 class IPDemographics(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    ip_address = db.Column(EncryptedString, unique=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    ip_address = db.Column(EncryptedString, nullable=False)
     country= db.Column(EncryptedString, nullable=True)
     country_code = db.Column(EncryptedString, nullable=True)
     continent_code = db.Column(EncryptedString, nullable=True)
     continent = db.Column(EncryptedString, nullable=True)
-    # isp = db.Column(db.String(200), nullable=True)
-    # time_zone = db.Column(db.String(50), nullable=True)
     last_updated = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
     def __repr__(self):

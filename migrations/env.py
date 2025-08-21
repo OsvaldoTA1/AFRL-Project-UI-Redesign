@@ -46,9 +46,10 @@ target_db = current_app.extensions['migrate'].db
 
 # Import custom types to make them available during migrations
 try:
-    from app.custom_types import EncryptedString
+    from app.custom_types import EncryptedString, decrypt_encrypted_field
     # Make the custom type available in the global namespace
     globals()['EncryptedString'] = EncryptedString
+    globals()['decrypt_encrypted_field'] = decrypt_encrypted_field
 except ImportError as e:
     logger.warning(f"Could not import custom types: {e}")
 
